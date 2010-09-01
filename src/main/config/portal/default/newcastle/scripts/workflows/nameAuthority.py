@@ -13,7 +13,8 @@ from java.util import ArrayList, HashMap
 from org.apache.commons.lang import StringEscapeUtils
 
 class NameAuthorityData:
-    def __init__(self):
+    def __activate__(self, context):
+        formData = context["formData"]
         print "formData: %s" % formData
         self.__oid = formData.get("oid")
         result = None
@@ -121,6 +122,3 @@ class NameAuthorityData:
     def __addNode(self):
         print self.__manifest.toString()
         return "{}"
-
-if __name__ == "__main__":
-    scriptObject = NameAuthorityData()

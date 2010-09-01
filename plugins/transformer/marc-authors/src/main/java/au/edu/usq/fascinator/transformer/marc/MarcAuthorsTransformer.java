@@ -184,7 +184,7 @@ public class MarcAuthorsTransformer implements Transformer {
             String title, String author) throws TransformerException {
         try {
             // Generate OID using author name + title
-            String oid = DigestUtils.md5Hex(author);
+            String oid = DigestUtils.md5Hex(author + "#" + title);
             log.debug("Creating author record: {} ({})", author, oid);
 
             // Signal a reharvest on the author object to index them

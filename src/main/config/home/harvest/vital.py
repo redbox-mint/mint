@@ -72,11 +72,12 @@ if params.getProperty("recordType") == "marc-author":
     title = params["title"]
     author = params["author"]
     rules.add(AddField("dc_title", author))
-    rules.add(AddField("dc_description", "Author name extracted from MARCXML"))
-    rules.add(AddField("application/x-fascinator-author"))
+    rules.add(AddField("dc_description", title))
+    rules.add(AddField("dc_format", "application/x-fascinator-author"))
     rules.add(AddField("recordtype", "author"))
     rules.add(AddField("repository_name", params["repository.name"]))
     rules.add(AddField("repository_type", params["repository.type"]))
+    rules.add(AddField("display_type", "author"))
 elif pid == metaPid:
     for payloadId in object.getPayloadIdList():
         try:
@@ -113,7 +114,7 @@ elif pid == metaPid:
             for k,v in coreFields.iteritems():
                 mapVuFind(v, k, marc)
 
-            rules.add(AddField("display_type", "marcxml"))
+            rules.add(AddField("display_type", "marc"))
 
     except StorageException, e:
         print "Could not find marc data (%s)" % str(e)
