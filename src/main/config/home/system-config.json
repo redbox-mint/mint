@@ -1,7 +1,7 @@
 {
     "version": "0.7.2",
     "configured": true,
-    "urlBase" : "http://novadev2.newcastle.edu.au:8088/mint/",
+    "urlBase" : "http://novadev2.newcastle.edu.au:8086/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
     "sso": ["OpenID"],
     "accesscontrol": {
@@ -29,8 +29,8 @@
         }
     },
     "messaging" : {
-        "url" : "tcp://localhost:8089",
-        "stompUrl" : "stomp://localhost:8090",
+        "url" : "tcp://localhost:8087",
+        "stompUrl" : "stomp://localhost:8088",
         "home" : "${fascinator.home}/activemq-data",
         "threads" : [
             {
@@ -107,12 +107,12 @@
         "type": "solr",
         "properties": "SOF-META",
         "solr": {
-            "uri": "http://localhost:8080/solr/fascinator",
+            "uri": "http://localhost:8086/solr/fascinator",
             "autocommit": false,
             "embedded": false
         },
         "anotar": {
-            "uri": "http://localhost:8080/solr/anotar",
+            "uri": "http://localhost:8086/solr/anotar",
             "autocommit": true,
             "embedded": false
         }

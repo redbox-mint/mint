@@ -39,7 +39,7 @@ else
 fi
 
 # jetty settings
-JETTY_OPTS="-Djetty.port=8088 -Djetty.logs=$JETTY_LOGS -Djetty.home=${dir.server}/jetty"
+JETTY_OPTS="-Djetty.port=8086 -Djetty.logs=$JETTY_LOGS -Djetty.home=${dir.server}/jetty"
 
 # solr settings
 SOLR_OPTS="-Dsolr.solr.home=${dir.solr} -Djava.util.logging.config.file=${dir.solr}/logging.properties"
