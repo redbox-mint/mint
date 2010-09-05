@@ -80,6 +80,20 @@ if pid == metaPid:
     formatList = ["application/x-fascinator-package"]
     creationDate = []
 
+    try:
+        pkgPayload = object.getPayload(object.getSourceId())
+        pkg = JsonConfigHelper(pkgPayload.open())
+        pkgPayload.close()
+        manifest = pkg.getJsonMap("manifest")
+        for key in manifest.keySet():
+            node = manifest.get(key)
+            nodeId = node.get("id")
+            nodeTitle = node.get("title")
+            rules.add(AddField("package_node_id", nodeId))
+            rules.add(AddField("package_node_title", nodeTitle))
+    except Exception, e:
+        print " *** Failed to index package items: %s" % str(e)
+
     # Workflow data
     WORKFLOW_ID = "packaging"
     wfChanged = False

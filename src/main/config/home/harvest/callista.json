@@ -35,7 +35,7 @@
             "label": "Confirmed Authority",
             "security": ["editor", "admin"],
             "visibility": ["guest"],
-            "template": "workflows/name-authority"
+            "template": "workflows/nameAuthority"
         }
     ]
 }

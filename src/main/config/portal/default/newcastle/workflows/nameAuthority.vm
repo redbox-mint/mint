@@ -1,6 +1,5 @@
-#if($formData.get("oid"))
 #set($manifest = $self.manifest)
-#set($oid = $self.getFormData('oid'))
+#set($oid = $self.getFormData("oid"))
 #set($title = $self.getFormData('title'))
 <div class="grid_4">
     <div class="box menu">
@@ -50,39 +49,64 @@
 <div class="grid_12">
     <div class="box">
         <h2>Display names</h2>
+        ##renderObject($self.getMetadata() "preview")
         <br />
         <p>Names used by this person.</p>
-        <ul id="alias-list">
+        <div id="displayNames">
+        ##<ul id="alias-list">
         #foreach($node in $self.getManifest())
-            <li><a href="$portalPath/detail/$node.get('id')">$node.get("title")</a></li>
+            #set($nodeId = $node.get("id"))
+            #set($nodeTitle = $node.get("title"))
+            <p>
+                <input type="checkbox" name="linked" value="$nodeId" id="linked-$nodeId" />
+                <label for="linked-$nodeId"> ##
+                    <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>##<br />
+                    ##$!itemTitle
+                </label>
+            </p>
+            ##<a href="$portalPath/detail/$node.get('id')">$node.get("title")</a>
         #end
-        </ul>
-        <form>
-            <fieldset class="login">
-                <legend>Find name</legend>
-                <input id="name-search-query" name="name-search-query" size="50" type="text" />
-                <button class="button" id="name-search">Go</button>
-            </fieldset>
-        </form>
-        <div class="name-search-result"></div>
+        <button id="unlink-names">Unlink selected</button>
+        ##</ul>
+        ##<form>
+        ##    <fieldset class="login">
+        ##        <legend>Find name</legend>
+        ##        <input id="name-search-query" name="name-search-query" size="50" type="text" />
+        ##        <button class="button" id="name-search">Go</button>
+        ##    </fieldset>
+        ##</form>
+        ##<div class="name-search-result"></div>
         <div class="hidden" id="delete-package-item"></div>
+        </div>
     </div>
     <div class="box">
         <h2>Suggested names</h2>
         <br />
-        <p>Below are some names that may match this person. Select one to add it to this person.</p>
         #set($suggestedNames = $self.getSuggestedNames())
-        <ul>
-        #foreach($doc in $suggestedNames)
-            #set($authorName = $doc.getList("dc_title").get(0))
-            #set($authorId = $doc.get("id"))
-            <li><a class="add-alias" rel="$authorId" href="#add-alias">$authorName</a></li>
+        #if($suggestedNames.isEmpty())
+            <p>No names were found that may match this person</p>
+        #else
+            <p>Below are some names that may match this person</p>
+            <div id="suggestedNames">
+                #foreach($doc in $suggestedNames)
+                    #set($authorId = $doc.get("id"))
+                    #set($authorName = $doc.getList("dc_title").get(0))
+                    #set($itemTitle = $doc.getList("dc_description").get(0))
+                    ##<li><a class="add-alias" rel="$authorId" href="#add-alias">$authorName</a> ($itemTitle)</li>
+                    <p>
+                        #if($self.isLinked($authorId))disabled="disabled" checked="checked" type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
+                        #else
+                            <input type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
+                        #end
+                        <label for="author-$authorId" title="$!itemTitle">
+                            $authorName<br />
+                            $!itemTitle
+                        </label>
+                    </p>
+                #end
+                <button id="link-names">Link selected</button>
+            </div>
         #end
-        </ul>
-    </div>
-    <div class="box hidden" id="preview">
-        <h2>Preview</h2>
-        <div id="content"></div>
     </div>
 </div>
 <script type="text/javascript">
@@ -109,7 +133,7 @@ $(function() {
     $(".add-alias").click(function() {
         var authorId = $(this).attr("rel");
         var authorName = $(this).text();
-        jQuery.post("$portalPath/workflows/name-authority.ajax",
+        jQuery.post("$portalPath/workflows/nameAuthority.ajax",
             {   func: "add",
                 
             }, function(data, status) {
@@ -119,6 +143,39 @@ $(function() {
             }, "json");
         return false;
     });
+    
+    $("#link-names").click(function() {
+        var authorIds = [];
+        $("#suggestedNames :checked").each(function() {
+            var authorId = $(this).attr("value");
+            authorIds.push(authorId);
+        });
+        jQuery.post("$portalPath/workflows/nameAuthority.ajax",
+            {   func: "link-names",
+                oid: "$oid",
+                authorIds: authorIds
+            }, function(data, status) {
+                console.log(data);
+            }, "json");
+    });
+    
+    if ($("#displayNames :checkbox")) {
+    }
 });
 </script>
-#end
+<script id="linked-name-template" type="text/html">
+    <p>
+        <input type="checkbox" name="linked" />
+        <label for="linked-$nodeId"> ##
+            <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
+        </label>
+    </p>
+</script>
+<script id="suggested-name-template" type="text/html">
+    <p>
+        <input type="checkbox" name="linked" />
+        <label for="linked-$nodeId"> ##
+            <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
+        </label>
+    </p>
+</script>

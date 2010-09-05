@@ -228,6 +228,16 @@ public class CallistaHarvester extends GenericHarvester {
                                 columns[7];
                     }
                     store("preferedName", pName, json);
+                    // Name title
+                    store("nameTitle", columns[3], json);
+                    // First name
+                    store("firstName", columns[4], json);
+                    // Second name
+                    if (columns[6] != null) {
+                        store("secondName", columns[6], json);
+                    }
+                    // Surname
+                    store("surname", columns[7], json);
                     // Full name
                     String fName = null;
                     if (columns[6] != null) {

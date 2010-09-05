@@ -1,17 +1,14 @@
-body {
-    background: #B7DAA0;
-}
-
-.container_16 {
-    background: #E2FFCD;
-}
-
 h1#branding {
     background: #C5DAAF;
 }
 
-.menu .selected, .menu .selected:hover, .facet-list .selected:hover {
+.menu .selected,.menu .selected:hover {
     background: #92A385;
+}
+
+.facet-list .portal-facet {
+    background: #92A385;
+    font-style: italic;
 }
 
 .box {
@@ -30,6 +27,15 @@ thead th {
     background: #92A385;
 }
 
-tbody th, tbody td {
+tbody th,tbody td {
     background: #E2FFCD;
 }
+/*
+body {
+    background: #B7DAA0;
+}
+
+.container_16 {
+    background: #E2FFCD;
+}
+*/
