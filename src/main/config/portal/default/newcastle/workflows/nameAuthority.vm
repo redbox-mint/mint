@@ -53,18 +53,15 @@
         <br />
         <p>Names used by this person.</p>
         <div id="displayNames">
-        ##<ul id="alias-list">
         #foreach($node in $self.getManifest())
             #set($nodeId = $node.get("id"))
             #set($nodeTitle = $node.get("title"))
             <p>
                 <input type="checkbox" name="linked" value="$nodeId" id="linked-$nodeId" />
-                <label for="linked-$nodeId"> ##
-                    <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>##<br />
-                    ##$!itemTitle
+                <label for="linked-$nodeId">##$nodeTitle</label>
+                    <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
                 </label>
             </p>
-            ##<a href="$portalPath/detail/$node.get('id')">$node.get("title")</a>
         #end
         <button id="unlink-names">Unlink selected</button>
         ##</ul>
@@ -92,12 +89,8 @@
                     #set($authorId = $doc.get("id"))
                     #set($authorName = $doc.getList("dc_title").get(0))
                     #set($itemTitle = $doc.getList("dc_description").get(0))
-                    ##<li><a class="add-alias" rel="$authorId" href="#add-alias">$authorName</a> ($itemTitle)</li>
                     <p>
-                        #if($self.isLinked($authorId))disabled="disabled" checked="checked" type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
-                        #else
-                            <input type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
-                        #end
+                        <input #if($self.isLinked($authorId))disabled="disabled" checked="checked" #{end}type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
                         <label for="author-$authorId" title="$!itemTitle">
                             $authorName<br />
                             $!itemTitle
@@ -130,20 +123,6 @@ $(function() {
         
     });
     
-    $(".add-alias").click(function() {
-        var authorId = $(this).attr("rel");
-        var authorName = $(this).text();
-        jQuery.post("$portalPath/workflows/nameAuthority.ajax",
-            {   func: "add",
-                
-            }, function(data, status) {
-                $("#alias-list").append('<li><a href="$portalPath/detail/'
-                    + authorId + '">' + authorName + '</a></li>');
-                $(this).parent().remove();
-            }, "json");
-        return false;
-    });
-    
     $("#link-names").click(function() {
         var authorIds = [];
         $("#suggestedNames :checked").each(function() {
@@ -154,12 +133,28 @@ $(function() {
             {   func: "link-names",
                 oid: "$oid",
                 authorIds: authorIds
-            }, function(data, status) {
+            }, function(data) {
                 console.log(data);
             }, "json");
     });
     
-    if ($("#displayNames :checkbox")) {
+    $("#unlink-names").click(function() {
+        var authorIds = [];
+        $("#displayNames :checked").each(function() {
+            var authorId = $(this).attr("value");
+            authorIds.push(authorId);
+        });
+        jQuery.post("$portalPath/workflows/nameAuthority.ajax",
+            {   func: "unlink-names",
+                oid: "$oid",
+                authorIds: authorIds
+            }, function(data) {
+                window.location.reload();
+            }, "json");
+    });
+    
+    if ($("#displayNames :checkbox").length == 0) {
+        $("#unlink-names").hide();
     }
 });
 </script>

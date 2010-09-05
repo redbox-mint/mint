@@ -6,7 +6,7 @@ from au.edu.usq.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
 from java.lang import Exception, String
-from java.util import ArrayList, HashMap
+from java.util import ArrayList, HashMap, HashSet
 
 from org.apache.commons.lang import StringEscapeUtils
 
@@ -41,6 +41,14 @@ class NameAuthorityData:
                     self.__manifest.set("manifest/node-%s/title" % id, title)
                 self.log.info(self.__manifest.toString())
                 self.__saveManifest(self.__oid)
+            elif func == "unlink-names":
+                authorIds = self.formData.getValues("authorIds")
+                print "Unlinking authors: ", authorIds
+                for authorId in authorIds:
+                    self.__manifest.removePath("manifest/node-%s" % authorId)
+                authorIds = self.formData.getValues("authorIds")
+                print "Linking authors: ", authorIds
+                self.__saveManifest(self.__oid)
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
             writer = self.response.getPrintWriter("application/json; charset=UTF-8")
@@ -48,7 +56,7 @@ class NameAuthorityData:
             writer.close()
     
     def __getAuthorDetails(self, authorIds):
-        query = "AND id:".join(authorIds)
+        query = " OR id:".join(authorIds)
         req = SearchRequest('id:%s' % query)
         req.setParam("fq", 'recordtype:"author"')
         req.addParam("fq", 'item_type:"object"')
@@ -67,8 +75,8 @@ class NameAuthorityData:
     
     def isLinked(self, oid):
         node = self.__manifest.get("manifest/node-%s" % oid)
-        self.log.info("manifest:{}", self.__manifest)
-        self.log.info(" ******* nodeid: {}", node)
+        #self.log.info("manifest:{}", self.__manifest)
+        #self.log.info(" ******* nodeid: {}", node)
         return node is not None
     
     def getSuggestedNames(self):
@@ -88,7 +96,19 @@ class NameAuthorityData:
         indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
-        return result.getJsonList("response/docs")
+        docs = result.getJsonList("response/docs")
+        
+        map = HashMap()
+        for doc in docs:
+            authorName = doc.getList("dc_title").get(0)
+            if map.containsKey(authorName):
+                authorDocs = map.get(authorName)
+            else:
+                authorDocs = ArrayList()
+                map.put(authorName, authorDocs)
+            authorDocs.add(doc)
+        
+        return docs
     
     def __getMetadata(self, oid):
         req = SearchRequest('id:%s' % oid)
