@@ -48,6 +48,7 @@
     </div>
 </div>
 <div class="grid_12">
+    ##<pre>$self.metadata.toString()</pre>
     <div class="box">
         <h2>Display names</h2>
         ##renderObject($self.getMetadata() "preview")
@@ -105,11 +106,12 @@
                 #foreach($authorName in $suggestedNames.keySet())
                     #set($hash = $self.getHash($authorName))
                     #if(!$self.isLinked($hash))
-                    <p>
                     #set($docs = $suggestedNames.get($authorName))
                     #set($rank = $self.getRank($docs.get(0).get("score")))
+                    <div class="suggestion" rel="$rank">
+                    <p>
                     <input type="checkbox" name="suggestions" value="$hash" id="author-${hash}"/>
-                    <label for="author-$hash">$authorName</label>&nbsp;(Rank: $rank) <a class="display-records" href="#" rel="$hash">(show)</a>
+                    <label for="author-$hash">$authorName</label>&nbsp;(Rank: $rank%) <a class="display-records" href="#" rel="$hash">(show)</a>
                     </p>
                     <ul id="${hash}-records" class="hidden">
                     #foreach($doc in $docs)
@@ -118,8 +120,13 @@
                         <li rel="$authorId">$!itemTitle</li>
                     #end
                     </ul>
+                    </div>
                     #end
                  #end
+                 <div>
+                    <p>Some names were found that could match but are less likely to. <a id="display-lesser" href="#">(show)</a></p>
+                    <div class="hidden" id="lesserMatches"></div>
+                 </div>
                 <button id="link-names">Link selected</button>
             </div>
         #end
@@ -216,6 +223,23 @@ $(function() {
     
     checkButton("displayNames", "unlink-names");
     checkButton("suggestedNames", "link-names");
+    
+    // filter suggestions by rank
+    $(".suggestion").each(function(index, item) {
+        var rank = $(item).attr("rel");
+        if (rank < 25) {
+            $(item).appendTo($("#lesserMatches"));
+        }
+    });
+    
+    $("#display-lesser").click(function() {
+        var me = $(this);
+        var lesser = $("#lesserMatches");
+        lesser.toggle("blind", function() {
+            me.text(lesser.is(":visible") ? "(hide)" : "(show)");
+        });
+        return false;
+    });
 });
 </script>
 <script id="linked-name-template" type="text/html">

@@ -84,8 +84,31 @@ class NameAuthorityData:
         return node is not None
     
     def getSuggestedNames(self):
-        query = " OR dc_title:".join(self.getPackageTitle().split(" "))
-        req = SearchRequest('dc_title:%s' % query)
+        # search common forms
+        lookupNames = []
+        surname = self.__metadata.getList("surname").get(0)
+        firstName = self.__metadata.getList("firstName").get(0)
+        firstInitial = firstName[0].upper()
+        secondName = self.__metadata.getList("secondName")
+        if not secondName.isEmpty():
+            secondName = secondName.get(0)
+        if secondName and secondName != "":
+            secondInitial = secondName[0].upper()
+            lookupNames.append("%s, %s. %s." % (surname, firstInitial, secondInitial))
+            lookupNames.append("%s, %s %s." % (surname, firstName, secondInitial))
+            lookupNames.append("%s, %s %s" % (surname, firstName, secondName))
+            lookupNames.append("%s %s %s" % (firstName, secondName, surname))
+        lookupNames.append("%s, %s." % (surname, firstInitial))
+        lookupNames.append("%s, %s" % (surname, firstName))
+        lookupNames.append("%s %s" % (firstName, surname))
+        query = '" OR dc_title:"'.join(lookupNames)
+        
+        # general word search from each part of the name
+        parts = [p for p in self.getPackageTitle().split(" ") if len(p) > 0]
+        query2 = " OR dc_title:".join(parts)
+        
+        req = SearchRequest('(dc_title:"%s")^2.5 OR (dc_title:%s)^0.5' % (query, query2))
+        self.log.info("suggestedNames query={}", req.query)
         req.setParam("fq", 'recordtype:"author"')
         req.addParam("fq", 'item_type:"object"')
         req.setParam("rows", "9999")
@@ -102,6 +125,7 @@ class NameAuthorityData:
         indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
+        #self.log.info("result={}", result.toString())
         docs = result.getJsonList("response/docs")
         
         map = LinkedHashMap()
@@ -114,7 +138,7 @@ class NameAuthorityData:
                 map.put(authorName, authorDocs)
             authorDocs.add(doc)
         
-        self.__maxScore = float(result.get("response/maxScore"))
+        self.__maxScore = max(1.0, float(result.get("response/maxScore")))
         
         return map
     
@@ -135,7 +159,7 @@ class NameAuthorityData:
         return result.getJsonList("response/docs").get(0)
     
     def getRank(self, score):
-        return "%.2f" % ((float(score) / self.__maxScore) * 100)
+        return "%.2f" % (min(1.0, float(score)) * 100)
     
     def getMetadata(self):
         return self.__metadata
