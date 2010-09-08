@@ -6,7 +6,7 @@ from au.edu.usq.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
 from java.lang import Exception, String
-from java.util import ArrayList, HashMap, HashSet
+from java.util import ArrayList, HashMap, HashSet, LinkedHashMap
 
 from org.apache.commons.lang import StringEscapeUtils
 
@@ -18,7 +18,6 @@ class NameAuthorityData:
         self.response = context["response"]
         self.defaultPortal = context["defaultPortal"]
         self.__oid = self.formData.get("oid")
-        self.log.info("oid={}", self.__oid)
         try:
             # get the package manifest
             self.__manifest = self.__readManifest(self.__oid)
@@ -27,33 +26,38 @@ class NameAuthorityData:
             self.log.error("Failed to load manifest: {}", e.getMessage());
             raise e
         
+        result = None
         try:
             func = self.formData.get("func")
             if func == "link-names":
-                authorIds = self.formData.getValues("authorIds")
-                print "Linking authors: ", authorIds
-                details = self.__getAuthorDetails(authorIds)
-                self.log.info(details.toString())
-                for detail in details:
-                    id = detail.get("id")
-                    title = detail.getList("dc_title").get(0)
-                    self.__manifest.set("manifest/node-%s/id" % id, id)
-                    self.__manifest.set("manifest/node-%s/title" % id, title)
-                self.log.info(self.__manifest.toString())
+                ids = self.formData.getValues("ids")
+                records = self.__getAuthorDetails(ids)
+                for record in records:
+                    id = record.get("id")
+                    name = record.getList("dc_title").get(0)
+                    title = record.getList("dc_description").get(0)
+                    hash = self.getHash(name)
+                    self.__manifest.set("manifest/node-%s/title" % (hash), name)
+                    self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
+                    self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
                 self.__saveManifest(self.__oid)
+                result = '{ status: "ok" }'
             elif func == "unlink-names":
-                authorIds = self.formData.getValues("authorIds")
-                print "Unlinking authors: ", authorIds
-                for authorId in authorIds:
-                    self.__manifest.removePath("manifest/node-%s" % authorId)
-                authorIds = self.formData.getValues("authorIds")
-                print "Linking authors: ", authorIds
+                ids = self.formData.getValues("ids")
+                for id in ids:
+                    self.__manifest.removePath("manifest/node-%s" % id)
+                result = '{ status: "ok" }'
                 self.__saveManifest(self.__oid)
+            #self.log.info(self.__manifest.toString())
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
+        if result:
             writer = self.response.getPrintWriter("application/json; charset=UTF-8")
             writer.println(result)
             writer.close()
+    
+    def getHash(self, data):
+        return md5.new(data).hexdigest()
     
     def __getAuthorDetails(self, authorIds):
         query = " OR id:".join(authorIds)
@@ -74,7 +78,7 @@ class NameAuthorityData:
         return result.getJsonList("response/docs")
     
     def isLinked(self, oid):
-        node = self.__manifest.get("manifest/node-%s" % oid)
+        node = self.__manifest.get("manifest//node-%s" % oid)
         #self.log.info("manifest:{}", self.__manifest)
         #self.log.info(" ******* nodeid: {}", node)
         return node is not None
@@ -85,6 +89,8 @@ class NameAuthorityData:
         req.setParam("fq", 'recordtype:"author"')
         req.addParam("fq", 'item_type:"object"')
         req.setParam("rows", "9999")
+        req.setParam("fl", "score")
+        req.setParam("sort", "score desc")
         
         # Make sure 'fq' has already been set in the session
         ##security_roles = self.authentication.get_roles_list();
@@ -98,7 +104,7 @@ class NameAuthorityData:
         
         docs = result.getJsonList("response/docs")
         
-        map = HashMap()
+        map = LinkedHashMap()
         for doc in docs:
             authorName = doc.getList("dc_title").get(0)
             if map.containsKey(authorName):
@@ -108,7 +114,9 @@ class NameAuthorityData:
                 map.put(authorName, authorDocs)
             authorDocs.add(doc)
         
-        return docs
+        self.__maxScore = float(result.get("response/maxScore"))
+        
+        return map
     
     def __getMetadata(self, oid):
         req = SearchRequest('id:%s' % oid)
@@ -123,8 +131,11 @@ class NameAuthorityData:
         indexer = self.services.getIndexer()
         indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
-        self.log.info("result={}", result.toString())
+        #self.log.info("result={}", result.toString())
         return result.getJsonList("response/docs").get(0)
+    
+    def getRank(self, score):
+        return "%.2f" % ((float(score) / self.__maxScore) * 100)
     
     def getMetadata(self):
         return self.__metadata

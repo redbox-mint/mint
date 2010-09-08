@@ -1,6 +1,7 @@
 <div>Author names linked to this person:</div>
+<br />
 <ul>
 #foreach($node in $self.getManifest())
-    <li><a href="$contextPath/author/detail/$node.get('id')">$node.get("title")</a></li>
+    <li>$node.get("title")</li>
 #end
 </ul>

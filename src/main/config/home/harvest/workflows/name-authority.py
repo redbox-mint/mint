@@ -87,10 +87,13 @@ if pid == metaPid:
         manifest = pkg.getJsonMap("manifest")
         for key in manifest.keySet():
             node = manifest.get(key)
-            nodeId = node.get("id")
             nodeTitle = node.get("title")
-            rules.add(AddField("package_node_id", nodeId))
             rules.add(AddField("package_node_title", nodeTitle))
+            children = node.getJsonMap("children")
+            for key in children:
+                childNode = children.get(key)
+                nodeId = childNode.get("id")
+                rules.add(AddField("package_node_id", nodeId))
     except Exception, e:
         print " *** Failed to index package items: %s" % str(e)
 

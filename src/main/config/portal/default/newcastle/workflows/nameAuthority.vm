@@ -6,7 +6,8 @@
         <h2>Actions</h2>
         <ul class="menu" id="actions">
             <li><a href="$portalPath/detail/$oid">View details...</a></li>
-            <li><a href="#" id="package-modify">Add display name...</a></li>
+            ## TODO
+            ##<li><a href="#" id="package-modify">Add display name...</a></li>
         </ul>
     </div>
     <div class="box">
@@ -54,14 +55,30 @@
         <p>Names used by this person.</p>
         <div id="displayNames">
         #foreach($node in $self.getManifest())
-            #set($nodeId = $node.get("id"))
-            #set($nodeTitle = $node.get("title"))
+            #set($authorName = $node.get("title"))
+            
+            ##<p>
+            ##    <input type="checkbox" name="linked" value="$nodeId" id="linked-$nodeId" />
+            ##    <label for="linked-$nodeId">$nodeTitle</label>
+                    ##<a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
+                ##</label>
+            ##</p>
+
+            #set($hash = $self.getHash($authorName))
             <p>
-                <input type="checkbox" name="linked" value="$nodeId" id="linked-$nodeId" />
-                <label for="linked-$nodeId">##$nodeTitle</label>
-                    <a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
-                </label>
+            <input type="checkbox" name="suggestions" value="$hash" id="author-${hash}"/>
+            <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(show)</a>
             </p>
+            #set($docs = $node.getJsonMap("children"))
+            <ul id="${hash}-records" class="hidden">
+            #foreach($key in $docs.keySet())
+                #set($doc = $docs.get($key))
+                #set($authorId = $doc.get("id"))
+                #set($itemTitle = $doc.get("title"))
+                <li rel="$authorId">$!itemTitle</li>
+            #end
+            </ul>
+
         #end
         <button id="unlink-names">Unlink selected</button>
         ##</ul>
@@ -85,18 +102,24 @@
         #else
             <p>Below are some names that may match this person</p>
             <div id="suggestedNames">
-                #foreach($doc in $suggestedNames)
-                    #set($authorId = $doc.get("id"))
-                    #set($authorName = $doc.getList("dc_title").get(0))
-                    #set($itemTitle = $doc.getList("dc_description").get(0))
+                #foreach($authorName in $suggestedNames.keySet())
+                    #set($hash = $self.getHash($authorName))
+                    #if(!$self.isLinked($hash))
                     <p>
-                        <input #if($self.isLinked($authorId))disabled="disabled" checked="checked" #{end}type="checkbox" name="suggestions" value="$authorId" id="author-$authorId"/>
-                        <label for="author-$authorId" title="$!itemTitle">
-                            $authorName<br />
-                            $!itemTitle
-                        </label>
+                    #set($docs = $suggestedNames.get($authorName))
+                    #set($rank = $self.getRank($docs.get(0).get("score")))
+                    <input type="checkbox" name="suggestions" value="$hash" id="author-${hash}"/>
+                    <label for="author-$hash">$authorName</label>&nbsp;(Rank: $rank) <a class="display-records" href="#" rel="$hash">(show)</a>
                     </p>
-                #end
+                    <ul id="${hash}-records" class="hidden">
+                    #foreach($doc in $docs)
+                        #set($authorId = $doc.get("id"))
+                        #set($itemTitle = $doc.getList("dc_description").get(0))
+                        <li rel="$authorId">$!itemTitle</li>
+                    #end
+                    </ul>
+                    #end
+                 #end
                 <button id="link-names">Link selected</button>
             </div>
         #end
@@ -119,43 +142,80 @@ $(function() {
         return false;
     });
     
-    $("#name-search").click(function() {
-        
-    });
-    
     $("#link-names").click(function() {
-        var authorIds = [];
+        var ids = [];
         $("#suggestedNames :checked").each(function() {
-            var authorId = $(this).attr("value");
-            authorIds.push(authorId);
+            var hash = $(this).attr("value");
+            $("#" + hash + "-records li").each(function() {
+                var id = $(this).attr("rel");
+                ids.push(id);
+            });
         });
         jQuery.post("$portalPath/workflows/nameAuthority.ajax",
-            {   func: "link-names",
-                oid: "$oid",
-                authorIds: authorIds
-            }, function(data) {
-                console.log(data);
-            }, "json");
+            { func: "link-names", oid: "$oid", ids: ids },
+            function(data, status, xhr) {
+                if (data.status == "ok") {
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            },
+            "json");
     });
     
     $("#unlink-names").click(function() {
-        var authorIds = [];
+        var ids = [];
         $("#displayNames :checked").each(function() {
-            var authorId = $(this).attr("value");
-            authorIds.push(authorId);
+            var hash = $(this).attr("value");
+            ids.push(hash);
         });
         jQuery.post("$portalPath/workflows/nameAuthority.ajax",
-            {   func: "unlink-names",
-                oid: "$oid",
-                authorIds: authorIds
-            }, function(data) {
-                window.location.reload();
-            }, "json");
+            { func: "unlink-names", oid: "$oid", ids: ids },
+            function(data, status, xhr) {
+                if (data.status == "ok") {
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            },
+            "json");
     });
     
-    if ($("#displayNames :checkbox").length == 0) {
-        $("#unlink-names").hide();
+    
+    $("a.display-records").click(function() {
+        var me = $(this);
+        var hash = me.attr("rel");
+        var records = $("#" + hash + "-records");
+        records.toggle("blind", function() {
+            me.text(records.is(":visible") ? "(hide)" : "(show)");
+        });
+        return false;
+    });
+    
+    function watchButton(rootId, buttonId) {
+        $("#" + rootId + " :checkbox").click(function() {
+            if ($("#" + rootId + " :checked").length == 0) {
+                $("#" + buttonId).attr("disabled", "disabled");
+            } else {
+                $("#" + buttonId).removeAttr("disabled");
+            }
+        });
     }
+    
+    watchButton("displayNames", "unlink-names");
+    watchButton("suggestedNames", "link-names");
+    
+    function checkButton(rootId, buttonId) {
+        if ($("#" + rootId + " :checkbox").length == 0) {
+            $("#" + buttonId).hide();
+        }
+        if ($("#" + rootId + " :checked").length == 0) {
+            $("#" + buttonId).attr("disabled", "disabled");
+        }
+    }
+    
+    checkButton("displayNames", "unlink-names");
+    checkButton("suggestedNames", "link-names");
 });
 </script>
 <script id="linked-name-template" type="text/html">
