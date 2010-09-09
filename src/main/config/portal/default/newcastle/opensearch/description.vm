@@ -7,5 +7,5 @@
     <Image height="16" width="16" type="image/x-icon">http://fascinator.usq.edu.au/favicon.ico</Image>
     <Url type="text/html" method="get" template="$baseUrl/search?query={searchTerms}" />
     <Url type="application/x-suggestions+json" method="get" template="$baseUrl/opensearch/suggest?query={searchTerms}" rel="suggestions" />
-    <Url type="application/x-fascinator-lookup+json" method="get" template="$baseUrl/opensearch/lookup?searchTerms={searchTerms}&startIndex={startIndex}&count={count}" rel="suggestions" />
+    <Url type="application/x-fascinator-lookup+json" method="get" template="$baseUrl/opensearch/lookup?searchTerms={searchTerms}&amp;startIndex={startIndex?}&amp;count={count?}" rel="suggestions" />
 </OpenSearchDescription>
