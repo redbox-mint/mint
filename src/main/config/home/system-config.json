@@ -1,5 +1,5 @@
 {
-    "version": "0.7.2",
+    "version": "0.7.6",
     "configured": true,
     "urlBase" : "http://novadev2.newcastle.edu.au:8086/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
@@ -100,21 +100,46 @@
                 "config" : {
                     "name" : "ingest"
                 }
+            },
+            {
+                "id" : "subscriber",
+                "description" : "Subscriber queue for event log.",
+                "priority": "7",
+                "config": {
+                    "name" : "subscriber",
+                    "subscribers": ["solr-event-log"]
+                }
+            },
+            {
+                "id" : "solrwrapper",
+                "description" : "Wrapper for ingest into main Solr core.",
+                "priority": "5",
+                "config": {
+                    "name" : "solrwrapper"
+                }
             }
         ]
     },
     "indexer": {
         "type": "solr",
         "properties": "SOF-META",
+        "useCache" : true,
+        "cachingLevel" : "dynamic",
+        "buffer": {
+            "docLimit" : "200",
+            "sizeLimit" : "204800",
+            "timeLimit" : "30"
+        },
         "solr": {
             "uri": "http://localhost:8086/solr/fascinator",
+            "coreName": "fascinator",
             "autocommit": false,
             "embedded": false
         },
         "anotar": {
             "uri": "http://localhost:8086/solr/anotar",
-            "autocommit": true,
-            "embedded": false
+            "coreName": "anotar",
+            "autocommit": true
         }
     },
     "transformerDefaults": {
@@ -139,12 +164,13 @@
     },
     "portal": {
         "home": "${portal.home}",
-        "contentDir": "${portal.home}",
+        "contentDir": "${fascinator.home}/content",
         "defaultView": "default",
         "skins": {
             "default": "default",
             "order": [ "newcastle" ]
         },
+        "cachingLevel": "dynamic",
         "layout": "layout",
         "nativeJython": true,
         "packageTypes": {
@@ -170,6 +196,16 @@
         }
     },
     "watcher" : {
-        "path": "${watcher.install.path}"
+        "path": "${INSTALL_PATH}/watcher"
+    },
+    "subscriber": {
+        "solr": {
+            "uri": "http://localhost:8086/solr/eventlog",
+            "buffer": {
+                "docLimit" : "200",
+                "sizeLimit" : "204800",
+                "timeLimit" : "30"
+            }
+        }
     }
 }
