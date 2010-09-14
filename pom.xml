@@ -122,6 +122,11 @@
         </dependency>
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <artifactId>plugin-subscriber-solrEventLog</artifactId>
+            <version>${fascinator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-transformer-solrmarc</artifactId>
             <version>${fascinator.version}</version>
         </dependency>

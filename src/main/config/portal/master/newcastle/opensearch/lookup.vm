@@ -2,7 +2,7 @@
 #set($results = $self.getResults())
 {
     "OpenSearchResponse": {
-        "title": "General Search",
+        "title": "People Search",
         "link": "$self.getLink()",
         "totalResults": "$self.getTotalResults()",
         "startIndex" : "$self.getStartIndex()",
@@ -14,23 +14,23 @@
         }
     },
     "namespaces": {
-        "dc": "http://purl.org/dc/terms",
-        "owl": "http://www.w3.org/2002/07/owl#",
-        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "vivo": "http://vivoweb.org/ontology/core#"
     },
     "results": [
         #foreach($result in $results)
-            #set($dctitles = $result.getList("dc_title"))
             {
                 "result-metadata": {
                     "relevance": $result.get("score")
                 }
                 "rdf:about": "$self.getBaseUrl()/master/detail/$result.get('id')",
-                "rdfs:type": ["owl:Thing"],
-                "rdfs:label": "$self.getValue($result, 'dc_title')",
-                "dc:title": $self.getValueList($result, "dc_title"),
-                "dc:description": $self.getValueList($result, "dc_description")
+                "rdfs:type": ["foaf:Person", "foaf:agent", "owl:Thing"],
+                "rdfs:label": "$result.getList('dc_title').get(0)",
+                "foaf:firstName": "$result.getList('firstName').get(0)",
+                "foaf:lastName": "$result.getList('surname').get(0)",
+                "vivo:workEmail": "$result.getList('email').get(0)",
             }
             #if($velocityCount < $results.size()),#end
         #end

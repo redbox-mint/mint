@@ -3,6 +3,7 @@ from au.edu.usq.fascinator.common import JsonConfig, JsonConfigHelper
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream
 from java.lang import Exception
+from java.util import ArrayList
 
 class LookupData:
     def __init__(self):
@@ -44,30 +45,23 @@ class LookupData:
         return "request"
     
     def getSearchTerms(self):
-        return self.getFormData("searchTerms", None)
+        return self.getFormData("searchTerms", "")
     
     def getStartPage(self):
-        #index = int(self.getStartIndex())
-        #perPage = int(self.getItemsPerPage())
-        return 0 #(index / perPage)
+        index = int(self.getStartIndex())
+        perPage = int(self.getItemsPerPage())
+        return (index / perPage)
     
     def getResults(self):
         return self.__results
     
-    def getValue(self, doc, field):
-        return doc.getList(field).get(0)
-    
-    def getValueList(self, doc, field):
-        return '["%s"]' % '", "'.join(doc.getList(field)) + ""
-    
     def __getSolrData(self):
         prefix = self.getSearchTerms()
-        if prefix:
-            query = '%(prefix)s OR %(prefix)s*' % { "prefix" : prefix }
-        else:
-            query = "*:*"
+        query = 'dc_title:"%(prefix)s" OR dc_title:%(prefix)s*' % { "prefix" : prefix }
+        query2 = 'package_node_title:"%(prefix)s" OR package_node_title:%(prefix)s*' % { "prefix" : prefix }
         
-        req = SearchRequest(query)
+        req = SearchRequest("(%s)^2.5 OR (%s)^0.5" % (query, query2))
+        req.addParam("fq", "recordtype:master")
         req.addParam("fq", 'item_type:"object"')
         req.setParam("fl", "score")
         req.setParam("sort", "score desc")
@@ -89,4 +83,5 @@ class LookupData:
         if value is None or value == "":
             return default
         return value
+    
 
