@@ -30,7 +30,7 @@
                 "rdfs:label": "$result.getList('dc_title').get(0)",
                 "foaf:firstName": "$result.getList('firstName').get(0)",
                 "foaf:lastName": "$result.getList('surname').get(0)",
-                "vivo:workEmail": "$result.getList('email').get(0)",
+                "vivo:workEmail": "$result.getList('email').get(0)"
             }
             #if($velocityCount < $results.size()),#end
         #end
