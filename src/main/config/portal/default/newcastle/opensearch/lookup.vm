@@ -25,7 +25,7 @@
             {
                 "result-metadata": {
                     "relevance": $result.get("score")
-                }
+                },
                 "rdf:about": "$self.getBaseUrl()/master/detail/$result.get('id')",
                 "rdfs:type": ["owl:Thing"],
                 "rdfs:label": "$self.getValue($result, 'dc_title')",
