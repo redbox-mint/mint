@@ -84,6 +84,17 @@
             <artifactId>plugin-transformer-marc-authors</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Contrib plugins -->
+        <dependency>
+            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <artifactId>plugin-harvester-geonames</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <artifactId>plugin-harvester-skos</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
@@ -147,8 +158,7 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Use Groovy to define a clean path to the top level directory.
-                 Windows pathing can be problematic, so we fix that here too -->
+            <!-- Use Groovy to define a clean path to the top level directory. Windows pathing can be problematic, so we fix that here too -->
             <plugin>
                 <groupId>org.codehaus.groovy.maven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
@@ -190,6 +200,20 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.1</version>
                 <executions>
+                    <!-- Unpack SKOS and Geonames harvest config -->
+                    <execution>
+                        <id>unpack-harvest-config</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>au.edu.usq.fascinator.plugins</includeGroupIds>
+                            <includeArtifactIds>plugin-harvester-geonames,plugin-harvester-skos</includeArtifactIds>
+                            <includes>harvest/**</includes>
+                            <outputDirectory>${dir.home}</outputDirectory>
+                        </configuration>
+                    </execution>
                     <!-- Unpack common workflow configuration -->
                     <execution>
                         <id>unpack-workflows</id>
