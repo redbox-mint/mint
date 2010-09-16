@@ -1,4 +1,4 @@
-import time
+import md5, time
 
 from au.edu.usq.fascinator.api.storage import StorageException
 from au.edu.usq.fascinator.common import JsonConfigHelper
@@ -6,6 +6,7 @@ from au.edu.usq.fascinator.common.storage import StorageUtils
 
 from java.io import ByteArrayInputStream
 from java.lang import Exception, String
+from java.util import HashMap
 
 class IndexData:
     def __init__(self):
@@ -14,6 +15,7 @@ class IndexData:
     def __activate__(self, context):
         # Prepare variables
         self.index = context["fields"]
+        self.indexer = context["indexer"]
         self.object = context["object"]
         self.payload = context["payload"]
         self.params = context["params"]
@@ -29,12 +31,49 @@ class IndexData:
             self.__basicData()
             self.__metadata()
             self.__nameAuthority()
+            self.__processOrgUnits()
             # Some of the above steps may request some
             #  messages be sent, particularly workflows.
             self.__messages()
 
         # Make sure security comes after workflows
-        self.__security()
+        self.__security(self.oid, self.index)
+
+    def __processOrgUnits(self):
+        try:
+            payload = self.object.getPayload("workflow.metadata")
+            json = self.utils.getJsonObject(payload.open())
+            payload.close()
+            
+            authors = json.getJsonList("authors")
+            for author in authors:
+                authorName = author.get("author")
+                orgUnitId = author.get("orgUnitId")
+                orgUnit = author.get("orgUnit")
+                expiry = author.get("expiry")
+                expiry = time.strptime(expiry, "%d/%m/%Y")
+                expiry = time.strftime("%Y-%m-%dT%H:%M:%SZ", expiry)
+                oid = md5.new(orgUnitId + "#" + orgUnit).hexdigest()
+                index = HashMap()
+                self.utils.add(index, "id", oid)
+                self.utils.add(index, "storage_id", self.oid)
+                self.utils.add(index, "item_type", "object")
+                self.utils.add(index, "last_modified", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
+                self.utils.add(index, "harvest_config", self.params.getProperty("jsonConfigOid"))
+                self.utils.add(index, "harvest_rules",  self.params.getProperty("rulesOid"))
+                self.utils.add(index, "dc_title", orgUnit)
+                self.utils.add(index, "recordtype", "org_unit")
+                self.utils.add(index, "repository_name", self.params["repository.name"])
+                self.utils.add(index, "repository_type", self.params["repository.type"])
+                self.utils.add(index, "display_type", "org-unit")
+                self.utils.add(index, "org_unit_id", orgUnitId)
+                self.utils.add(index, "org_unit_label", orgUnit)
+                self.utils.add(index, "org_unit_author", authorName)
+                self.utils.add(index, "date_org_unit_expiry", expiry)
+                self.__security(oid, index)
+                self.indexer.sendIndexToBuffer(oid, index)
+        except StorageException, se:
+            print "Failed to read workflow metadata payload: '%s'" % str(e)
 
     def __nameAuthority(self):
         # set constant fields
@@ -99,9 +138,9 @@ class IndexData:
             except Exception, e:
                 pass
 
-    def __security(self):
+    def __security(self, oid, index):
         # Security
-        roles = self.utils.getRolesWithAccess(self.oid)
+        roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:
             # For every role currently with access
             for role in roles:
@@ -109,35 +148,35 @@ class IndexData:
                 if role != "":
                     if role in self.item_security:
                         # They still have access
-                        self.utils.add(self.index, "security_filter", role)
+                        self.utils.add(index, "security_filter", role)
                     else:
                         # Their access has been revoked
-                        self.__revokeAccess(role)
+                        self.__revokeAccess(oid, role)
             # Now for every role that the new step allows access
             for role in self.item_security:
                 if role not in roles:
                     # Grant access if new
-                    self.__grantAccess(role)
-                    self.utils.add(self.index, "security_filter", role)
+                    self.__grantAccess(oid, role)
+                    self.utils.add(index, "security_filter", role)
 
         # No existing security
         else:
             if self.item_security is None:
                 # Guest access if none provided so far
-                self.__grantAccess("guest")
-                self.utils.add(self.index, "security_filter", role)
+                self.__grantAccess(oid, "guest")
+                self.utils.add(index, "security_filter", role)
             else:
                 # Otherwise use workflow security
                 for role in self.item_security:
                     # Grant access if new
-                    self.__grantAccess(role)
-                    self.utils.add(self.index, "security_filter", role)
+                    self.__grantAccess(oid, role)
+                    self.utils.add(index, "security_filter", role)
         # Ownership
         owner = self.params.getProperty("owner", None)
         if owner is None:
-            self.utils.add(self.index, "owner", "system")
+            self.utils.add(index, "owner", "system")
         else:
-            self.utils.add(self.index, "owner", owner)
+            self.utils.add(index, "owner", owner)
 
     def __indexPath(self, name, path, includeLastPart=True):
         parts = path.split("/")
@@ -166,15 +205,15 @@ class IndexData:
                     valueList.append(node.getText())
         return valueList
 
-    def __grantAccess(self, newRole):
+    def __grantAccess(self, oid, newRole):
         schema = self.utils.getAccessSchema("derby");
-        schema.setRecordId(self.oid)
+        schema.setRecordId(oid)
         schema.set("role", newRole)
         self.utils.setAccessSchema(schema, "derby")
 
-    def __revokeAccess(self, oldRole):
+    def __revokeAccess(self, oid, oldRole):
         schema = self.utils.getAccessSchema("derby");
-        schema.setRecordId(self.oid)
+        schema.setRecordId(oid)
         schema.set("role", oldRole)
         self.utils.removeAccessSchema(schema, "derby")
 

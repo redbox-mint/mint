@@ -1,6 +1,8 @@
-import time
+import md5, time
 
 from au.edu.usq.fascinator.api.storage import StorageException
+
+from java.util import HashMap
 
 class IndexData:
     def __init__(self):
@@ -9,6 +11,7 @@ class IndexData:
     def __activate__(self, context):
         # Prepare variables
         self.index = context["fields"]
+        self.indexer = context["indexer"]
         self.object = context["object"]
         self.payload = context["payload"]
         self.params = context["params"]
@@ -19,27 +22,53 @@ class IndexData:
 
         # Real metadata
         if self.itemType == "object":
-            if self.params["recordType"] == "marc-author":
-                self.__author()
-            else:
-                self.__previews()
-                self.__basicData()
-                self.__metadata()
-                self.__solrMarc()
+            self.__previews()
+            self.__basicData()
+            self.__metadata()
+            self.__solrMarc()
+            self.__processAuthors()
 
         # Make sure security comes after workflows
-        self.__security()
-        
-    def __author(self):
-        title = self.params["title"]
-        author = self.params["author"]
-        self.utils.add(self.index, "dc_title", author)
-        self.utils.add(self.index, "dc_description", title)
-        self.utils.add(self.index, "dc_format", "application/x-fascinator-author")
-        self.utils.add(self.index, "recordtype", "author")
-        self.utils.add(self.index, "repository_name", self.params["repository.name"])
-        self.utils.add(self.index, "repository_type", self.params["repository.type"])
-        self.utils.add(self.index, "display_type", "author")
+        self.__security(self.oid, self.index)
+
+    def __processAuthors(self):
+        try:
+            payload = self.object.getPayload("metadata.json")
+            json = self.utils.getJsonObject(payload.open())
+            payload.close()
+            
+            title = json.get("title")
+            
+            author100 = json.get("author_100")
+            if author100:
+                self.__createAuthorRecord(title, author100)
+            
+            author700 = json.getList("author_700")
+            for author in author700:
+                self.__createAuthorRecord(title, author)
+            
+        except StorageException, se:
+            print "Failed to read metadata payload: '%s'" % str(e)
+
+    def __createAuthorRecord(self, title, author):
+        hash = title.encode("utf-8") + "#" + author.encode("utf-8")
+        print "Creating author record:", hash
+        oid = md5.new(hash).hexdigest()
+        index = HashMap()
+        self.utils.add(index, "id", oid)
+        self.utils.add(index, "storage_id", self.oid)
+        self.utils.add(index, "item_type", "object")
+        self.utils.add(index, "last_modified", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        self.utils.add(index, "harvest_config", self.params.getProperty("jsonConfigOid"))
+        self.utils.add(index, "harvest_rules",  self.params.getProperty("rulesOid"))
+        self.utils.add(index, "dc_title", author)
+        self.utils.add(index, "dc_description", title)
+        self.utils.add(index, "recordtype", "author")
+        self.utils.add(index, "repository_name", self.params["repository.name"])
+        self.utils.add(index, "repository_type", self.params["repository.type"])
+        self.utils.add(index, "display_type", "author")
+        self.__security(oid, index)
+        self.indexer.sendIndexToBuffer(oid, index)
 
     def __mapVuFind(self, ourField, theirField, map):
         for value in map.getList(theirField):
@@ -113,18 +142,18 @@ class IndexData:
             except Exception, e:
                 pass
 
-    def __security(self):
-        roles = self.utils.getRolesWithAccess(self.oid)
+    def __security(self, oid, index):
+        roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:
             for role in roles:
-                self.utils.add(self.index, "security_filter", role)
+                self.utils.add(index, "security_filter", role)
         else:
             # Default to guest access if Null object returned
             schema = self.utils.getAccessSchema("derby");
-            schema.setRecordId(self.oid)
+            schema.setRecordId(oid)
             schema.set("role", "guest")
             self.utils.setAccessSchema(schema, "derby")
-            self.utils.add(self.index, "security_filter", "guest")
+            self.utils.add(index, "security_filter", "guest")
 
     def __metadata(self):
         self.utils.registerNamespace("oai_dc", "http://www.openarchives.org/OAI/2.0/oai_dc/")
