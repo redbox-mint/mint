@@ -210,7 +210,7 @@
                         <configuration>
                             <includeGroupIds>au.edu.usq.fascinator.plugins</includeGroupIds>
                             <includeArtifactIds>plugin-harvester-geonames,plugin-harvester-skos</includeArtifactIds>
-                            <includes>harvest/**</includes>
+                            <includes>harvest/**,geonames/**,skos/**</includes>
                             <outputDirectory>${dir.home}</outputDirectory>
                         </configuration>
                     </execution>
