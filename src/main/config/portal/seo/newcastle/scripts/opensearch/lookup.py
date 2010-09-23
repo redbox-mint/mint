@@ -80,6 +80,13 @@ class LookupData:
         req.setParam("sort", "score desc")
         req.setParam("start", self.getStartIndex())
         req.setParam("rows", self.getItemsPerPage())
+        level = self.getFormData("level", None)
+        if level is not None:
+            if level=="top":
+                #query += " AND skos_hasTopConcept:http*"
+                query += ' AND dc_identifier:"http://purl.org/anzsrc/seo/#division"'
+            else:
+                query += ' AND skos_broader:"%s"' % level
         
         try:
             out = ByteArrayOutputStream()

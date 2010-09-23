@@ -72,6 +72,13 @@ class LookupData:
             query = '%(prefix)s OR %(prefix)s*' % { "prefix" : prefix }
         else:
             query = "*:*"
+        level = self.getFormData("level", None)
+        if level is not None:
+            if level=="top":
+                #query += " AND skos_hasTopConcept:http*"
+                query += ' AND dc_identifier:"http://purl.org/anzsrc/for/#division"'
+            else:
+                query += ' AND skos_broader:"%s"' % level
         
         req = SearchRequest(query)
         req.addParam("fq", 'item_type:"object"')
