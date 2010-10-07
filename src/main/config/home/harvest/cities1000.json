@@ -1,0 +1,62 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/geonames/cities1000.txt",
+            "idColumn": "geonameid",
+            "recordIDPrefix": "http://geonames.org/",
+            "headerRow": "false",
+            "headerList": ["geonameid", 
+                                "name",
+                                "asciiname",
+                                "alternatenames",
+                                "latitude",
+                                "longitude",
+                                "feature class",
+                                "feature code",
+                                "country code",
+                                "cc2", 
+                                "admin1 code", 
+                                "admin2 code",
+                                "admin3 code", 
+                                "admin4 code", 
+                                "population", 
+                                "elevation", 
+                                "gtopo30", 
+                                "timezone", 
+                                "modification date"
+                                ],
+            "delimiter": "\t",
+            "includedFields" : ["geonameid", 
+                                "name",
+                                "asciiname",
+                                "alternatenames",
+                                "latitude",
+                                "longitude",
+                                "feature class",
+                                "feature code",
+                                "country code",
+                                "cc2", 
+                                "admin1 code", 
+                                "admin2 code",
+                                "admin3 code", 
+                                "admin4 code", 
+                                "population", 
+                                "elevation", 
+                                "gtopo30", 
+                                "timezone", 
+                                "modification date"
+                                ]
+        }
+    },
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "cities1000.py"
+        },
+        "params": {
+            "repository.name": "Geonames",
+            "repository.type": "Geonames"
+        }
+    }
+}
