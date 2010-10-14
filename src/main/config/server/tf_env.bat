@@ -33,7 +33,7 @@ REM jvm memory settings
 set JVM_OPTS=-XX:MaxPermSize=256m -Xmx512m
 
 REM jetty settings
-set JETTY_OPTS=-Djetty.port=8080 -Djetty.logs=%JETTY_LOGS% -Djetty.home=${dir.server}/jetty
+set JETTY_OPTS=-Djetty.port=${server.port} -Djetty.logs=%JETTY_LOGS% -Djetty.home=${dir.server}/jetty
 
 REM solr settings
 set SOLR_OPTS=-Dsolr.solr.home="${dir.solr}" -Djava.util.logging.config.file="${dir.solr}/logging.properties"

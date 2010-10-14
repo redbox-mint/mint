@@ -18,6 +18,7 @@
         <dir.server>${project.home}/server</dir.server>
         <dir.solr>${project.home}/solr</dir.solr>
         <dir.storage>${project.home}/storage</dir.storage>
+		<server.port>8086</server.port>
     </properties>
     <modules>
         <module>parent</module>
@@ -134,6 +135,11 @@
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-storage-filesystem</artifactId>
+            <version>${fascinator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <artifactId>plugin-storage-fedora3</artifactId>
             <version>${fascinator.version}</version>
         </dependency>
         <dependency>

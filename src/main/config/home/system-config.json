@@ -1,9 +1,17 @@
 {
-    "version": "0.7.6",
+    "version": "0.7.7",
     "configured": true,
-    "urlBase" : "http://novadev2.newcastle.edu.au:8086/mint/",
+    "urlBaseNova" : "http://novadev2.newcastle.edu.au/mint/",
+	"urlBase" : "http://localhost:${jetty.port}/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
-    "sso": ["OpenID"],
+    "sso": {
+        "plugins": ["OpenID"],
+        "urlExclusions": {
+            "startsWith" : ["css/", "feed/", "images/", "js/", "flowplayer/"],
+            "endsWidth" : [".ico"],
+            "equals" : ["css"]
+        }
+    },
     "accesscontrol": {
     "type" : "derby",
         "derby" : {
@@ -23,9 +31,14 @@
         }
     },
     "storage": {
-        "type": "file-system",
+        "type": "fedora3",
         "file-system": {
             "home": "${storage.home}"
+        },
+        "fedora3": {
+            "url": "http://localhost:7070/fedora",
+            "username": "fedoraAdmin",
+            "password": "fedoraAdmin"
         }
     },
     "messaging" : {
@@ -131,13 +144,13 @@
             "timeLimit" : "30"
         },
         "solr": {
-            "uri": "http://localhost:8086/solr/fascinator",
+            "uri": "http://localhost:${jetty.port}/solr/fascinator",
             "coreName": "fascinator",
             "autocommit": false,
             "embedded": false
         },
         "anotar": {
-            "uri": "http://localhost:8086/solr/anotar",
+            "uri": "http://localhost:${jetty.port}/solr/anotar",
             "coreName": "anotar",
             "autocommit": true
         }
@@ -200,7 +213,7 @@
     },
     "subscriber": {
         "solr": {
-            "uri": "http://localhost:8086/solr/eventlog",
+            "uri": "http://localhost:${jetty.port}/solr/eventlog",
             "buffer": {
                 "docLimit" : "200",
                 "sizeLimit" : "204800",
