@@ -1,8 +1,7 @@
 {
-    "version": "0.7.7",
+    "version": "0.7.8",
     "configured": true,
-    "urlBaseNova" : "http://novadev2.newcastle.edu.au/mint/",
-	"urlBase" : "http://localhost:${jetty.port}/mint/",
+    "urlBase" : "http://novadev2.newcastle.edu.au/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
     "sso": {
         "plugins": ["OpenID"],
@@ -10,7 +9,8 @@
             "startsWith" : ["css/", "feed/", "images/", "js/", "flowplayer/"],
             "endsWidth" : [".ico"],
             "equals" : ["css"]
-        }
+        },
+		"trustTokens" : {}
     },
     "accesscontrol": {
     "type" : "derby",
@@ -36,7 +36,7 @@
             "home": "${storage.home}"
         },
         "fedora3": {
-            "url": "http://localhost:7070/fedora",
+            "url": "http://localhost:8080/fedora",
             "username": "fedoraAdmin",
             "password": "fedoraAdmin"
         }
