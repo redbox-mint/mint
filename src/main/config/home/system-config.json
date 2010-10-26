@@ -1,5 +1,5 @@
 {
-    "version": "0.7.8",
+    "version": "0.7.12",
     "configured": true,
     "urlBase" : "http://novadev2.newcastle.edu.au/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
@@ -10,7 +10,7 @@
             "endsWidth" : [".ico"],
             "equals" : ["css"]
         },
-		"trustTokens" : {}
+        "trustTokens": {}
     },
     "accesscontrol": {
     "type" : "derby",
@@ -31,7 +31,7 @@
         }
     },
     "storage": {
-        "type": "fedora3",
+        "type": "file-system",
         "file-system": {
             "home": "${storage.home}"
         },
@@ -130,6 +130,26 @@
                 "config": {
                     "name" : "solrwrapper"
                 }
+            },
+            {
+                "id" : "emailnotification",
+                "description" : "Queue to send email notifications",
+                "priority" : "8",
+                "config" : {
+                    "name" : "emailnotification",
+                    "debug" : false,
+                    "from" : {
+                        "email" : "fascinator@usq.edu.au",
+                        "name": "The Fascinator"
+                    },
+                    "smtp" : {
+                        "host" : "smtp-gw.usq.edu.au"
+                    },
+                    "defaults" : {
+                        "subject" : "Notification",
+                        "body": "nt"
+                    }
+                }
             }
         ]
     },
@@ -156,7 +176,7 @@
         }
     },
     "transformerDefaults": {
-        "solrmarc": {
+    	"solrmarc": {
             "id": "solrmarc",
             "configPath": "${fascinator.home}/solrmarc/vital-config.properties"
         },
@@ -206,7 +226,24 @@
                 "jobs": [
                 ]
             }
+        },
+        "oai-pmh": {
+            "metadataFormats": {
+                "oai_dc": {
+                    "enabledViews": ["default"],
+                    "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
+                    "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
+                }
+            }
         }
+    },
+    "proxy-urls": {
+        "mintPeople" : "http://novadev2.newcastle.edu.au:8086/mint/master/opensearch/lookup",
+        "mintFor" : "http://novadev2.newcastle.edu.au:8086/mint/for/opensearch/lookup",
+        "mintSeo" : "http://novadev2.newcastle.edu.au:8086/mint/seo/opensearch/lookup",
+        "mintAuthor" : "http://novadev2.newcastle.edu.au:8086/mint/author/opensearch/lookup",
+        "mintGeoNames" : "http://novadev2.newcastle.edu.au:8086/mint/geonmaes/opensearch/lookup",
+        "mintOrgUnit" : "http://novadev2.newcastle.edu.au:8086/mint/orgunit/opensearch/lookup"
     },
     "watcher" : {
         "path": "${INSTALL_PATH}/watcher"
