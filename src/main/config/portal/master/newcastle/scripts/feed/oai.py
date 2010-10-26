@@ -2,6 +2,7 @@ import random, time, os
 from au.edu.usq.fascinator.api.indexer import SearchRequest
 from au.edu.usq.fascinator.common import JsonConfig, JsonConfigHelper
 from java.io import ByteArrayInputStream, ByteArrayOutputStream
+
 from java.lang import Boolean
 
 from java.io import InputStreamReader
@@ -136,9 +137,13 @@ class OaiData:
             ## Only list those data if the metadata format is enabled
             metadataPrefix = self.vc("formData").get("metadataPrefix")
             
-            enabledInViews = JsonConfig().getList("portal/oai-pmh/metadataFormats/%s/enabledViews" % metadataPrefix)
-            if self.__portalName in enabledInViews:
+            enabledInAllViews = Boolean.parseBoolean(JsonConfig().get("portal/oai-pmh/metadataFormats/%s/enabledInAllViews" % metadataPrefix, "false"))
+            if enabledInAllViews:
                 self.__search()
+            else:
+                enabledInViews = JsonConfig().getList("portal/oai-pmh/metadataFormats/%s/enabledViews" % metadataPrefix)
+                if self.__portalName in enabledInViews:
+                    self.__search()
 
     # Get from velocity context
     def vc(self, index):

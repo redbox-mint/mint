@@ -230,9 +230,22 @@
         "oai-pmh": {
             "metadataFormats": {
                 "oai_dc": {
+                    "enabledInAllViews": false,
                     "enabledViews": ["default"],
                     "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
                     "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
+                },
+                "eac_cpf": {
+                    "enabledInAllViews": false,
+                    "enabledViews": ["master"],
+                    "schema": "urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd",
+                    "metadataNamespace": "urn:isbn:1-931666-33-4"
+                },
+                "rif_cs": {
+                    "enabledInAllViews": false,
+                    "enabledViews": ["master"],
+                    "schema": "http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/registryObjects.xsd",
+                    "metadataNamespace": "http://ands.org.au/standards/rif-cs/registryObjects"
                 }
             }
         }
