@@ -61,8 +61,9 @@
         </identity>
         <relations> 
             #foreach($resource in $self.getResourceRelations())
+                #set ($handle = $resource.get("handle"))
                 <resourceRelation resourceRelationType="creatorOf"
-                    xlink:href="$resource.get("id")-->link to vital repository...?????"
+                    xlink:href="$handle"
                     xlink:type="simple">
                     <objectXMLWrap><dc:dc>
                             <dc:creator>$resource.get("author")</dc:creator>

@@ -36,10 +36,13 @@ class NameAuthorityData:
                     id = record.get("id")
                     name = record.getList("dc_title").get(0)
                     title = record.getList("dc_description").get(0)
+                    handle = record.getList("handle").get(0)
                     hash = self.getHash(name)
                     self.__manifest.set("manifest/node-%s/title" % (hash), name)
                     self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
                     self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
+                    if handle:
+                        self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
                 self.__saveManifest(self.__oid)
                 result = '{ status: "ok" }'
             elif func == "unlink-names":

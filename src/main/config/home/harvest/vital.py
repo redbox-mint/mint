@@ -16,6 +16,8 @@ class IndexData:
         self.payload = context["payload"]
         self.params = context["params"]
         self.utils = context["pyUtils"]
+        
+        self.handle = ""
 
         # Common data
         self.__newDoc()
@@ -24,9 +26,11 @@ class IndexData:
         if self.itemType == "object":
             self.__previews()
             self.__basicData()
-            self.__metadata()
-            self.__solrMarc()
-            self.__processAuthors()
+            # Run dc first before marc harvester, try to change in the oaiPmhHarvester to support multiple prefix in 1 harvest
+            self.__getHandleFromDC()
+            if self.params.get("prefix") == "marc":
+                self.__solrMarc()
+                self.__processAuthors()
 
         # Make sure security comes after workflows
         self.__security(self.oid, self.index)
@@ -64,6 +68,7 @@ class IndexData:
         self.utils.add(index, "dc_title", author)
         self.utils.add(index, "dc_description", title)
         self.utils.add(index, "recordtype", "author")
+        self.utils.add(index, "handle", self.handle)
         self.utils.add(index, "repository_name", self.params["repository.name"])
         self.utils.add(index, "repository_type", self.params["repository.type"])
         self.utils.add(index, "display_type", "author")
@@ -155,20 +160,17 @@ class IndexData:
             self.utils.setAccessSchema(schema, "derby")
             self.utils.add(index, "security_filter", "guest")
 
-    def __metadata(self):
+    def __getHandleFromDC(self):
         self.utils.registerNamespace("oai_dc", "http://www.openarchives.org/OAI/2.0/oai_dc/")
         self.utils.registerNamespace("dc", "http://purl.org/dc/elements/1.1/")
 
-        dcPayload = self.object.getPayload(self.object.getSourceId())
-        dc = self.utils.getXmlDocument(dcPayload.open())
-        dcPayload.close()
-        nodes = dc.selectNodes("//dc:*")
-        for node in nodes:
-            name = "dc_" + node.getName()
-            text = node.getTextTrim()
-            self.utils.add(self.index, name, text)
-            # Make sure we get the title and description just for the Fascanator
-            if name == "dc_title":
-                self.utils.add(self.index, "title", text)
-            if name == "dc_description":
-                self.utils.add(self.index, "description", text)
+        try:
+            dcPayload = self.object.getPayload("oai_dc.xml")
+            dc = self.utils.getXmlDocument(dcPayload.open())
+            dcPayload.close()
+            node = dc.selectSingleNode("//dc:identifier[starts-with(text(), 'http://hdl.handle.net')]")
+            if node:
+                self.handle = node.getTextTrim()
+                self.utils.add(self.index, "handle", self.handle)
+        except:
+           pass

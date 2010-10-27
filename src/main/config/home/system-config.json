@@ -1,5 +1,5 @@
 {
-    "version": "0.7.12",
+    "version": "0.7.13",
     "configured": true,
     "urlBase" : "http://novadev2.newcastle.edu.au/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
@@ -228,6 +228,7 @@
             }
         },
         "oai-pmh": {
+            "sessionExpiry": "300000",
             "metadataFormats": {
                 "oai_dc": {
                     "enabledInAllViews": false,

@@ -13,6 +13,6 @@
     #end
     
     #if ($self.token)
-        <resumptionToken>$self.token.getConstructedToken()</resumptionToken>
+        <resumptionToken>$self.token.getToken()</resumptionToken>
     #end
 </ListRecords>

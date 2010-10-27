@@ -1,12 +1,8 @@
 import random, time, os
 from au.edu.usq.fascinator.api.indexer import SearchRequest
 from au.edu.usq.fascinator.common import JsonConfig, JsonConfigHelper
-from java.io import ByteArrayInputStream, ByteArrayOutputStream
-
-from java.lang import Boolean
-
-from java.io import InputStreamReader
-
+from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
+from java.lang import Boolean, System, Long
 from org.apache.commons.lang import StringEscapeUtils
 
 from java.util import HashMap, HashSet
@@ -49,22 +45,28 @@ class OaiPmhError:
         return self.__message
 
 class OaiPmhVerb:
-    def __init__(self, formData):
+    def __init__(self, formData, currentToken, sessionState):
         self.__error = None
         self.__verb = formData.get("verb")
         self.__metadataFormats = self.__metadataFormatList()
         print " * verb=%s" % self.__verb
+        
         if self.__verb is None:
             self.__error = OaiPmhError("badVerb", "No verb was specified")
         elif self.__verb in ["GetRecord", "ListIdentifiers", "ListRecords"]:
             self.__metadataPrefix = formData.get("metadataPrefix")
             if self.__metadataPrefix is None:
-                #check if resumptionToken exist
-                self.__resumptionToken = formData.get("resumptionToken")
-                if self.__resumptionToken is None:
-                    self.__error = OaiPmhError("badArgument", "Missing required argument: metadataPrefix")
+                if currentToken:
+                    #check expiry
+                    if currentToken.getExpiry() > System.currentTimeMillis():
+                        self.__metadataPrefix = currentToken.getMetadataPrefix()
+                    else:
+                        self.__error=OaiPmhError("badResumptionToken", "Token has expired")
+                        tokenList = sessionState.get("resumptionTokenList")
+                        tokenList.pop(currentToken.getToken())
+                        sessionState.set("resumptionTokenList", tokenList)
                 else:
-                    self.__metadataPrefix = self.__resumptionToken.split("/")[3]
+                    self.__error=OaiPmhError("badResumptionToken", "Invalid token")
             elif self.__metadataPrefix not in self.__metadataFormatList():
                 self.__error = OaiPmhError("cannotDisseminateFormat",
                                            "Record not available as metadata type: %s" % self.__metadataPrefix)
@@ -93,22 +95,33 @@ class OaiPmhVerb:
         return self.__identifier
 
 class ResumptionToken:
-    def __init__(self, token=None, start=0, metadataPrefix=""):
+    def __init__(self, token=None, start=0, metadataPrefix="", sessionExpiry=300000):
         if token is None:
             random.seed()
             token = "%016x" % random.getrandbits(128)
         self.__token = token
         self.__start = start
         self.__metadataPrefix = metadataPrefix
+        self.__totalFound = 0
+        self.__expiry = System.currentTimeMillis() + sessionExpiry
     
     def getToken(self):
         return self.__token
     
+    def getExpiry(self):
+        return self.__expiry
+    
+    def setTotalFound(self, totalFound):
+        self.__totalFound = totalFound
+    
+    def getTotalFound(self):
+        return self.__totalFound
+    
+    def getMetadataPrefix(self):
+        return self.__metadataPrefix
+    
     def getStart(self):
         return self.__start
-    
-    def getConstructedToken(self):
-        return "archive/%s/%s/%s" % (self.__start, self.__token, self.__metadataPrefix)
 
 class OaiData:
     def __init__(self):
@@ -128,21 +141,41 @@ class OaiData:
         self.__authors = []
         self.__relatedResources = []
         
+        self.__enabledInAllViews = False
+        self.__enabledInViews = []
+        
+        self.__metadataPrefix = ""
+        
+        self.__sessionExpiry = Long.parseLong(JsonConfig().get("portal/oai-pmh/sessionExpiry"))
+        
+        self.__resumptionTokenList = self.sessionState.get("resumptionTokenList")
+        if self.__resumptionTokenList == None:
+            self.__resumptionTokenList = {}
+        #Check if there's resumption token exist in the formData
+        self.__currentToken = None
+        
+        resumptionToken = self.vc("formData").get("resumptionToken")
+        if resumptionToken:
+            if self.__resumptionTokenList.has_key(resumptionToken):
+                self.__currentToken = self.__resumptionTokenList[resumptionToken]
+        
         print " * oai.py: formData=%s" % self.vc("formData")
         self.vc("request").setAttribute("Content-Type", "text/xml")
-        self.__request = OaiPmhVerb(self.vc("formData"))
+        self.__request = OaiPmhVerb(self.vc("formData"), self.__currentToken, self.sessionState)
         if self.getError() is None and \
                 self.getVerb() in ["GetRecord", "ListIdentifiers", "ListRecords"]:
             
             ## Only list those data if the metadata format is enabled
-            metadataPrefix = self.vc("formData").get("metadataPrefix")
+            self.__metadataPrefix = self.vc("formData").get("metadataPrefix")
+            if self.__metadataPrefix is None:
+                self.__metadataPrefix = self.__currentToken.getMetadataPrefix()
             
-            enabledInAllViews = Boolean.parseBoolean(JsonConfig().get("portal/oai-pmh/metadataFormats/%s/enabledInAllViews" % metadataPrefix, "false"))
-            if enabledInAllViews:
+            self.__enabledInAllViews = Boolean.parseBoolean(JsonConfig().get("portal/oai-pmh/metadataFormats/%s/enabledInAllViews" % self.__metadataPrefix, "false"))
+            if self.__enabledInAllViews:
                 self.__search()
             else:
-                enabledInViews = JsonConfig().getList("portal/oai-pmh/metadataFormats/%s/enabledViews" % metadataPrefix)
-                if self.__portalName in enabledInViews:
+                self.__enabledInViews = JsonConfig().getList("portal/oai-pmh/metadataFormats/%s/enabledViews" % self.__metadataPrefix)
+                if self.__portalName in self.__enabledInViews:
                     self.__search()
 
     # Get from velocity context
@@ -197,28 +230,16 @@ class OaiData:
             req.addParam("fq", portalQuery)
         
         #Check if there's resumption token exist in the formData
-        resumptionToken = self.vc("formData").get("resumptionToken")
-        resumptionTokenList = None
-        numFoundFromPrevToken = 0
-        if resumptionToken:
-            # sample: archive/145/6f9b63f83bdb5d1e634b0348f77d8cb3/oai_dc
-            _, start, token, metadataPrefix = resumptionToken.split("/")
-            start = int(start) + recordsPerPage
-            
-            resumptionTokenList = self.sessionState.get("resumptionTokenList")
-            if resumptionTokenList.has_key(token):
-                numFoundFromPrevToken = int(resumptionTokenList[token][0])
-            
-            #Forseen the next 2 pages to check if the next token is the last page of the request
-            if start + recordsPerPage >= numFoundFromPrevToken:
-                start = 0
-                self.__token = None
-            else:
-                self.__token = ResumptionToken(token=token, start=start, metadataPrefix=metadataPrefix)
+        if self.__currentToken:
+            start = self.__currentToken.getStart()
+            totalFound = self.__currentToken.getTotalFound()
+            nextTokenStart = start+recordsPerPage
+            if nextTokenStart < totalFound:
+                self.__token = ResumptionToken(start=nextTokenStart, metadataPrefix=self.__metadataPrefix, sessionExpiry=self.__sessionExpiry)
         else:
-            start = recordsPerPage
+            start = 0
             metadataPrefix = self.vc("formData").get("metadataPrefix")
-            self.__token = ResumptionToken(start=start, metadataPrefix=metadataPrefix)
+            self.__token = ResumptionToken(start=recordsPerPage, metadataPrefix=self.__metadataPrefix, sessionExpiry=self.__sessionExpiry)
         
         req.setParam("start", str(start))
         
@@ -227,24 +248,30 @@ class OaiData:
         out = ByteArrayOutputStream()
         self.services.indexer.search(req, out)
         self.__result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
-        totalFound = self.__result.get("response/numFound")
+        
+        totalFound = int(self.__result.get("response/numFound"))
+        if totalFound == 0:
+            self.__token = None
+        elif self.__token:
+            if self.__token.getStart() < totalFound:
+                self.__token.setTotalFound(totalFound)
+            else:
+                self.__token = None
         
         #Storing the resumptionToken to session
         if self.__token:
-            resumptionTokenList = self.sessionState.get("resumptionTokenList")
-            #resumptionTokenList = {}
-            if resumptionTokenList == None:
-                resumptionTokenList = {}
-            resumptionTokenList[self.__token.getToken()] = (totalFound, self.__token.getConstructedToken())
+            self.__resumptionTokenList[self.__token.getToken()] = self.__token #(totalFound, self.__token.getConstructedToken())
             #Need to know how long the server need to store this token
-            self.sessionState.set("resumptionTokenList", resumptionTokenList)
+            self.sessionState.set("resumptionTokenList", self.__resumptionTokenList)
     
     def getUrlBase(self):
         conf = JsonConfig()
         return "%s%s/detail/" % (conf.get("urlBase"), self.__portalName)
     
     def getToken(self):
-        return self.__token
+        if self.__enabledInAllViews or self.__portalName in self.__enabledInViews:
+            return self.__token
+        return None
 
     def getMetadataFormats(self):
         conf = JsonConfig()
@@ -297,6 +324,8 @@ class OaiData:
                 childMap = children.get(child)
                 id = childMap.get("id")
                 title = childMap.get("title")
+                handle = childMap.get("handle")
+                map.put("handle", handle)
                 map.put("author", author)
                 map.put("title", title)
                 map.put("id", id)
