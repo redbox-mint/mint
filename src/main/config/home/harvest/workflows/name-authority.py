@@ -297,6 +297,7 @@ class IndexData:
                 title = formData.getList("title")
                 if title:
                     self.titleList = title
+                    wfMeta.set("pageTitle", title[0])
                 creator = formData.getList("creator")
                 if creator:
                     self.creatorList = creator
