@@ -1,5 +1,5 @@
 {
-    "version": "0.7.13",
+    "version": "0.7.14",
     "configured": true,
     "urlBase" : "http://novadev2.newcastle.edu.au/mint/",
     "email" : "dave.huthnance@newcastle.edu.au",
@@ -7,7 +7,7 @@
         "plugins": ["OpenID"],
         "urlExclusions": {
             "startsWith" : ["css/", "feed/", "images/", "js/", "flowplayer/"],
-            "endsWidth" : [".ico"],
+            "endsWith" : [".ico"],
             "equals" : ["css"]
         },
         "trustTokens": {}
@@ -157,7 +157,6 @@
         "type": "solr",
         "properties": "SOF-META",
         "useCache" : true,
-        "cachingLevel" : "dynamic",
         "buffer": {
             "docLimit" : "200",
             "sizeLimit" : "204800",
@@ -176,7 +175,7 @@
         }
     },
     "transformerDefaults": {
-    	"solrmarc": {
+        "solrmarc": {
             "id": "solrmarc",
             "configPath": "${fascinator.home}/solrmarc/vital-config.properties"
         },
@@ -194,6 +193,9 @@
     },
     "mime-types" : {
         "tfpackage" : "application/x-fascinator-package"
+    },
+    "database-service": {
+        "derbyHome" : "${fascinator.home}/database-service"
     },
     "portal": {
         "home": "${portal.home}",
@@ -231,7 +233,7 @@
             "sessionExpiry": "300000",
             "metadataFormats": {
                 "oai_dc": {
-                    "enabledInAllViews": false,
+                    "enabledInAllViews": true,
                     "enabledViews": ["default"],
                     "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
                     "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
