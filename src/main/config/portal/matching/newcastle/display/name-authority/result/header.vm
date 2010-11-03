@@ -1,0 +1,12 @@
+#set($packagingEnabled = false)
+<div class="$itemClass" id="$id">
+    #if($is_admin)
+        #parseDisplayTemplate("result/admin-actions.vm")
+    #end
+    <h3>
+        $self.getMimeTypeIcon($portalPath, $format)
+        #if($wfStep && $wfStep != "" && $wfStep != "live")
+            <img class="workflow" src="$portalPath/images/icons/wf_${wfStep}.png" />
+        #end
+        <a href="$portalPath/workflow/$id">$title</a>
+    </h3>

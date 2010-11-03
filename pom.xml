@@ -493,6 +493,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Set executable attribute for shell scripts -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <chmod file="${dir.server}/*.sh" perm="740"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

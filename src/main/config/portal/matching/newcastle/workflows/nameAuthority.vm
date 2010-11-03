@@ -1,29 +1,83 @@
 #set($manifest = $self.manifest)
 #set($oid = $self.getFormData("oid"))
 #set($title = $self.getFormData('title'))
-<div class="grid_4">
-    #*<div class="box menu">
-        <h2>Actions</h2>
-        <ul class="menu" id="actions">
-            <li><a href="$portalPath/detail/$oid">View details...</a></li>
-            ## TODO
-            ##<li><a href="#" id="package-modify">Add display name...</a></li>
-        </ul>
-    </div>*#
+
+<style type="text/css">
+.wfnav {
+    font-size: 1.25em;
+    margin-bottom: 0.5em;
+}
+.wfnav img {
+    vertical-align: top;
+}
+.wfnav a, .wfnav a:hover {
+    padding: 0.1em;
+}
+.wfnav a:hover {
+    background: #5E7553;
+    color: white;
+}
+</style>
+
+<div class="grid_16">
+    <div class="wfnav">
+        #set($prevOid = $self.prevOid)
+        #if($prevOid)
+            
+            <a href="$portalPath/workflow/$prevOid">
+                <img src="$portalPath/images/icons/arrow_left.png"/>
+                Previous
+            </a>
+            <em>($self.prevName)</em>
+        #end
+        #set($nextOid = $self.nextOid)
+        #if($nextOid)
+            <div class="right">
+                <em>($self.nextName)</em>
+                <a href="$portalPath/workflow/$nextOid">
+                    Next
+                    <img src="$portalPath/images/icons/arrow_right.png"/>
+                </a>
+            </div>
+        #end
+    </div>
+    #*
+    <div class="wfnav">
+        #set($prevUneditedOid = $self.prevUneditedOid)
+        #if($prevUneditedOid)
+            
+            <a href="$portalPath/workflow/$prevUneditedOid">
+                <img src="$portalPath/images/icons/book_previous.png"/>
+                Previous unedited
+            </a>
+            <em>($self.prevUneditedName)</em>
+        #end
+        #set($nextUneditedOid = $self.nextUneditedOid)
+        #if($nextUneditedOid)
+            <div class="right">
+                <em>($self.nextUneditedName)</em>
+                <a href="$portalPath/workflow/$nextUneditedOid">
+                    Next unedited
+                    <img src="$portalPath/images/icons/book_next.png"/>
+                </a>
+            </div>
+        #end
+    </div>
+    *#
+</div>
+<div id="action-list" class="grid_4">
     <div class="box">
-        <h2>Metadata</h2>
+        <h2>Debug</h2>
         <form action="$portalPath/workflow" id="package-form" method="post">
         <fieldset>
-            <p>
-                <label for="description">Description</label>
-                <input type="text" id="package-description" name="description" value="$!self.getMeta('description')" />
-            </p>
+            <p>Title: $self.getFormData("title")</p>
             <input type="hidden" name="targetStep" value="$self.getFormData('nextStep')" />
             <input type="hidden" name="oid" value="$oid" />
-            <input class="button" id="update-package" type="button" value="Update" />
+            <input class="button" id="update-package" type="button" value="Reindex" />
         </fieldset>
         </form>
     </div>
+    
     <div id="item-props" class="box hidden">
         <h2>Item properties</h2>
         <div id="item-form">

@@ -17,6 +17,8 @@ class NameAuthorityData:
         self.formData = context["formData"]
         self.response = context["response"]
         self.defaultPortal = context["defaultPortal"]
+        self.sessionState = context["sessionState"]
+        
         self.__oid = self.formData.get("oid")
         try:
             # get the package manifest
@@ -25,6 +27,9 @@ class NameAuthorityData:
         except Exception, e:
             self.log.error("Failed to load manifest: {}", e.getMessage());
             raise e
+        
+        #print "\n***************\n%s\n************\n" % self.sessionState
+        self.__oidList, self.__nameList = self.__getNavData()
         
         result = None
         try:
@@ -52,15 +57,77 @@ class NameAuthorityData:
                 result = '{ status: "ok" }'
                 self.__saveManifest(self.__oid)
             #self.log.info(self.__manifest.toString())
-            elif func== "search-names":
-                searchText = self.formData.get("text")
-                result = self.__searchNames(searchText)
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
         if result:
             writer = self.response.getPrintWriter("application/json; charset=UTF-8")
             writer.println(result)
             writer.close()
+    
+    def __getNavData(self):
+        query = self.sessionState.get("query")
+        if query == "":
+            query = "*:*"
+        req = SearchRequest(query)
+        req.setParam("fl", "id dc_title")
+        req.setParam("sort", "f_dc_title asc")
+        req.setParam("rows", "10000")
+        fq = self.sessionState.get("fq")
+        if fq:
+            for q in fq:
+                req.addParam("fq", q)
+        
+        out = ByteArrayOutputStream()
+        indexer = self.services.getIndexer()
+        indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        oidList = result.getList("response/docs/id")
+        nameList = result.getList("response/docs/dc_title")
+        #print " *** oidList:'%s'" % oidList
+        #print " *** nameList:'%s'" % nameList
+        return oidList, nameList
+    
+    def __getNavDataUnedited(self):
+        pass
+    
+    def __getIndex(self):
+        return self.__oidList.indexOf(self.__oid)
+    
+    def getNextOid(self):
+        i = self.__getIndex()
+        if i+1 < self.__oidList.size():
+            return self.__oidList.get(i+1)
+        return None
+    
+    def getNextName(self):
+        i = self.__getIndex()
+        if i+1 < self.__nameList.size():
+            return self.__nameList.get(i+1)
+        return None
+    
+    def getPrevOid(self):
+        i = self.__getIndex()
+        if i > 0:
+            return self.__oidList.get(i-1)
+        return None
+    
+    def getPrevName(self):
+        i = self.__getIndex()
+        if i > 0:
+            return self.__nameList.get(i-1)
+        return None
+    
+    def getNextUneditedOid(self):
+        return None
+    
+    def getNextUneditedName(self):
+        return None
+    
+    def getPrevUneditedOid(self):
+        return None
+    
+    def getPrevUneditedName(self):
+        return None
     
     def getHash(self, data):
         return md5.new(data).hexdigest()
@@ -245,43 +312,3 @@ class NameAuthorityData:
         object.updatePayload(sourceId,
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
-
-    def __searchNames(self, searchText):
-        # search common forms
-        lookupNames = []
-        
-        req = SearchRequest('(dc_title:"%s")^2.5' % searchText)
-        self.log.info("searchNames query={}", req.query)
-        req.setParam("fq", 'recordtype:"author"')
-        req.addParam("fq", 'item_type:"object"')
-        req.setParam("rows", "9999")
-        req.setParam("fl", "score")
-        req.setParam("sort", "score desc")
-        
-        # Make sure 'fq' has already been set in the session
-        ##security_roles = self.authentication.get_roles_list();
-        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
-        ##req.addParam("fq", security_query)
-        
-        out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
-        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
-        
-        #self.log.info("result={}", result.toString())
-        docs = result.getJsonList("response/docs")
-        return docs
-        map = LinkedHashMap()
-        for doc in docs:
-            authorName = doc.getList("dc_title").get(0)
-            if map.containsKey(authorName):
-                authorDocs = map.get(authorName)
-            else:
-                authorDocs = ArrayList()
-                map.put(authorName, authorDocs)
-            authorDocs.add(doc)
-        
-        #might not need this....
-        self.__maxScore = max(1.0, float(result.get("response/maxScore")))
-        print map
-        return map

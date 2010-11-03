@@ -4,26 +4,18 @@
     "description" : "Name Matching",
     "query" : "recordtype:\"master\"",
     "searchQuery" : "*:*",
-    "facet-fields" : {
-      "recordtype" : {
-        "label" : "Record type",
-        "display" : "list"
-      },
-      "repository_name" : {
-        "label" : "Source",
-        "display" : "list"
-      },
-      "repository_type" : {
-        "label" : "Source type",
-        "display" : "list"
-      },
-      "workflow_step_label" : {
-        "label" : "Workflow Step",
-        "display" : "list"
-      }
-    },
     "records-per-page" : "10",
     "facet-count" : "25",
-    "facet-sort-by-count" : "false"
+    "facet-sort-by-count" : "false",
+    "facet-fields" : {
+      "workflow_step_label" : {
+        "label" : "Status",
+        "display" : "list"
+      },
+      "surname" : {
+        "label" : "Family name",
+        "display" : "list"
+      }
+    }
   }
 }

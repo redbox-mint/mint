@@ -1,0 +1,5 @@
+<h2 id="page-heading">
+    <span class="paging right">#parseTemplate("results/search-paging.vm")</span>
+    <span>Browse</span>
+</h2>
+<div class="clear"></div>
