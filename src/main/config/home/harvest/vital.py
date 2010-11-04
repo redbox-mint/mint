@@ -18,6 +18,8 @@ class IndexData:
         self.utils = context["pyUtils"]
         
         self.handle = ""
+        self.faculty = ""
+        self.school = ""
 
         # Common data
         self.__newDoc()
@@ -69,6 +71,8 @@ class IndexData:
         self.utils.add(index, "dc_description", title)
         self.utils.add(index, "recordtype", "author")
         self.utils.add(index, "handle", self.handle)
+        self.utils.add(index, "faculty", self.faculty)
+        self.utils.add(index, "school", self.school)
         self.utils.add(index, "repository_name", self.params["repository.name"])
         self.utils.add(index, "repository_type", self.params["repository.type"])
         self.utils.add(index, "display_type", "author")
@@ -77,6 +81,10 @@ class IndexData:
 
     def __mapVuFind(self, ourField, theirField, map):
         for value in map.getList(theirField):
+            if theirField == "faculty":
+                self.faculty = value
+            if theirField == "school":
+                self.school = value
             self.utils.add(self.index, ourField, value)
 
     def __solrMarc(self):

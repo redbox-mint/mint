@@ -37,32 +37,48 @@ class NameAuthorityData:
             if func == "link-names":
                 ids = self.formData.getValues("ids")
                 records = self.__getAuthorDetails(ids)
-                for record in records:
-                    id = record.get("id")
-                    name = record.getList("dc_title").get(0)
-                    title = record.getList("dc_description").get(0)
-                    handle = record.getList("handle").get(0)
-                    hash = self.getHash(name)
-                    self.__manifest.set("manifest/node-%s/title" % (hash), name)
-                    self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
-                    self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
-                    if handle:
-                        self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
-                self.__saveManifest(self.__oid)
-                result = '{ status: "ok" }'
+                result = self.__linkNames(records)
             elif func == "unlink-names":
                 ids = self.formData.getValues("ids")
-                for id in ids:
-                    self.__manifest.removePath("manifest/node-%s" % id)
-                result = '{ status: "ok" }'
-                self.__saveManifest(self.__oid)
+                result = self.__unlinkNames(ids)
             #self.log.info(self.__manifest.toString())
+            elif func== "search-names":
+                searchText = self.formData.get("text")
+                result = self.__searchNames(searchText)
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
         if result:
             writer = self.response.getPrintWriter("application/json; charset=UTF-8")
             writer.println(result)
             writer.close()
+            
+    def __linkNames(self, records):
+        for record in records:
+            id = record.get("id")
+            name = record.getList("dc_title").get(0)
+            title = record.getList("dc_description").get(0)
+            handle = record.getList("handle").get(0)
+            faculty = record.getList("faculty").get(0)
+            school = record.getList("school").get(0)
+            hash = self.getHash(name)
+            self.__manifest.set("manifest/node-%s/title" % (hash), name)
+            self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
+            self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
+            if handle:
+                self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
+            if faculty:
+                self.__manifest.set("manifest/node-%s/children/node-%s/faculty" % (hash, id), faculty)
+            if school:
+                self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
+        self.__saveManifest(self.__oid)
+        return '{ status: "ok" }'
+    
+    def __unlinkNames(self, ids):
+        for id in ids:
+            self.__manifest.removePath("//children/node-%s" % id)
+            print self.__manifest
+        self.__saveManifest(self.__oid)
+        return '{ status: "ok" }'
     
     def __getNavData(self):
         query = self.sessionState.get("query")
@@ -180,7 +196,15 @@ class NameAuthorityData:
         parts = [p for p in self.getPackageTitle().split(" ") if len(p) > 0]
         query2 = " OR dc_title:".join(parts)
         
-        req = SearchRequest('(dc_title:"%s")^2.5 OR (dc_title:%s)^0.5' % (query, query2))
+        
+        #filter out the linked citation
+        linkedCitations = self.__manifest.getList("//children//id")
+        query3 = ""
+        if linkedCitations:
+            query3 = " OR ".join(linkedCitations)
+            query3 = " AND -id:(%s)" % query3
+        
+        req = SearchRequest('(dc_title:"%s")^2.5 OR (dc_title:%s)^0.5%s' % (query, query2, query3))
         self.log.info("suggestedNames query={}", req.query)
         req.setParam("fq", 'recordtype:"author"')
         req.addParam("fq", 'item_type:"object"')
@@ -201,19 +225,52 @@ class NameAuthorityData:
         #self.log.info("result={}", result.toString())
         docs = result.getJsonList("response/docs")
         
+        exactMatchRecords = LinkedHashMap()
         map = LinkedHashMap()
         for doc in docs:
             authorName = doc.getList("dc_title").get(0)
+            rank = self.getRank(doc.getList("score").get(0))
             if map.containsKey(authorName):
                 authorDocs = map.get(authorName)
             else:
                 authorDocs = ArrayList()
                 map.put(authorName, authorDocs)
             authorDocs.add(doc)
+            
+            if float(rank) == 100.00:
+                exactMatchRecords.put(authorName, authorDocs)
+                map.remove(authorName)
         
         self.__maxScore = max(1.0, float(result.get("response/maxScore")))
         
+        #NOTE!!! only the first time (workflow_modified is false)
+        self.__autoSaveExactRecord(exactMatchRecords)
         return map
+    
+    
+    def __autoSaveExactRecord(self, map):
+        if map:
+            for authorName in map.keySet():
+                authorDocs = map.get(authorName)
+                for doc in authorDocs:
+                    id = doc.get("id")
+                    name = doc.getList("dc_title").get(0)
+                    title = doc.getList("dc_description").get(0)
+                    handle = doc.getList("handle").get(0)
+                    faculty = doc.getList("faculty").get(0)
+                    school = doc.getList("school").get(0)
+                    hash = self.getHash(name)
+                    
+                    self.__manifest.set("manifest/node-%s/title" % (hash), name)
+                    self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
+                    self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
+                    if handle:
+                        self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
+                    if faculty:
+                        self.__manifest.set("manifest/node-%s/children/node-%s/faculty" % (hash, id), faculty)
+                    if school:
+                        self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
+                self.__saveManifest(self.__oid)
     
     def __getMetadata(self, oid):
         req = SearchRequest('id:%s' % oid)
@@ -312,3 +369,43 @@ class NameAuthorityData:
         object.updatePayload(sourceId,
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
+
+    def __searchNames(self, searchText):
+        # search common forms
+        lookupNames = []
+        
+        req = SearchRequest('(dc_title:"%s")^2.5' % searchText)
+        self.log.info("searchNames query={}", req.query)
+        req.setParam("fq", 'recordtype:"author"')
+        req.addParam("fq", 'item_type:"object"')
+        req.setParam("rows", "9999")
+        req.setParam("fl", "score")
+        req.setParam("sort", "score desc")
+        
+        # Make sure 'fq' has already been set in the session
+        ##security_roles = self.authentication.get_roles_list();
+        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+        ##req.addParam("fq", security_query)
+        
+        out = ByteArrayOutputStream()
+        indexer = self.services.getIndexer()
+        indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        
+        #self.log.info("result={}", result.toString())
+        docs = result.getJsonList("response/docs")
+        return docs
+        map = LinkedHashMap()
+        for doc in docs:
+            authorName = doc.getList("dc_title").get(0)
+            if map.containsKey(authorName):
+                authorDocs = map.get(authorName)
+            else:
+                authorDocs = ArrayList()
+                map.put(authorName, authorDocs)
+            authorDocs.add(doc)
+        
+        #might not need this....
+        self.__maxScore = max(1.0, float(result.get("response/maxScore")))
+        print map
+        return map

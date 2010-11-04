@@ -97,6 +97,9 @@
         </div>
     </div>
 </div>
+
+#set($suggestedNames = $self.getSuggestedNames())
+
 <div class="grid_12">
     ##<pre>$self.metadata.toString()</pre>
     <div class="box">
@@ -107,47 +110,39 @@
         <div id="displayNames">
         #foreach($node in $self.getManifest())
             #set($authorName = $node.get("title"))
-            
-            ##<p>
-            ##    <input type="checkbox" name="linked" value="$nodeId" id="linked-$nodeId" />
-            ##    <label for="linked-$nodeId">$nodeTitle</label>
-                    ##<a href="$portalPath/detail/$node.get('id')">$nodeTitle</a>
-                ##</label>
-            ##</p>
-
             #set($hash = $self.getHash($authorName))
             <p>
-            <input type="checkbox" name="suggestions" value="$hash" id="author-${hash}"/>
-            <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(show)</a>
+            <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}"/>
+            <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(hide)</a>
             </p>
             #set($docs = $node.getJsonMap("children"))
-            <ul id="${hash}-records" class="hidden">
+            <ul id="${hash}-records">
             #foreach($key in $docs.keySet())
                 #set($doc = $docs.get($key))
-                #set($authorId = $doc.get("id"))
+                #set($citeId = $doc.get("id"))
                 #set($itemTitle = $doc.get("title"))
-                <li rel="$authorId">$!itemTitle</li>
+                #set($faculty="")
+                #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
+                    #set($faculty = ", " + $doc.getList("faculty").get(0))
+                #end
+                #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
+                    #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
+                #end
+                <li rel="$citeId">
+                <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}"/>
+                <label for="unlink-author-${hash}-cite-${citeId}">$!itemTitle$faculty</label>
+                </li>
             #end
             </ul>
 
         #end
         <button id="unlink-names">Unlink selected</button>
-        ##</ul>
-        ##<form>
-        ##    <fieldset class="login">
-        ##        <legend>Find name</legend>
-        ##        <input id="name-search-query" name="name-search-query" size="50" type="text" />
-        ##        <button class="button" id="name-search">Go</button>
-        ##    </fieldset>
-        ##</form>
-        ##<div class="name-search-result"></div>
         <div class="hidden" id="delete-package-item"></div>
         </div>
     </div>
     <div class="box">
         <h2>Suggested names</h2>
         <br />
-        #set($suggestedNames = $self.getSuggestedNames())
         #if($suggestedNames.isEmpty())
             <p>No names were found that may match this person</p>
         #else
@@ -157,32 +152,39 @@
                     
                     #### if author checkbox is checked, all the citations will be checked
                     #set($hash = $self.getHash($authorName))
-                    #if(!$self.isLinked($hash))
+          ##if(!$self.isLinked($hash))  --> check based on citation!!!
                     #set($docs = $suggestedNames.get($authorName))
                     #set($rank = $self.getRank($docs.get(0).get("score")))
                     <div class="suggestion" rel="$rank">
                     <p>
-                    <input type="checkbox" name="suggestions" value="$hash" id="author-${hash}"/>
-                    <label for="author-$hash">$authorName</label>&nbsp;(Rank: $rank%) <a class="display-records" href="#" rel="$hash">(show)</a>
+                    <input type="checkbox" class="multiple" name="suggestions" value="$hash" id="author-${hash}"/>
+                    <label for="author-$hash">$authorName</label>&nbsp;(Rank: $rank%) <a class="display-records" href="#" rel="$hash">(hide)</a>
                     </p>
-                    <ul id="${hash}-records" class="hidden">
+                    <ul id="${hash}-records">
                     #foreach($doc in $docs)
                         #set($authorId = $doc.get("id"))
                         #set($itemTitle = $doc.getList("dc_description").get(0))
                         #set($storageId = $doc.get("storage_id"))
                         #set($citationHash = $self.getHash($storageId))
+                        #set($faculty="")
+                        #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
+                            #set($faculty = ", " + $doc.getList("faculty").get(0))
+                        #end
+                        #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
+                            #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
+                        #end
                         
                         #if(!$self.isLinked($citationHash))
                             <li rel="$authorId">
                                 <input type="checkbox" name="citation" value="$citationHash" id="author-${hash}-cite-${citationHash}"/>
-                                <label for="author-${hash}-cite-${citationHash}">$!itemTitle, Need to do affiliation</label>
+                                <label for="author-${hash}-cite-${citationHash}">$!itemTitle$faculty</label>
                             </li>
                         #end
                     #end
                     </ul>
                     </div>
                     #end
-                 #end
+         ##end
                  <div>
                     <p>Some names were found that could match but are less likely to. <a id="display-lesser" href="#">(show)</a></p>
                     <div class="hidden" id="lesserMatches"></div>
@@ -215,10 +217,8 @@ $(function() {
         var ids = [];
         $("#suggestedNames :checked").each(function() {
             var hash = $(this).attr("value");
-            $("#" + hash + "-records li").each(function() {
-                var id = $(this).attr("rel");
-                ids.push(id);
-            });
+            var id = $(this).parent().attr("rel");
+            ids.push(id);
         });
         jQuery.post("$portalPath/workflows/nameAuthority.ajax",
             { func: "link-names", oid: "$oid", ids: ids },
@@ -236,7 +236,8 @@ $(function() {
         var ids = [];
         $("#displayNames :checked").each(function() {
             var hash = $(this).attr("value");
-            ids.push(hash);
+            var id = $(this).parent().attr("rel");
+            ids.push(id);
         });
         jQuery.post("$portalPath/workflows/nameAuthority.ajax",
             { func: "unlink-names", oid: "$oid", ids: ids },
@@ -303,11 +304,10 @@ $(function() {
         return false;
     });
     
-    
-    $("input[name=suggestions]").click(function() {
+    $(".multiple").click(function() {
         var id = $(this).attr("id");
-        var citeId = id + "-cite";
         
+        var citeId = id + "-cite";
         $('input[id^='+citeId+']').attr('checked', $('#'+id+'').is(':checked'));
     });
     

@@ -250,6 +250,9 @@ public class CallistaHarvester extends GenericHarvester {
                     }
                     store("fullName", fName, json);
                     store("title", fName, json);
+                    
+                    json.set("pageTitle", fName);
+                    
                     store("description", "Authority record for '" +
                             fName + "'", json);
                     packageJson.set("title", fName);
@@ -257,7 +260,7 @@ public class CallistaHarvester extends GenericHarvester {
                             fName + "'");
                     // Email
                     store("email", columns[8], json);
-
+                    
                     // Author data used in publication
                     JsonConfigHelper auth = new JsonConfigHelper();
                     auth.set("author", columns[9]);
@@ -268,6 +271,7 @@ public class CallistaHarvester extends GenericHarvester {
 
                 // Catch any data mismatches during storage
                 } catch(Exception ex) {
+                    log.error("line: {}", columns);
                     log.error("Error parsing record '{}'", key, ex);
                 }
             }
