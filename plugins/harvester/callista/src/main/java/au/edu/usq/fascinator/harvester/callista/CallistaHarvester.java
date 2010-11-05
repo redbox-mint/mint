@@ -214,6 +214,7 @@ public class CallistaHarvester extends GenericHarvester {
             packageJson.set("packageType", "name-authority");
             json.set("id", key);
             json.set("step", "pending");
+            json.set("modified", "false");
 
             List<JsonConfigHelper> authors = new ArrayList();
             for (String[] columns : parsedData.get(key)) {

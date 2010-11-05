@@ -17,14 +17,28 @@
     background: #5E7553;
     color: white;
 }
+
+.new {
+    color: red;
+}
+
+.approved{
+    font-weight: bold;
+}
 </style>
+
+<div class="grid_16">
+    <div class="wfnav right">
+    Progress: Completed <strong>$self.confirmed</strong> out of <strong>$self.total</strong>
+    </div>
+</div>
 
 <div class="grid_16">
     <div class="wfnav">
         #set($prevOid = $self.prevOid)
         #if($prevOid)
             
-            <a href="$portalPath/workflow/$prevOid">
+            <a href="$portalPath/workflow/$prevOid" class="update" rel="$prevOid">
                 <img src="$portalPath/images/icons/arrow_left.png"/>
                 Previous
             </a>
@@ -34,7 +48,7 @@
         #if($nextOid)
             <div class="right">
                 <em>($self.nextName)</em>
-                <a href="$portalPath/workflow/$nextOid">
+                <a href="$portalPath/workflow/$nextOid" class="update" rel="$nextOid">
                     Next
                     <img src="$portalPath/images/icons/arrow_right.png"/>
                 </a>
@@ -45,7 +59,6 @@
     <div class="wfnav">
         #set($prevUneditedOid = $self.prevUneditedOid)
         #if($prevUneditedOid)
-            
             <a href="$portalPath/workflow/$prevUneditedOid">
                 <img src="$portalPath/images/icons/book_previous.png"/>
                 Previous unedited
@@ -65,7 +78,48 @@
     </div>
     *#
 </div>
+
+
+#set($modified=$self.isModified())
+
+#set($checked = "")
+#set($statusClass = 'approved')
+#set($approved = "Approved Authority Record")
+#if ($modified == "false")
+    #set($checked = "checked=checked")
+    #set($statusClass = 'new')
+    #set($approved = "New Authority Record")
+#end
+
 <div id="action-list" class="grid_4">
+    <div class="box">
+        <h2>Status</h2>
+        #set($menuTitle = "<a href='#'>Status</a>")
+        <div class="$statusClass">
+            $approved
+        </div>
+    </div>
+
+    <div id="affiliations">
+        #set($menuTitle = "<a href='#'>Affiliations</a>")
+        #parse($page.getTemplate('wrapping/info-box-open.vm'))
+        #set($menuTitle = $nullValue)
+        <div id="table">
+            <table class="meta">
+                #foreach ($node in $self.getAffiliation())
+                <tr>
+                    <td><strong>$node.get("author")</strong>
+                    <table>
+                        <tr><td>Expiry:</td><td>$node.get("expiry")</td></tr>
+                        <tr><td>Org. Unit:</td><td>$node.get("orgUnit") ($node.get("orgUnitId"))</td></tr>
+                    </table></td>
+                </tr>
+                #end
+            </table>
+        </div>
+        #parse($page.getTemplate('wrapping/info-box-close.vm'))
+    </div>
+
     <div class="box">
         <h2>Debug</h2>
         <form action="$portalPath/workflow" id="package-form" method="post">
@@ -73,6 +127,7 @@
             <p>Title: $self.getFormData("title")</p>
             <input type="hidden" name="targetStep" value="$self.getFormData('nextStep')" />
             <input type="hidden" name="oid" value="$oid" />
+            <input type="hidden" name="redirectUrl" id="redirectUrl" value="" />
             <input class="button" id="update-package" type="button" value="Reindex" />
         </fieldset>
         </form>
@@ -106,38 +161,44 @@
         <h2>Display names</h2>
         ##renderObject($self.getMetadata() "preview")
         <br />
-        <p>Names used by this person.</p>
-        <div id="displayNames">
-        #foreach($node in $self.getManifest())
-            #set($authorName = $node.get("title"))
-            #set($hash = $self.getHash($authorName))
-            <p>
-            <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}"/>
-            <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(hide)</a>
-            </p>
-            #set($docs = $node.getJsonMap("children"))
-            <ul id="${hash}-records">
-            #foreach($key in $docs.keySet())
-                #set($doc = $docs.get($key))
-                #set($citeId = $doc.get("id"))
-                #set($itemTitle = $doc.get("title"))
-                #set($faculty="")
-                #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
-                    #set($faculty = ", " + $doc.getList("faculty").get(0))
-                #end
-                #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
-                    #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
-                #end
-                <li rel="$citeId">
-                <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}"/>
-                <label for="unlink-author-${hash}-cite-${citeId}">$!itemTitle$faculty</label>
-                </li>
-            #end
-            </ul>
-
+        #set($manifest = $self.getManifest())
+        #if ($manifest.size() > 0)
+            <p>Names used by this person.</p>
+        #else
+            <p>No name used by this person</p>
         #end
-        <button id="unlink-names">Unlink selected</button>
-        <div class="hidden" id="delete-package-item"></div>
+        <div id="displayNames">
+            #foreach($node in $manifest)
+                #set($authorName = $node.get("title"))
+                #set($hash = $self.getHash($authorName))
+                <p>
+                
+                <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" $checked/>
+                <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(hide)</a>
+                </p>
+                #set($docs = $node.getJsonMap("children"))
+                <ul id="${hash}-records">
+                #foreach($key in $docs.keySet())
+                    #set($doc = $docs.get($key))
+                    #set($citeId = $doc.get("id"))
+                    #set($itemTitle = $doc.get("title"))
+                    #set($faculty="")
+                    #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
+                        #set($faculty = ", " + $doc.getList("faculty").get(0))
+                    #end
+                    #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
+                        #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
+                    #end
+                    <li rel="$citeId">
+                    <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}" $checked/>
+                    <label for="unlink-author-${hash}-cite-${citeId}">$!itemTitle$faculty</label>
+                    </li>
+                #end
+                </ul>
+    
+            #end
+            <button id="unlink-names">Save</button>
+            <div class="hidden" id="delete-package-item"></div>
         </div>
     </div>
     <div class="box">
@@ -152,7 +213,6 @@
                     
                     #### if author checkbox is checked, all the citations will be checked
                     #set($hash = $self.getHash($authorName))
-          ##if(!$self.isLinked($hash))  --> check based on citation!!!
                     #set($docs = $suggestedNames.get($authorName))
                     #set($rank = $self.getRank($docs.get(0).get("score")))
                     <div class="suggestion" rel="$rank">
@@ -184,20 +244,59 @@
                     </ul>
                     </div>
                     #end
-         ##end
                  <div>
                     <p>Some names were found that could match but are less likely to. <a id="display-lesser" href="#">(show)</a></p>
                     <div class="hidden" id="lesserMatches"></div>
                  </div>
                  
-                <button id="link-names">Link selected</button>
+                <button id="link-names">Save</button>
             </div>
         #end
+    </div>
+    
+    <div class="box">
+        <h2>Search names</h2>
+        <br />
+        <div id="search">
+            <form>
+                <fieldset class="login">
+                    <legend>Find name</legend>
+                    <input id="name-search-query" name="name-search-query" size="50" type="text" />
+                    <button class="button" id="search-names">Go</button>
+                </fieldset>
+            </form>
+            <div id="searchResult"></div>
+            <button id="link-search-names" disabled="disabled">Save</button>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
 $(function() {
+    $("#affiliations h2 a").click(function() {
+        $("#affiliations #table").toggle("blind").toggleClass('visible').toggleClass('hidden');
+        $("#affiliations h2 a").toggleClass('visible');
+        return false;
+    });
+    
+    $(".update").click(function() {
+        var button = $(this);
+        jQuery.post("$portalPath/actions/manifest.ajax",
+            {
+                func: "update-package-meta",
+                oid: "$oid",
+                metaList: ["title", "description"],
+                title: $("#package-title").val(),
+                description: $("#package-description").val()
+            },
+            function(data, status) {
+                var rel = button.attr("rel")
+                $("#redirectUrl").attr("value", "$portalPath/workflow/" + rel);
+                $("#package-form").submit();
+            });
+        return false;
+    });
+    
     $("#update-package").click(function() {
         jQuery.post("$portalPath/actions/manifest.ajax",
             {
@@ -213,10 +312,9 @@ $(function() {
         return false;
     });
     
-    $("#link-names").click(function() {
+    $("#link-names, #link-search-names").click(function() {
         var ids = [];
-        $("#suggestedNames :checked").each(function() {
-            var hash = $(this).attr("value");
+        $("#suggestedNames :checked, #search :checked").each(function() {
             var id = $(this).parent().attr("rel");
             ids.push(id);
         });
@@ -235,7 +333,6 @@ $(function() {
     $("#unlink-names").click(function() {
         var ids = [];
         $("#displayNames :checked").each(function() {
-            var hash = $(this).attr("value");
             var id = $(this).parent().attr("rel");
             ids.push(id);
         });
@@ -249,6 +346,46 @@ $(function() {
                 }
             },
             "json");
+    });
+    
+        
+    $("#search-names").click(function() {
+        jQuery.ajax({
+            url: "$portalPath/workflows/nameAuthority.ajax",
+            data: {
+                func: "search-names",
+                query: $("#name-search-query").val(),
+                oid: "$oid"
+            },
+            success: function(data, status) {
+                var html = "<ul>"
+                jQuery.each(data, function(index, item) {
+                    var authorName = item.dc_title[0];
+                    var hash = "$self.getHash(" + authorName + ")"; 
+                    var authorId = item.id;
+                    var citationHash = "$self.getHash(" + item.storage_id + ")";
+                    var itemTitle = item.dc_description[0];
+                    var faculty = item.faculty[0]
+                    html += 
+                        "<li rel="+authorId+">" + 
+                            "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"'/>" +
+                            "<lable for='author-"+hash+"-cite-"+citationHash+"'><strong>"+authorName+"</strong>,"+itemTitle+faculty+"</label>" +
+                        "</li>";
+                });
+                
+                html += "</ul>"
+                $("#searchResult").html(html);
+                
+                watchButton("search", "link-search-names");
+                
+            },
+            error: function(xhr, status, errorThrown) {
+                $("#searchResult").html("");
+                $("#link-search-names").attr("disabled", "disabled");
+            },
+            dataType: "json"
+            });
+        return false;
     });
     
     
@@ -313,12 +450,6 @@ $(function() {
     
 });
 </script>
-
-
-
-
-
-
 
 <script id="linked-name-template" type="text/html">
     <p>

@@ -326,6 +326,7 @@ class IndexData:
             wfMeta.set("id", WORKFLOW_ID)
             wfMeta.set("step", "pending")
             wfMeta.set("pageTitle", "Uploaded Files - Management")
+            wfMeta.set("modified", "true")
             stages = self.config.getJsonList("stages")
             for stage in stages:
                 if stage.get("name") == "pending":
@@ -336,13 +337,15 @@ class IndexData:
 
         # Has the workflow metadata changed?
         if wfChanged == True:
+            wfMeta.set("modified", "true")
             jsonString = String(wfMeta.toString())
             inStream = ByteArrayInputStream(jsonString.getBytes("UTF-8"))
             try:
                 StorageUtils.createOrUpdatePayload(self.object, "workflow.metadata", inStream)
             except StorageException, e:
                 print " * name-authority.py : Error updating workflow payload"
-
+        
+        self.utils.add(self.index, "workflow_modified", wfMeta.get("modified"))
         self.utils.add(self.index, "workflow_id", wfMeta.get("id"))
         self.utils.add(self.index, "workflow_step", wfMeta.get("step"))
         self.utils.add(self.index, "workflow_step_label", wfMeta.get("label"))

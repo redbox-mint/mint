@@ -129,7 +129,8 @@
         #else
           #if ($self.redirectNeeded())
         <script type="text/javascript">
-            window.location = "$portalPath/workflow/$oid";
+            ##window.location = "$portalPath/workflow/$oid";
+            window.location = "$formData.get('redirectUrl')";
         </script>
           #else
             #if($self.prepareTemplate())

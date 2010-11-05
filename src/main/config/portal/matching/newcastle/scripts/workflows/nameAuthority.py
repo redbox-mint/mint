@@ -6,7 +6,7 @@ from au.edu.usq.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
 from java.lang import Exception, String
-from java.util import ArrayList, HashMap, HashSet, LinkedHashMap
+from java.util import ArrayList, HashMap, HashSet, LinkedHashMap, TreeMap
 
 from org.apache.commons.lang import StringEscapeUtils
 
@@ -24,13 +24,13 @@ class NameAuthorityData:
             # get the package manifest
             self.__manifest = self.__readManifest(self.__oid)
             self.__metadata = self.__getMetadata(self.__oid)
+            self.__workflowMetadata = self.__readWorkflowMetadata(self.__oid)
         except Exception, e:
             self.log.error("Failed to load manifest: {}", e.getMessage());
             raise e
         
         #print "\n***************\n%s\n************\n" % self.sessionState
-        self.__oidList, self.__nameList = self.__getNavData()
-        
+        self.__oidList, self.__nameList = self.__getNavData() 
         result = None
         try:
             func = self.formData.get("func")
@@ -43,8 +43,8 @@ class NameAuthorityData:
                 result = self.__unlinkNames(ids)
             #self.log.info(self.__manifest.toString())
             elif func== "search-names":
-                searchText = self.formData.get("text")
-                result = self.__searchNames(searchText)
+                query = self.formData.get("query")
+                result = self.__searchNames(query)
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
         if result:
@@ -71,13 +71,27 @@ class NameAuthorityData:
             if school:
                 self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
         self.__saveManifest(self.__oid)
+        self.__workflowMetadata.set("modified", "true")
+        self.__saveWorkflowMetadata(self.__oid)
+        
         return '{ status: "ok" }'
     
     def __unlinkNames(self, ids):
         for id in ids:
             self.__manifest.removePath("//children/node-%s" % id)
-            print self.__manifest
+        
+        #remove the parent if no more children
+        records = self.__getAuthorDetails(ids)
+        for record in records:
+            hash = self.getHash(record.getList("dc_title").get(0))
+            childList = self.__manifest.getList("manifest/node-%s/children" % hash)
+            for child in childList:
+                if child.isEmpty():
+                    self.__manifest.removePath("manifest/node-%s" % hash)
+        
         self.__saveManifest(self.__oid)
+        self.__workflowMetadata.set("modified", "true")
+        self.__saveWorkflowMetadata(self.__oid)
         return '{ status: "ok" }'
     
     def __getNavData(self):
@@ -88,6 +102,9 @@ class NameAuthorityData:
         req.setParam("fl", "id dc_title")
         req.setParam("sort", "f_dc_title asc")
         req.setParam("rows", "10000")
+        req.setParam("facet", "true")
+        req.addParam("facet.field", "workflow_step_label")
+        req.setParam("facet.sort", "false")
         fq = self.sessionState.get("fq")
         if fq:
             for q in fq:
@@ -99,6 +116,14 @@ class NameAuthorityData:
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         oidList = result.getList("response/docs/id")
         nameList = result.getList("response/docs/dc_title")
+        
+        progress = result.getList("facet_counts/facet_fields/workflow_step_label")
+        
+        self.confirmed = progress[1]
+        self.pending = 0
+        if len(progress)>2:
+            self.pending = progress[3]
+        self.total = self.pending + self.confirmed
         #print " *** oidList:'%s'" % oidList
         #print " *** nameList:'%s'" % nameList
         return oidList, nameList
@@ -196,7 +221,6 @@ class NameAuthorityData:
         parts = [p for p in self.getPackageTitle().split(" ") if len(p) > 0]
         query2 = " OR dc_title:".join(parts)
         
-        
         #filter out the linked citation
         linkedCitations = self.__manifest.getList("//children//id")
         query3 = ""
@@ -227,26 +251,36 @@ class NameAuthorityData:
         
         exactMatchRecords = LinkedHashMap()
         map = LinkedHashMap()
+        
+        
         for doc in docs:
             authorName = doc.getList("dc_title").get(0)
             rank = self.getRank(doc.getList("score").get(0))
-            if map.containsKey(authorName):
-                authorDocs = map.get(authorName)
-            else:
-                authorDocs = ArrayList()
-                map.put(authorName, authorDocs)
-            authorDocs.add(doc)
+            id = doc.get("id")
             
-            if float(rank) == 100.00:
-                exactMatchRecords.put(authorName, authorDocs)
-                map.remove(authorName)
+            #try to do automatch
+            if float(rank) == 100.00 and self.isModified() == "false":
+                if exactMatchRecords.containsKey(authorName):
+                    authorMatchDocs = exactMatchRecords.get(authorName)
+                else:
+                    authorMatchDocs = ArrayList()
+                    exactMatchRecords.put(authorName, authorMatchDocs)
+                authorMatchDocs.add(doc)
+            elif id not in linkedCitations:
+                if map.containsKey(authorName):
+                    authorDocs = map.get(authorName)
+                else:
+                    authorDocs = ArrayList()
+                    map.put(authorName, authorDocs)
+                authorDocs.add(doc)
         
         self.__maxScore = max(1.0, float(result.get("response/maxScore")))
         
-        #NOTE!!! only the first time (workflow_modified is false)
-        self.__autoSaveExactRecord(exactMatchRecords)
+        # Do not auto save if record is live
+        if self.__workflowMetadata.get("modified") == "false":
+            self.__autoSaveExactRecord(exactMatchRecords)
+        
         return map
-    
     
     def __autoSaveExactRecord(self, map):
         if map:
@@ -287,6 +321,9 @@ class NameAuthorityData:
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         #self.log.info("result={}", result.toString())
         return result.getJsonList("response/docs").get(0)
+    
+    def isModified(self):
+        return self.__workflowMetadata.get("modified") 
     
     def getRank(self, score):
         return "%.2f" % (min(1.0, float(score)) * 100)
@@ -358,6 +395,17 @@ class NameAuthorityData:
         object.close()
         return manifest
     
+    def __readWorkflowMetadata(self, oid):
+        object = self.services.getStorage().getObject(oid)
+        sourceId = object.getSourceId()
+        payload = object.getPayload("workflow.metadata")
+        payloadReader = InputStreamReader(payload.open(), "UTF-8")
+        metadata = JsonConfigHelper(payloadReader)
+        payloadReader.close()
+        payload.close()
+        object.close()
+        return metadata
+    
     def __addNode(self):
         print self.__manifest.toString()
         return "{}"
@@ -367,6 +415,13 @@ class NameAuthorityData:
         sourceId = object.getSourceId()
         manifestStr = String(self.__manifest.toString())
         object.updatePayload(sourceId,
+                             ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
+        object.close()
+        
+    def __saveWorkflowMetadata(self, oid):
+        object = self.services.getStorage().getObject(oid)
+        manifestStr = String(self.__workflowMetadata.toString())
+        object.updatePayload("workflow.metadata",
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
 
@@ -394,6 +449,7 @@ class NameAuthorityData:
         
         #self.log.info("result={}", result.toString())
         docs = result.getJsonList("response/docs")
+        #print "**** docs: ", docs
         return docs
         map = LinkedHashMap()
         for doc in docs:
@@ -407,5 +463,18 @@ class NameAuthorityData:
         
         #might not need this....
         self.__maxScore = max(1.0, float(result.get("response/maxScore")))
-        print map
-        return map
+        #print "map: ", type(map)
+        #print JsonConfigHelper(map).get("/")
+        return JsonConfigHelper(map).toString()
+    
+    def getAffiliation(self):
+        map = TreeMap()
+        
+        authors = self.__workflowMetadata.getList("authors")
+        
+        list = []
+        #sort base on the expired date
+        for author in authors:
+            map.put("%s %s %s" % (author.get("expiry"), author.get("author"), author.get("orgUnitId")), author)
+        
+        return map 
