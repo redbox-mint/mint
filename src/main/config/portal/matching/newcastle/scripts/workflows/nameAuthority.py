@@ -31,6 +31,7 @@ class NameAuthorityData:
         
         #print "\n***************\n%s\n************\n" % self.sessionState
         self.__oidList, self.__nameList = self.__getNavData() 
+        self.__unEditedOidList, self.__unEditedNameList = self.__getNavDataUnedited()
         result = None
         try:
             func = self.formData.get("func")
@@ -119,20 +120,47 @@ class NameAuthorityData:
         
         progress = result.getList("facet_counts/facet_fields/workflow_step_label")
         
-        self.confirmed = progress[1]
         self.pending = 0
-        if len(progress)>2:
-            self.pending = progress[3]
+        self.confirmed = 0
+        for count in range(len(progress)):
+            if progress[count] == "New Authority Record":
+                self.pending = progress[count+1]
+            if progress[count] == "Confirmed Authority":
+                self.confirmed = progress[count+1]
+        
         self.total = self.pending + self.confirmed
         #print " *** oidList:'%s'" % oidList
         #print " *** nameList:'%s'" % nameList
         return oidList, nameList
     
     def __getNavDataUnedited(self):
-        pass
+        query = self.sessionState.get("query")
+        if query == "":
+            query = "*:*"
+        req = SearchRequest(query)
+        req.setParam("fl", "id dc_title")
+        req.setParam("sort", "f_dc_title asc")
+        req.setParam("rows", "10000")
+        req.setParam("facet", "true")
+        req.setParam("facet.sort", "false")
+        fq = self.sessionState.get("fq")
+        if fq:
+            for q in fq:
+                req.addParam("fq", q)
+        req.addParam("fq", "workflow_modified:false")
+        out = ByteArrayOutputStream()
+        indexer = self.services.getIndexer()
+        indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        oidList = result.getList("response/docs/id")
+        nameList = result.getList("response/docs/dc_title")
+        return oidList, nameList
     
     def __getIndex(self):
         return self.__oidList.indexOf(self.__oid)
+    
+    def __getUneditedIndex(self):
+        return self.__unEditedOidList.indexOf(self.__oid)
     
     def getNextOid(self):
         i = self.__getIndex()
@@ -159,15 +187,27 @@ class NameAuthorityData:
         return None
     
     def getNextUneditedOid(self):
+        i = self.__getUneditedIndex()
+        if i+1 < self.__unEditedOidList.size():
+            return self.__unEditedOidList.get(i+1)
         return None
     
     def getNextUneditedName(self):
+        i = self.__getUneditedIndex()
+        if i+1 < self.__unEditedNameList.size():
+            return self.__unEditedNameList.get(i+1)
         return None
     
     def getPrevUneditedOid(self):
+        i = self.__getUneditedIndex()
+        if i > 0:
+            return self.__unEditedOidList.get(i-1)
         return None
     
     def getPrevUneditedName(self):
+        i = self.__getUneditedIndex()
+        if i > 0:
+            return self.__unEditedNameList.get(i-1)
         return None
     
     def getHash(self, data):
