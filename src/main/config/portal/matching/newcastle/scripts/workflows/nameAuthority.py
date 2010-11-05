@@ -211,7 +211,6 @@ class NameAuthorityData:
         return None
     
     def getHash(self, data):
-        print " 888888888888888888888888888888888888888: ", data
         return md5.new(data).hexdigest()
     
     def __getAuthorDetails(self, authorIds):
@@ -504,7 +503,6 @@ class NameAuthorityData:
             doc.set("storageHash", self.getHash(doc.get("storage_id")))
             docsDic["%s" % count] = doc
             count +=1
-        
         return map
     
     def getAffiliation(self):

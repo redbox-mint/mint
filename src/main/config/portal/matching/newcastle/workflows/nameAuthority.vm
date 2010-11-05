@@ -369,10 +369,17 @@ $(function() {
                         var citationHash = item.storageHash;
                         var itemTitle = item.dc_description[0];
                         var faculty = item.faculty[0]
+                        var school = item.school[0]
+                        
+                        if (faculty)
+                           faculty = " , " + faculty
+                        if (school)
+                           faculty += ", <strong>" + school + "</strong>"
+                        
                         html += 
                         "<li rel="+authorId+">" + 
                             "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"'/>" +
-                            "<lable for='author-"+hash+"-cite-"+citationHash+"'><strong>"+authorName+"</strong>,"+itemTitle+faculty+"</label>" +
+                            "<lable for='author-"+hash+"-cite-"+citationHash+"'>"+itemTitle+faculty+"</label>" +
                         "</li>";
                         count++;
                     });
