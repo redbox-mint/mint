@@ -211,6 +211,7 @@ class NameAuthorityData:
         return None
     
     def getHash(self, data):
+        print " 888888888888888888888888888888888888888: ", data
         return md5.new(data).hexdigest()
     
     def __getAuthorDetails(self, authorIds):
@@ -487,25 +488,24 @@ class NameAuthorityData:
         indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
-        #self.log.info("result={}", result.toString())
         docs = result.getJsonList("response/docs")
-        #print "**** docs: ", docs
-        return docs
-        map = LinkedHashMap()
-        for doc in docs:
-            authorName = doc.getList("dc_title").get(0)
-            if map.containsKey(authorName):
-                authorDocs = map.get(authorName)
-            else:
-                authorDocs = ArrayList()
-                map.put(authorName, authorDocs)
-            authorDocs.add(doc)
         
-        #might not need this....
-        self.__maxScore = max(1.0, float(result.get("response/maxScore")))
-        #print "map: ", type(map)
-        #print JsonConfigHelper(map).get("/")
-        return JsonConfigHelper(map).toString()
+        map={}
+        count = 0
+        for doc in docs:
+            authorName = str(doc.getList("dc_title").get(0))
+            if map.has_key(authorName):
+                docsDic = map.get(authorName)
+            else:
+                docsDic = {}
+                map[authorName] = docsDic
+            #hash storageId and authorName
+            doc.set("authorHash", self.getHash(authorName))
+            doc.set("storageHash", self.getHash(doc.get("storage_id")))
+            docsDic["%s" % count] = doc
+            count +=1
+        
+        return map
     
     def getAffiliation(self):
         map = TreeMap()

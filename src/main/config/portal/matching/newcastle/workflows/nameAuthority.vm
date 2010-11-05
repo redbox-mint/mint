@@ -168,7 +168,6 @@
                 #set($authorName = $node.get("title"))
                 #set($hash = $self.getHash($authorName))
                 <p>
-                
                 <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" $checked/>
                 <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(hide)</a>
                 </p>
@@ -354,26 +353,34 @@ $(function() {
                 oid: "$oid"
             },
             success: function(data, status) {
-                var html = "<ul>"
-                jQuery.each(data, function(index, item) {
-                    var authorName = item.dc_title[0];
-                    var hash = "$self.getHash(" + authorName + ")"; 
-                    var authorId = item.id;
-                    var citationHash = "$self.getHash(" + item.storage_id + ")";
-                    var itemTitle = item.dc_description[0];
-                    var faculty = item.faculty[0]
-                    html += 
+                var html = "<div class='results'>";
+                jQuery.each(data, function(authorName, map) {
+                    var count = 0;
+                    jQuery.each(map, function(key, item) {
+                        var hash = item.authorHash;
+                        if (count == 0) {
+                            html += "<p>" +
+                                    "<input type='checkbox' class='multiple' name='results' value='"+hash+"' id='author-"+hash+"'/>" + 
+                                    "<label for='author-"+hash+"'>"+authorName+"</label> <a class='display-records' href='#' rel="+hash+">(hide)</a>"+
+                                "</p>" +
+                                "<ul id='"+hash+"-records'>";
+                        }
+                        var authorId = item.id;
+                        var citationHash = item.storageHash;
+                        var itemTitle = item.dc_description[0];
+                        var faculty = item.faculty[0]
+                        html += 
                         "<li rel="+authorId+">" + 
                             "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"'/>" +
                             "<lable for='author-"+hash+"-cite-"+citationHash+"'><strong>"+authorName+"</strong>,"+itemTitle+faculty+"</label>" +
                         "</li>";
+                        count++;
+                    });
+                    html += "</ul>";
+                    $("#searchResult").html(html);
+                
+                    watchButton("search", "link-search-names");
                 });
-                
-                html += "</ul>"
-                $("#searchResult").html(html);
-                
-                watchButton("search", "link-search-names");
-                
             },
             error: function(xhr, status, errorThrown) {
                 $("#searchResult").html("No Author found");
@@ -385,7 +392,7 @@ $(function() {
     });
     
     
-    $("a.display-records").click(function() {
+    $("a.display-records").live("click", function() {
         var me = $(this);
         var hash = me.attr("rel");
         var records = $("#" + hash + "-records");
@@ -437,12 +444,13 @@ $(function() {
         return false;
     });
     
-    $(".multiple").click(function() {
+    $(".multiple").live("click", function() {
         var id = $(this).attr("id");
         
         var citeId = id + "-cite";
         $('input[id^='+citeId+']').attr('checked', $('#'+id+'').is(':checked'));
-    });
+    }); 
+    
     
 });
 </script>
