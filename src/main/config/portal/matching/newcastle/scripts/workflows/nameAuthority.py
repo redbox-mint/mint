@@ -9,6 +9,7 @@ from java.lang import Exception, String
 from java.util import ArrayList, HashMap, HashSet, LinkedHashMap, TreeMap
 
 from org.apache.commons.lang import StringEscapeUtils
+from org.apache.commons.collections import ListUtils
 
 class NameAuthorityData:
     def __activate__(self, context):
@@ -18,6 +19,7 @@ class NameAuthorityData:
         self.response = context["response"]
         self.defaultPortal = context["defaultPortal"]
         self.sessionState = context["sessionState"]
+        self.portalId = context["portalId"]
         
         self.__oid = self.formData.get("oid")
         try:
@@ -29,7 +31,6 @@ class NameAuthorityData:
             self.log.error("Failed to load manifest: {}", e.getMessage());
             raise e
         
-        #print "\n***************\n%s\n************\n" % self.sessionState
         self.__oidList, self.__nameList = self.__getNavData() 
         self.__unEditedOidList, self.__unEditedNameList = self.__getNavDataUnedited()
         result = None
@@ -63,6 +64,7 @@ class NameAuthorityData:
             school = record.getList("school").get(0)
             hash = self.getHash(name)
             self.__manifest.set("manifest/node-%s/title" % (hash), name)
+            self.__manifest.set("manifest/node-%s/automatch" % (hash), "false")
             self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
             self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
             if handle:
@@ -102,10 +104,14 @@ class NameAuthorityData:
         req = SearchRequest(query)
         req.setParam("fl", "id dc_title")
         req.setParam("sort", "f_dc_title asc")
-        req.setParam("rows", "10000")
+        req.setParam("rows", "10000")   ## TODO there could be more than this
         req.setParam("facet", "true")
-        req.addParam("facet.field", "workflow_step_label")
+        req.addParam("facet.field", "workflow_step")
         req.setParam("facet.sort", "false")
+        
+        pq = self.services.portalManager.get(self.portalId).query
+        req.setParam("fq", pq)
+        req.addParam("fq", 'item_type:"object"')
         fq = self.sessionState.get("fq")
         if fq:
             for q in fq:
@@ -118,15 +124,14 @@ class NameAuthorityData:
         oidList = result.getList("response/docs/id")
         nameList = result.getList("response/docs/dc_title")
         
-        progress = result.getList("facet_counts/facet_fields/workflow_step_label")
-        
+        wfStep = result.getList("facet_counts/facet_fields/workflow_step")
         self.pending = 0
         self.confirmed = 0
-        for count in range(len(progress)):
-            if progress[count] == "New Authority Record":
-                self.pending = progress[count+1]
-            if progress[count] == "Confirmed Authority":
-                self.confirmed = progress[count+1]
+        for i in range(len(wfStep)):
+            if wfStep[i] == "pending":
+                self.pending = wfStep[i+1]
+            if wfStep[i] == "live":
+                self.confirmed = wfStep[i+1]
         
         self.total = self.pending + self.confirmed
         #print " *** oidList:'%s'" % oidList
@@ -141,13 +146,14 @@ class NameAuthorityData:
         req.setParam("fl", "id dc_title")
         req.setParam("sort", "f_dc_title asc")
         req.setParam("rows", "10000")
-        req.setParam("facet", "true")
-        req.setParam("facet.sort", "false")
+        pq = self.services.portalManager.get(self.portalId).query
+        req.setParam("fq", pq)
+        req.addParam("fq", 'item_type:"object"')
+        req.addParam("fq", "workflow_modified:false")
         fq = self.sessionState.get("fq")
         if fq:
             for q in fq:
                 req.addParam("fq", q)
-        req.addParam("fq", "workflow_modified:false")
         out = ByteArrayOutputStream()
         indexer = self.services.getIndexer()
         indexer.search(req, out)
@@ -336,6 +342,7 @@ class NameAuthorityData:
                     hash = self.getHash(name)
                     
                     self.__manifest.set("manifest/node-%s/title" % (hash), name)
+                    self.__manifest.set("manifest/node-%s/automatch" % (hash), "true")
                     self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
                     self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
                     if handle:
@@ -367,6 +374,14 @@ class NameAuthorityData:
     
     def getRank(self, score):
         return "%.2f" % (min(1.0, float(score)) * 100)
+    
+    def getCitationAffiliation(self, author):
+        faculties = [f for f in author.getList("faculty") if f != ""]
+        schools = [s for s in author.getList("school") if s != ""]
+        all = ListUtils.union(faculties, schools)
+        if len(all) > 0:
+            return ", ".join(all)
+        return None
     
     def getMetadata(self):
         return self.__metadata
@@ -501,6 +516,7 @@ class NameAuthorityData:
             #hash storageId and authorName
             doc.set("authorHash", self.getHash(authorName))
             doc.set("storageHash", self.getHash(doc.get("storage_id")))
+            doc.set("affiliation", self.getCitationAffiliation(doc))
             docsDic["%s" % count] = doc
             count +=1
         return map

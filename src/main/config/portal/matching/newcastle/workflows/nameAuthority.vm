@@ -17,21 +17,26 @@
     background: #5E7553;
     color: white;
 }
-
-.new {
-    color: red;
+.wfnav em {
+    font-size: 0.8em;
 }
-
-.approved{
+.citation {
+    list-style-type: none;
+}
+.new, .approved {
     font-weight: bold;
+    padding-left: 2em;
+    padding-bottom: 1em;
+    background-position: 0 9px;
+    background-repeat: no-repeat;
+}
+.new {
+    background-image: url($portalPath/images/icons/asterisk_orange.png);
+}
+.approved {
+    background-image: url($portalPath/images/icons/tick.png);
 }
 </style>
-
-<div class="grid_16">
-    <div class="wfnav right">
-    Progress: Completed <strong>$self.confirmed</strong> out of <strong>$self.total</strong>
-    </div>
-</div>
 
 <div class="grid_16">
     <div class="wfnav">
@@ -42,37 +47,45 @@
                 Previous
             </a>
             <em>($self.prevName)</em>
+        #else
+            <span>&nbsp;</span>
         #end
-        #set($nextOid = $self.nextOid)
         <div class="right">
-        #if($nextOid)
+            #set($nextOid = $self.nextOid)
+            #if($nextOid)
                 <em>($self.nextName)</em>
                 <a href="$portalPath/workflow/$nextOid" class="update" rel="$nextOid">
                     Next
                     <img src="$portalPath/images/icons/arrow_right.png"/>
                 </a>
-        #end
+            #else
+                <span>&nbsp;</span>
+            #end
         </div>
     </div>
     
     <div class="wfnav">
         #set($prevUneditedOid = $self.prevUneditedOid)
-        #if($prevUneditedOid)
+        #if($prevUneditedOid && $prevOid != $prevUneditedOid)
             <a href="$portalPath/workflow/$prevUneditedOid" class="update" rel="$prevUneditedOid">
                 <img src="$portalPath/images/icons/book_previous.png"/>
                 Previous unedited
             </a>
             <em>($self.prevUneditedName)</em>
+        #else
+            <span>&nbsp;</span>
         #end
-        #set($nextUneditedOid = $self.nextUneditedOid)
         <div class="right">
-        #if($nextUneditedOid)
+            #set($nextUneditedOid = $self.nextUneditedOid)
+            #if($nextUneditedOid && $nextOid != $nextUneditedOid)
                 <em>($self.nextUneditedName)</em>
                 <a href="$portalPath/workflow/$nextUneditedOid" class="update" rel="$nextUneditedOid">
                     Next unedited
                     <img src="$portalPath/images/icons/book_next.png"/>
                 </a>
-        #end
+            #else
+                <span>&nbsp;</span>
+            #end
         </div>
     </div>
 </div>
@@ -89,24 +102,21 @@
     </form>
 </div>
 
-#set($modified=$self.isModified())
-
 #set($checked = "")
-#set($statusClass = 'approved')
-#set($approved = "Approved Authority Record")
-#if ($modified == "false")
-    #set($checked = "checked=checked")
-    #set($statusClass = 'new')
-    #set($approved = "New Authority Record")
+
+#if($self.isModified() == "false")
+    #set($statusClass = "new")
+    #set($statusMessage = "New Record")
+#else
+    #set($statusClass = "approved")
+    #set($statusMessage = "Approved")
 #end
 
 <div id="action-list" class="grid_4">
     <div class="box">
         <h2>Status</h2>
-        #set($menuTitle = "<a href='#'>Status</a>")
-        <div class="$statusClass">
-            $approved
-        </div>
+        <div class="block $statusClass">$statusMessage</div>
+        <div><p>Completed <strong>$self.confirmed</strong> out of <strong>$self.total</strong> records</p></div>
     </div>
 
     <div id="affiliations">
@@ -154,22 +164,30 @@
 <div class="grid_12">
     ##<pre>$self.metadata.toString()</pre>
     <div class="box">
-        <h2>Display names</h2>
+        <h2>Names</h2>
         ##renderObject($self.getMetadata() "preview")
         <br />
         #set($manifest = $self.getManifest())
         #if ($manifest.size() > 0)
-            <p>Names used by this person.</p>
+            <p>
+                Names currently used by this person.
+                Records that have been automatically matched are noted.
+            </p>
         #else
-            <p>No name used by this person</p>
+            <p>No are currently names used by this person.</p>
         #end
         <div id="displayNames">
             #foreach($node in $manifest)
                 #set($authorName = $node.get("title"))
                 #set($hash = $self.getHash($authorName))
+                #set($automatch = $node.get("automatch"))
                 <p>
-                <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" $checked/>
-                <label for="author-$hash">$authorName</label>&nbsp;<a class="display-records" href="#" rel="$hash">(hide)</a>
+                    <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" $checked/>
+                    #if($automatch=="true")
+                        <img src="$portalPath/images/icons/star.png" style="vertical-align: top;"/>
+                    #end
+                    <label for="author-$hash">$authorName</label>
+                    <a class="display-records" href="#" rel="$hash">(hide)</a>
                 </p>
                 #set($docs = $node.getJsonMap("children"))
                 <ul id="${hash}-records">
@@ -177,27 +195,30 @@
                     #set($doc = $docs.get($key))
                     #set($citeId = $doc.get("id"))
                     #set($itemTitle = $doc.get("title"))
-                    #set($faculty="")
-                    #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
-                        #set($faculty = ", " + $doc.getList("faculty").get(0))
+                    #set($faculty = $doc.get("faculty"))
+                    #if($faculty)
+                        #set($affiliation = $faculty)
                     #end
-                    #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
-                        #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
+                    #set($school = $doc.get("school"))
+                    #if($school)
+                        #set($affiliation = "$affiliation, $school")
                     #end
-                    <li rel="$citeId">
-                    <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}" $checked/>
-                    <label for="unlink-author-${hash}-cite-${citeId}">$!itemTitle$faculty</label>
+                    <li class="citation" rel="$citeId">
+                        <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}" $checked/>
+                        <label for="unlink-author-${hash}-cite-${citeId}">
+                            $!itemTitle
+                            #if("$!affiliation" != "")<em>($affiliation)</em>#end
+                        </label>
                     </li>
                 #end
                 </ul>
-    
             #end
             <button id="unlink-names">Save</button>
             <div class="hidden" id="delete-package-item"></div>
         </div>
     </div>
     <div class="box">
-        <h2>Suggested names</h2>
+        <h2>Suggestions</h2>
         <br />
         #if($suggestedNames.isEmpty())
             <p>No names were found that may match this person</p>
@@ -221,18 +242,23 @@
                         #set($itemTitle = $doc.getList("dc_description").get(0))
                         #set($storageId = $doc.get("storage_id"))
                         #set($citationHash = $self.getHash($storageId))
-                        #set($faculty="")
-                        #if($doc.getList("faculty") != [] && $doc.getList("faculty").get(0) != "")
-                            #set($faculty = ", " + $doc.getList("faculty").get(0))
+                        #set($faculty = $doc.getList("faculty"))
+                        #set($affiliation = "")
+                        #if($faculty != [])
+                            #set($affiliation = $faculty.get(0))
                         #end
-                        #if($doc.getList("school") != [] && $doc.getList("school").get(0) != "")
-                            #set($faculty = $faculty + ", <strong>" + $doc.getList("school").get(0) + "</strong>")
+                        #set($school = $doc.getList("school"))
+                        #if($school != [] && !$school.isEmpty())
+                            #set($affiliation = "$affiliation, $school.get(0)")
                         #end
-                        
+                        #set($affiliation = $self.getCitationAffiliation($doc))
                         #if(!$self.isLinked($citationHash))
-                            <li rel="$authorId">
+                            <li class="citation" rel="$authorId">
                                 <input type="checkbox" name="citation" value="$citationHash" id="author-${hash}-cite-${citationHash}"/>
-                                <label for="author-${hash}-cite-${citationHash}">$!itemTitle$faculty</label>
+                                <label for="author-${hash}-cite-${citationHash}">
+                                    $!itemTitle
+                                    #if($affiliation)<em>($affiliation)</em>#end
+                                </label>
                             </li>
                         #end
                     #end
@@ -250,12 +276,11 @@
     </div>
     
     <div class="box">
-        <h2>Search names</h2>
+        <h2>Find</h2>
         <br />
         <div id="search">
             <form>
                 <fieldset class="login">
-                    <legend>Find name</legend>
                     <input id="name-search-query" name="name-search-query" size="50" type="text" />
                     <button class="button" id="search-names">Go</button>
                 </fieldset>
@@ -368,18 +393,12 @@ $(function() {
                         var authorId = item.id;
                         var citationHash = item.storageHash;
                         var itemTitle = item.dc_description[0];
-                        var faculty = item.faculty[0]
-                        var school = item.school[0]
-                        
-                        if (faculty)
-                           faculty = " , " + faculty
-                        if (school)
-                           faculty += ", <strong>" + school + "</strong>"
-                        
+                        var affiliation = item.affiliation || "";
+                        if (affiliation != "") { affiliation = " <em>(" + affiliation + ")</em>"; }
                         html += 
-                        "<li rel="+authorId+">" + 
+                        "<li class='citation' rel="+authorId+">" + 
                             "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"'/>" +
-                            "<lable for='author-"+hash+"-cite-"+citationHash+"'>"+itemTitle+faculty+"</label>" +
+                            "<lable for='author-"+hash+"-cite-"+citationHash+"'>"+itemTitle+affiliation+"</label>" +
                         "</li>";
                         count++;
                     });
@@ -390,7 +409,7 @@ $(function() {
                 });
             },
             error: function(xhr, status, errorThrown) {
-                $("#searchResult").html("No Author found");
+                $("#searchResult").html("<p>No authors found!</p>");
                 $("#link-search-names").attr("disabled", "disabled");
             },
             dataType: "json"
@@ -458,7 +477,11 @@ $(function() {
         $('input[id^='+citeId+']').attr('checked', $('#'+id+'').is(':checked'));
     }); 
     
-    
+    $(".wfnav").each(function(i, elem) {
+        if ($(elem).find("span").length == 2) {
+            $(elem).hide();
+        }
+    });
 });
 </script>
 

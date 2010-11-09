@@ -1,0 +1,13 @@
+#set($pageTitle = "Home")
+<h2 id="page-heading">$page.portalName</h2>
+#parseTemplate("menus/home-main-menu.vm")
+<div class="grid_12">
+    #set($contentTitle = "Information")
+    #parseTemplate("wrapping/content-block-open.vm")
+    <div class="block">
+        <p>There are currently <strong>$self.completedCount</strong> out of <strong>$self.itemCount</strong> name authorities approved.</p>
+    </div>
+    #parseTemplate("wrapping/content-block-close.vm")
+    #parseTemplate("menus/home-new-items.vm")
+</div>
+<div class="clear"></div>

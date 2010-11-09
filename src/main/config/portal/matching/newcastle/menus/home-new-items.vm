@@ -1,27 +1,19 @@
-<div class="grid_6">
-  #set($menuTitle = "Latest additions")
-  #parse($page.getTemplate('wrapping/info-box-open.vm'))
-  #set($menuTitle = $nullValue)
-  <div class="block">
+#set($menuTitle = "Recently added")
+#parseTemplate("wrapping/info-box-open.vm")
+<div class="block">
     <ol>
     #foreach($item in $self.latest)
-      #set($itemId = $item.get('id'))
-      #set($itemTitle = $item.get("dc_title").get(0))
-      #set($owner = $item.get("owner"))
-      #if ("$!owner" != "" && $owner == $page.authentication.get_username())
-          #set ($class = " class='owner'")
-      #else
-          #set ($class = "")
-      #end
-      <li$class>
-        <a href="$portalPath/workflow/$itemId">$itemTitle</a>
-        #set($wfStep = $item.get("workflow_step").get(0))
-        #if ("$!wfStep" != "" && $wfStep != "" && $wfStep != "live")
-        <img class="workflow" src="$portalPath/images/icons/wf_${wfStep}.png" title="Workflow: $wfStep"/>
-        #end
-      </li>
+        #set($itemId = $item.get("id"))
+        #set($itemTitle = $item.get("dc_title").get(0))
+        #set($owner = $item.get("owner"))
+        <li>
+            <a href="$portalPath/workflow/$itemId">$itemTitle</a>
+            #set($wfStep = $item.get("workflow_step").get(0))
+            #if("$!wfStep" != "" && $wfStep != "" && $wfStep != "live")
+                <img class="workflow" src="$portalPath/images/icons/wf_${wfStep}.png" title="Workflow: $wfStep"/>
+            #end
+        </li>
     #end
     </ol>
-  </div>
-  #parse($page.getTemplate('wrapping/info-box-close.vm'))
 </div>
+#parseTemplate("wrapping/info-box-close.vm")
