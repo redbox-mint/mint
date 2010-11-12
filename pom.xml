@@ -18,7 +18,7 @@
         <dir.server>${project.home}/server</dir.server>
         <dir.solr>${project.home}/solr</dir.solr>
         <dir.storage>${project.home}/storage</dir.storage>
-		<server.port>8086</server.port>
+        <server.port>8086</server.port>
     </properties>
     <modules>
         <module>parent</module>
@@ -101,6 +101,11 @@
             <artifactId>plugin-harvester-csv</artifactId>
             <version>0.7.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <artifactId>plugin-storage-fedora3</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
@@ -136,11 +141,6 @@
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-storage-filesystem</artifactId>
             <version>${fascinator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
-            <artifactId>plugin-storage-fedora3</artifactId>
-            <version>${fascinator.version}-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
