@@ -13,11 +13,13 @@ class DetailData:
         self.__ffmpegData = None
         self.__urlBase = context["urlBase"]
         
-        sessionState = context["sessionState"]
-        self.__sourceUrl = sessionState.get("sourceUrl")
+        formData = context["formData"]
+        self.__sourceUrl = formData.get("from")
     
     def getSourceUrl(self):
-        return self.__sourceUrl
+        if self.__sourceUrl:
+            return "%sauthor/detail/%s" % (self.__urlBase, self.__sourceUrl)
+        return None
     
     def escape(self, text):
         return StringEscapeUtils.escapeHtml(text)

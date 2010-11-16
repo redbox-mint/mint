@@ -102,8 +102,6 @@
     </form>
 </div>
 
-#set($checked = "")
-
 #if($self.isModified() == "false")
     #set($statusClass = "new")
     #set($statusMessage = "New Record")
@@ -212,7 +210,7 @@
                 #set($hash = $self.getHash($authorName))
                 #set($automatch = $node.get("automatch"))
                 <p>
-                    <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" $checked/>
+                    <input type="checkbox" class="multiple" name="unlink" value="$hash" id="unlink-author-${hash}" checked="checked"/>
                     #if($automatch=="true")
                         <img src="$portalPath/images/icons/star.png" style="vertical-align: top;"/>
                     #end
@@ -234,7 +232,7 @@
                         #set($affiliation = "$affiliation, $school")
                     #end
                     <li class="citation" rel="$citeId">
-                        <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}" $checked/>
+                        <input type="checkbox" name="citation" value="$citeId" id="unlink-author-${hash}-cite-${citeId}" checked="checked"/>
                         <label for="unlink-author-${hash}-cite-${citeId}">
                             $!itemTitle
                             #if("$!affiliation" != "")<em>($affiliation)</em>#end
@@ -468,7 +466,7 @@ $(function() {
         });
     }
     
-    watchButton("displayNames", "unlink-names");
+    ##watchButton("displayNames", "unlink-names");
     watchButton("suggestedNames", "link-names");
     
     function checkButton(rootId, buttonId) {
@@ -480,7 +478,7 @@ $(function() {
         }
     }
     
-    checkButton("displayNames", "unlink-names");
+    ##checkButton("displayNames", "unlink-names");
     checkButton("suggestedNames", "link-names");
     
     // filter suggestions by rank

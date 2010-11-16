@@ -80,6 +80,34 @@ class NameAuthorityData:
         return '{ status: "ok" }'
     
     def __unlinkNames(self, ids):
+        # link all records in ids
+        if ids:
+            records = self.__getAuthorDetails(ids)
+            self.__linkNames(records)
+        else:
+            ids = []
+        
+        # remove all current link that is not in ids
+        nodeList = self.__manifest.getMap("//children")
+        for node in nodeList:
+            if node[5:] not in ids:
+                self.__manifest.removePath("//children/%s" % node)
+        
+        # check if children node is empty, if yes, remove parent
+        nodeList = self.__manifest.getMap("//manifest")
+        for node in nodeList:
+            childList = self.__manifest.getList("//%s/children" % node)
+            for child in childList:
+                if child.isEmpty():
+                    self.__manifest.removePath("manifest/%s" % node)
+        
+        self.__saveManifest(self.__oid)
+        self.__workflowMetadata.set("modified", "true")
+        self.__saveWorkflowMetadata(self.__oid)
+        return '{ status: "ok" }'
+        
+    
+    def __xunlinkNames(self, ids):
         for id in ids:
             self.__manifest.removePath("//children/node-%s" % id)
         

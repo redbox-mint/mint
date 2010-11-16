@@ -10,7 +10,6 @@ class DetailData:
         self.log = context["log"]
         self.log.info("metadata:{}", self.metadata)
         sessionState = context["sessionState"]
-        sessionState.set("sourceUrl", "%s/detail/%s" % (context["portalPath"], self.metadata.get("id")))
     
     def getRecords(self):
         req = SearchRequest('dc_creator:"%s"' % self.metadata.getList("dc_title").get(0))

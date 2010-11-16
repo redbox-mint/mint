@@ -7,6 +7,6 @@
 <div>MARC Records related to this author:</div>
 <ul>
 #foreach($record in $self.getRecords())
-    <li><a href="$contextPath/marc/detail/$record.get('id')/">$record.getList("dc_title").get(0)</a></li>
+    <li><a href="$contextPath/marc/detail/$record.get('id')/?from=$metadata.get("id")">$record.getList("dc_title").get(0)</a></li>
 #end
 </ul>
