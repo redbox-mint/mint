@@ -22,7 +22,6 @@
         <dir.server>${project.home}/server</dir.server>
         <dir.solr>${project.home}/solr</dir.solr>
         <dir.storage>${project.home}/storage</dir.storage>
-        <server.port>8086</server.port>
     </properties>
     <modules>
         <module>parent</module>
