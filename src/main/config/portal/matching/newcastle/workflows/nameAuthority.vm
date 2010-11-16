@@ -120,10 +120,40 @@
     </div>
 
     <div id="affiliations">
+        #set($menuTitle = '<a href="#">Affiliations</a>')
+        #parseTemplate("wrapping/info-box-open.vm")
+        <div id="table">
+            #set($affiliations = $self.affiliations)
+            #foreach($orgUnit in $affiliations.keys())
+                <table class="meta">
+                    #set($expiryDates = $affiliations.get($orgUnit))
+                    <tr>
+                        <th>$orgUnit</th>
+                    </tr>
+                    #foreach($expiry in $expiryDates.keys())
+                        <tr><td>Names valid to <strong>$expiry</strong></td></tr>
+                        <tr>
+                            <td>
+                                <ul style="margin-bottom:0">
+                                    #set($authorNames = $expiryDates.get($expiry))
+                                    #foreach($authorName in $authorNames)
+                                        <li>$authorName</li>
+                                    #end
+                                </ul>
+                            </td>
+                        </tr>
+                    #end
+                </table>
+            #end
+        </div>
+        #parseTemplate("wrapping/info-box-close.vm")
+    </div>
+
+    <div id="affiliations-old">
         #set($menuTitle = "<a href='#'>Affiliations</a>")
         #parse($page.getTemplate('wrapping/info-box-open.vm'))
         #set($menuTitle = $nullValue)
-        <div id="table">
+        <div id="table-old">
             <table class="meta">
                 #foreach ($node in $self.getAffiliation())
                 <tr>

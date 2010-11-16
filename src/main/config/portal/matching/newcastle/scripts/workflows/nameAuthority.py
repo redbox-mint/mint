@@ -6,7 +6,7 @@ from au.edu.usq.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
 from java.lang import Exception, String
-from java.util import ArrayList, HashMap, HashSet, LinkedHashMap, TreeMap
+from java.util import ArrayList, Collections, HashMap, HashSet, LinkedHashMap, TreeMap
 
 from org.apache.commons.lang import StringEscapeUtils
 from org.apache.commons.collections import ListUtils
@@ -531,4 +531,21 @@ class NameAuthorityData:
         for author in authors:
             map.put("%s %s %s" % (author.get("expiry"), author.get("author"), author.get("orgUnitId")), author)
         
-        return map 
+        return map
+    
+    def getAffiliations(self):
+        authors = self.__workflowMetadata.getList("authors")
+        
+        affiliations = {}
+        for author in authors:
+            key = "(%s) %s" % (author.get("orgUnitId"), author.get("orgUnit"))
+            if not affiliations.has_key(key):
+                affiliations[key] = {}
+            names = affiliations[key]
+            expiry = author["expiry"]
+            if not names.has_key(expiry):
+                names[expiry] = []
+            names[expiry].append(author["author"])
+        print "\n**************\n%s\n**************\n" % affiliations
+        return affiliations
+    
