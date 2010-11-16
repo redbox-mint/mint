@@ -13,6 +13,10 @@
         <relativePath>parent/pom.xml</relativePath>
     </parent>
     <properties>
+        <server.port>8086</server.port>
+        <amq.port>8087</amq.port>
+        <amq.stomp.port>8088</amq.stomp.port>
+        <server.url.base>http://localhost:${server.port}/mint/</server.url.base>
         <dir.home>${project.home}/home</dir.home>
         <dir.portal>${project.home}/portal</dir.portal>
         <dir.server>${project.home}/server</dir.server>
@@ -153,6 +157,35 @@
             <version>${fascinator.version}</version>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>novadev1</id>
+            <activation>
+                <property>
+                    <name>env.HOSTNAME</name>
+                    <value>novadev1</value>
+                </property>
+            </activation>
+            <properties>
+                <server.port>9001</server.port>
+                <amq.port>9201</amq.port>
+                <amq.stomp.port>9202</amq.stomp.port>
+                <server.url.base>http://novadev1.newcastle.usq.edu.au/mint/</server.url.base>
+            </properties>
+        </profile>
+        <profile>
+            <id>novadev2</id>
+            <activation>
+                <property>
+                    <name>env.HOSTNAME</name>
+                    <value>novadev2</value>
+                </property>
+            </activation>
+            <properties>
+                <server.url.base>http://novadev2.newcastle.usq.edu.au/mint/</server.url.base>
+            </properties>
+        </profile>
+    </profiles>
     <build>
         <resources>
             <resource>
