@@ -22,6 +22,8 @@ class NameAuthorityData:
         self.portalId = context["portalId"]
         
         self.__oid = self.formData.get("oid")
+        self.__indexer = self.services.getIndexer()
+        
         try:
             # get the package manifest
             self.__manifest = self.__readManifest(self.__oid)
@@ -42,7 +44,7 @@ class NameAuthorityData:
                 result = self.__linkNames(records)
             elif func == "unlink-names":
                 ids = self.formData.getValues("ids")
-                result = self.__unlinkNames(ids)
+                result = self.__unlinkCitationForCurrentObject(ids)
             #self.log.info(self.__manifest.toString())
             elif func == "search-names":
                 query = self.formData.get("query")
@@ -82,7 +84,7 @@ class NameAuthorityData:
         
         return '{ status: "ok" }'
     
-    def __unlinkNames(self, ids):
+    def __unlinkCitationForCurrentObject(self, ids):
         # link all records in ids
         if ids:
             records = self.__getAuthorDetails(ids)
@@ -126,9 +128,8 @@ class NameAuthorityData:
                     if child.isEmpty():
                         manifest.removePath("manifest/%s" % node)
             self.__saveManifest(authorityStorageId, manifest)
-            indexer = self.services.getIndexer()
-            indexer.index(authorityStorageId)
-            indexer.commit()
+            self.__indexer.index(authorityStorageId)
+            self.__indexer.commit()
             
         idList = [str("%s" % item) for item in ids]
         map = {}
@@ -156,8 +157,7 @@ class NameAuthorityData:
                 req.addParam("fq", q)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         oidList = result.getList("response/docs/id")
         nameList = result.getList("response/docs/dc_title")
@@ -193,8 +193,7 @@ class NameAuthorityData:
             for q in fq:
                 req.addParam("fq", q)
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         oidList = result.getList("response/docs/id")
         nameList = result.getList("response/docs/dc_title")
@@ -270,8 +269,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         return result.getJsonList("response/docs")
     
@@ -326,8 +324,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
         #self.log.info("result={}", result.toString())
@@ -399,8 +396,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         #self.log.info("result={}", result.toString())
         return result.getJsonList("response/docs").get(0)
@@ -518,9 +514,8 @@ class NameAuthorityData:
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
         
-        indexer = self.services.getIndexer()
-        indexer.index(oid)
-        indexer.commit()
+        self.__indexer.index(oid)
+        self.__indexer.commit()
 
     def __searchNames(self, searchText):
         # search common forms
@@ -540,8 +535,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
         docs = result.getJsonList("response/docs")
@@ -582,8 +576,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
         currentList = []
@@ -610,8 +603,7 @@ class NameAuthorityData:
         ##req.addParam("fq", security_query)
         
         out = ByteArrayOutputStream()
-        indexer = self.services.getIndexer()
-        indexer.search(req, out)
+        self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
         return result.getJsonList("response/docs")
