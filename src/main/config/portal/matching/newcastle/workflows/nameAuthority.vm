@@ -266,7 +266,7 @@
                     </p>
                     <ul id="${hash}-records">
                     #foreach($doc in $docs)
-                        #set($authorId = $doc.get("id"))
+                        #set($citationId = $doc.get("id"))
                         #set($itemTitle = $doc.getList("dc_description").get(0))
                         #set($storageId = $doc.get("storage_id"))
                         #set($citationHash = $self.getHash($storageId))
@@ -280,15 +280,13 @@
                             #set($affiliation = "$affiliation, $school.get(0)")
                         #end
                         #set($affiliation = $self.getCitationAffiliation($doc))
-                        #if(!$self.isLinked($citationHash))
-                            <li class="citation" rel="$authorId">
-                                <input type="checkbox" name="citation" value="$citationHash" id="author-${hash}-cite-${citationHash}"/>
-                                <label for="author-${hash}-cite-${citationHash}">
-                                    $!itemTitle
-                                    #if($affiliation)<em>($affiliation)</em>#end
-                                </label>
-                            </li>
-                        #end
+                        <li class="citation" rel="$citationId">
+                            <input type="checkbox" name="citation" value="$citationHash" id="author-${hash}-cite-${citationHash}"/>
+                            <label for="author-${hash}-cite-${citationHash}">
+                                $!itemTitle
+                                #if($affiliation)<em>($affiliation)</em>#end
+                            </label>
+                        </li>
                     #end
                     </ul>
                     </div>
@@ -396,7 +394,28 @@ $(function() {
             "json");
     });
     
-        
+    
+    $("a.unlink-citation").live("click", function() {
+        var checkboxId = $(this).attr("rel");
+        jQuery.ajax({
+            url: "$portalPath/workflows/nameAuthority.ajax",
+            data: {
+                func: "unlink-citation",
+                oid: "$oid", 
+                id: $(this).parent().attr("rel")
+            }, 
+            success: function(data, status) {
+                $("a[rel=" + checkboxId + "]").remove();
+                $("input[value=" + checkboxId + "]").removeAttr('disabled');
+            },
+            error: function(xhr, status, errorThrown) {
+                console.log("error: ", errorThrown)
+            },
+            dataType: "json"
+            });
+        return false;
+    });
+    
     $("#search-names").click(function() {
         jQuery.ajax({
             url: "$portalPath/workflows/nameAuthority.ajax",
@@ -411,22 +430,30 @@ $(function() {
                     var count = 0;
                     jQuery.each(map, function(key, item) {
                         var hash = item.authorHash;
-                        if (count == 0) {
-                            html += "<p>" +
-                                    "<input type='checkbox' class='multiple' name='results' value='"+hash+"' id='author-"+hash+"'/>" + 
-                                    "<label for='author-"+hash+"'>"+authorName+"</label> <a class='display-records' href='#' rel="+hash+">(hide)</a>"+
-                                "</p>" +
-                                "<ul id='"+hash+"-records'>";
-                        }
-                        var authorId = item.id;
+                        var citationId = item.id;
                         var citationHash = item.storageHash;
                         var itemTitle = item.dc_description[0];
                         var affiliation = item.affiliation || "";
                         if (affiliation != "") { affiliation = " <em>(" + affiliation + ")</em>"; }
+                        var linked = item.linked || "false";
+                        var disabled = "";
+                        var unlinked = "";
+                        if (linked == "true") {
+                            disabled = "disabled=disabled";
+                            unlinked = "<a class='unlink-citation' href='#' rel='"+citationHash+"'>&lt;unlink citation&gt;</a>";
+                        }
+                        if (count == 0) {
+                            html += "<p>" +
+                                    "<input type='checkbox' class='multiple' name='results' value='"+hash+"' id='author-"+hash+"' />" + 
+                                    "<label for='author-"+hash+"'>"+authorName+"</label> <a class='display-records' href='#' rel="+hash+">(hide)</a>"+
+                                "</p>" +
+                                "<ul id='"+hash+"-records'>";
+                        }
                         html += 
-                        "<li class='citation' rel="+authorId+">" + 
-                            "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"'/>" +
-                            "<lable for='author-"+hash+"-cite-"+citationHash+"'>"+itemTitle+affiliation+"</label>" +
+                        "<li class='citation' rel="+citationId+">" + 
+                            "<input type='checkbox' name='citation' value='"+citationHash+"' id='author-"+hash+"-cite-"+citationHash+"' "+disabled+" />" +
+                            "<label for='author-"+hash+"-cite-"+citationHash+"'>"+itemTitle+affiliation+"</label> " +
+                            unlinked +
                         "</li>";
                         count++;
                     });

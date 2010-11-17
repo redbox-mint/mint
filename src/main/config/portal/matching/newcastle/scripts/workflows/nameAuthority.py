@@ -5,7 +5,7 @@ from au.edu.usq.fascinator.common import JsonConfigHelper
 from au.edu.usq.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
-from java.lang import Exception, String
+from java.lang import Exception, String, Boolean, Integer
 from java.util import ArrayList, Collections, HashMap, HashSet, LinkedHashMap, TreeMap
 
 from org.apache.commons.lang import StringEscapeUtils
@@ -44,9 +44,12 @@ class NameAuthorityData:
                 ids = self.formData.getValues("ids")
                 result = self.__unlinkNames(ids)
             #self.log.info(self.__manifest.toString())
-            elif func== "search-names":
+            elif func == "search-names":
                 query = self.formData.get("query")
                 result = self.__searchNames(query)
+            elif func == "unlink-citation":
+                id = self.formData.getValues("id")
+                result = self.__unlinkCitation(id)
         except Exception, e:
             result = '{ status: "error", message: "%s" }' % str(e)
         if result:
@@ -105,25 +108,32 @@ class NameAuthorityData:
         self.__workflowMetadata.set("modified", "true")
         self.__saveWorkflowMetadata(self.__oid)
         return '{ status: "ok" }'
-        
     
-    def __xunlinkNames(self, ids):
-        for id in ids:
-            self.__manifest.removePath("//children/node-%s" % id)
+    def __unlinkCitation(self, ids):
+        records = self.__getAuthorityRecord(ids)
         
-        #remove the parent if no more children
-        records = self.__getAuthorDetails(ids)
         for record in records:
-            hash = self.getHash(record.getList("dc_title").get(0))
-            childList = self.__manifest.getList("manifest/node-%s/children" % hash)
-            for child in childList:
-                if child.isEmpty():
-                    self.__manifest.removePath("manifest/node-%s" % hash)
-        
-        self.__saveManifest(self.__oid)
-        self.__workflowMetadata.set("modified", "true")
-        self.__saveWorkflowMetadata(self.__oid)
-        return '{ status: "ok" }'
+            authorityStorageId = record.get("storage_id")
+            manifest = self.__readManifest(authorityStorageId)
+            for id in ids:
+                manifest.removePath("//children/node-%s" % id)
+                
+            # check if children node is empty, if yes, remove parent
+            nodeList = manifest.getMap("//manifest")
+            for node in nodeList:
+                childList = manifest.getList("//%s/children" % node)
+                for child in childList:
+                    if child.isEmpty():
+                        manifest.removePath("manifest/%s" % node)
+            self.__saveManifest(authorityStorageId, manifest)
+            indexer = self.services.getIndexer()
+            indexer.index(authorityStorageId)
+            indexer.commit()
+            
+        idList = [str("%s" % item) for item in ids]
+        map = {}
+        map["a"]=idList
+        return map
     
     def __getNavData(self):
         query = self.sessionState.get("query")
@@ -247,8 +257,8 @@ class NameAuthorityData:
     def getHash(self, data):
         return md5.new(data).hexdigest()
     
-    def __getAuthorDetails(self, authorIds):
-        query = " OR id:".join(authorIds)
+    def __getAuthorDetails(self, citationIds):
+        query = " OR id:".join(citationIds)
         req = SearchRequest('id:%s' % query)
         req.setParam("fq", 'recordtype:"author"')
         req.addParam("fq", 'item_type:"object"')
@@ -326,12 +336,10 @@ class NameAuthorityData:
         exactMatchRecords = LinkedHashMap()
         map = LinkedHashMap()
         
-        
         for doc in docs:
             authorName = doc.getList("dc_title").get(0)
             rank = self.getRank(doc.getList("score").get(0))
             id = doc.get("id")
-            
             #try to do automatch
             if float(rank) == 100.00 and self.isModified() == "false":
                 if exactMatchRecords.containsKey(authorName):
@@ -493,10 +501,12 @@ class NameAuthorityData:
         print self.__manifest.toString()
         return "{}"
     
-    def __saveManifest(self, oid):
+    def __saveManifest(self, oid, manifest=None):
         object = self.services.getStorage().getObject(oid)
         sourceId = object.getSourceId()
-        manifestStr = String(self.__manifest.toString())
+        if manifest is None:
+            manifest = self.__manifest
+        manifestStr = String(manifest.toString())
         object.updatePayload(sourceId,
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
@@ -507,6 +517,10 @@ class NameAuthorityData:
         object.updatePayload("workflow.metadata",
                              ByteArrayInputStream(manifestStr.getBytes("UTF-8")))
         object.close()
+        
+        indexer = self.services.getIndexer()
+        indexer.index(oid)
+        indexer.commit()
 
     def __searchNames(self, searchText):
         # search common forms
@@ -533,9 +547,11 @@ class NameAuthorityData:
         docs = result.getJsonList("response/docs")
         
         map={}
+        idList = []
         count = 0
         for doc in docs:
             authorName = str(doc.getList("dc_title").get(0))
+            idList.append(doc.get("id"))
             if map.has_key(authorName):
                 docsDic = map.get(authorName)
             else:
@@ -545,9 +561,60 @@ class NameAuthorityData:
             doc.set("authorHash", self.getHash(authorName))
             doc.set("storageHash", self.getHash(doc.get("storage_id")))
             doc.set("affiliation", self.getCitationAffiliation(doc))
+            ##doc.set("linked", Boolean.toString(linked))
             docsDic["%s" % count] = doc
             count +=1
+        
+        if idList:
+            self.__isLinked(idList, map)
         return map
+    
+    def __isLinked(self, ids, map):
+        query = 'package_node_id:("' + '" OR "'.join(ids) + '")'
+        req = SearchRequest(query)
+        req.setParam("fq", 'recordtype:"master"')
+        req.addParam("fq", 'item_type:"object"')
+        req.setParam("rows", "9999")
+        
+        # Make sure 'fq' has already been set in the session
+        ##security_roles = self.authentication.get_roles_list();
+        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+        ##req.addParam("fq", security_query)
+        
+        out = ByteArrayOutputStream()
+        indexer = self.services.getIndexer()
+        indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        
+        currentList = []
+        for doc in result.getJsonList("response/docs"):
+            currentList.extend(doc.getList("package_node_id"))
+        
+        for author in map.keys():
+            authorList = map[author]
+            for count in authorList:
+                doc = authorList[count]
+                if doc.get("id") in currentList:
+                    doc.set("linked", "true")
+    
+    def __getAuthorityRecord(self, ids):
+        query = 'package_node_id:("' + '" OR "'.join(ids) + '")'
+        req = SearchRequest(query)
+        req.setParam("fq", 'recordtype:"master"')
+        req.addParam("fq", 'item_type:"object"')
+        req.setParam("rows", "9999")
+        
+        # Make sure 'fq' has already been set in the session
+        ##security_roles = self.authentication.get_roles_list();
+        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
+        ##req.addParam("fq", security_query)
+        
+        out = ByteArrayOutputStream()
+        indexer = self.services.getIndexer()
+        indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        
+        return result.getJsonList("response/docs")
     
     def getAffiliation(self):
         map = TreeMap()
@@ -574,6 +641,5 @@ class NameAuthorityData:
             if not names.has_key(expiry):
                 names[expiry] = []
             names[expiry].append(author["author"])
-        print "\n**************\n%s\n**************\n" % affiliations
         return affiliations
     
