@@ -38,14 +38,13 @@ class NameAuthorityData:
         result = None
         try:
             func = self.formData.get("func")
-            if func == "link-names":
+            if func == "link-citation-current-object":
                 ids = self.formData.getValues("ids")
                 records = self.__getAuthorDetails(ids)
                 result = self.__linkNames(records)
-            elif func == "unlink-names":
+            elif func == "unlink-citation-current-object":
                 ids = self.formData.getValues("ids")
                 result = self.__unlinkCitationForCurrentObject(ids)
-            #self.log.info(self.__manifest.toString())
             elif func == "search-names":
                 query = self.formData.get("query")
                 result = self.__searchNames(query)
@@ -59,30 +58,6 @@ class NameAuthorityData:
             writer.println(result)
             writer.close()
             
-    def __linkNames(self, records):
-        for record in records:
-            id = record.get("id")
-            name = record.getList("dc_title").get(0)
-            title = record.getList("dc_description").get(0)
-            handle = record.getList("handle").get(0)
-            faculty = record.getList("faculty").get(0)
-            school = record.getList("school").get(0)
-            hash = self.getHash(name)
-            self.__manifest.set("manifest/node-%s/title" % (hash), name)
-            self.__manifest.set("manifest/node-%s/automatch" % (hash), "false")
-            self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
-            self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
-            if handle:
-                self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
-            if faculty:
-                self.__manifest.set("manifest/node-%s/children/node-%s/faculty" % (hash, id), faculty)
-            if school:
-                self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
-        self.__saveManifest(self.__oid)
-        self.__workflowMetadata.set("modified", "true")
-        self.__saveWorkflowMetadata(self.__oid)
-        
-        return '{ status: "ok" }'
     
     def __unlinkCitationForCurrentObject(self, ids):
         # link all records in ids
@@ -136,123 +111,6 @@ class NameAuthorityData:
         map["a"]=idList
         return map
     
-    def __getNavData(self):
-        query = self.sessionState.get("query")
-        if query == "":
-            query = "*:*"
-        req = SearchRequest(query)
-        req.setParam("fl", "id dc_title")
-        req.setParam("sort", "f_dc_title asc")
-        req.setParam("rows", "10000")   ## TODO there could be more than this
-        req.setParam("facet", "true")
-        req.addParam("facet.field", "workflow_step")
-        req.setParam("facet.sort", "false")
-        
-        pq = self.services.portalManager.get(self.portalId).query
-        req.setParam("fq", pq)
-        req.addParam("fq", 'item_type:"object"')
-        fq = self.sessionState.get("fq")
-        if fq:
-            for q in fq:
-                req.addParam("fq", q)
-        
-        out = ByteArrayOutputStream()
-        self.__indexer.search(req, out)
-        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
-        oidList = result.getList("response/docs/id")
-        nameList = result.getList("response/docs/dc_title")
-        
-        wfStep = result.getList("facet_counts/facet_fields/workflow_step")
-        self.pending = 0
-        self.confirmed = 0
-        for i in range(len(wfStep)):
-            if wfStep[i] == "pending":
-                self.pending = wfStep[i+1]
-            if wfStep[i] == "live":
-                self.confirmed = wfStep[i+1]
-        
-        self.total = self.pending + self.confirmed
-        #print " *** oidList:'%s'" % oidList
-        #print " *** nameList:'%s'" % nameList
-        return oidList, nameList
-    
-    def __getNavDataUnedited(self):
-        query = self.sessionState.get("query")
-        if query == "":
-            query = "*:*"
-        req = SearchRequest(query)
-        req.setParam("fl", "id dc_title")
-        req.setParam("sort", "f_dc_title asc")
-        req.setParam("rows", "10000")
-        pq = self.services.portalManager.get(self.portalId).query
-        req.setParam("fq", pq)
-        req.addParam("fq", 'item_type:"object"')
-        req.addParam("fq", "workflow_modified:false")
-        fq = self.sessionState.get("fq")
-        if fq:
-            for q in fq:
-                req.addParam("fq", q)
-        out = ByteArrayOutputStream()
-        self.__indexer.search(req, out)
-        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
-        oidList = result.getList("response/docs/id")
-        nameList = result.getList("response/docs/dc_title")
-        return oidList, nameList
-    
-    def __getIndex(self):
-        return self.__oidList.indexOf(self.__oid)
-    
-    def __getUneditedIndex(self):
-        return self.__unEditedOidList.indexOf(self.__oid)
-    
-    def getNextOid(self):
-        i = self.__getIndex()
-        if i+1 < self.__oidList.size():
-            return self.__oidList.get(i+1)
-        return None
-    
-    def getNextName(self):
-        i = self.__getIndex()
-        if i+1 < self.__nameList.size():
-            return self.__nameList.get(i+1)
-        return None
-    
-    def getPrevOid(self):
-        i = self.__getIndex()
-        if i > 0:
-            return self.__oidList.get(i-1)
-        return None
-    
-    def getPrevName(self):
-        i = self.__getIndex()
-        if i > 0:
-            return self.__nameList.get(i-1)
-        return None
-    
-    def getNextUneditedOid(self):
-        i = self.__getUneditedIndex()
-        if i+1 < self.__unEditedOidList.size():
-            return self.__unEditedOidList.get(i+1)
-        return None
-    
-    def getNextUneditedName(self):
-        i = self.__getUneditedIndex()
-        if i+1 < self.__unEditedNameList.size():
-            return self.__unEditedNameList.get(i+1)
-        return None
-    
-    def getPrevUneditedOid(self):
-        i = self.__getUneditedIndex()
-        if i > 0:
-            return self.__unEditedOidList.get(i-1)
-        return None
-    
-    def getPrevUneditedName(self):
-        i = self.__getUneditedIndex()
-        if i > 0:
-            return self.__unEditedNameList.get(i-1)
-        return None
-    
     def getHash(self, data):
         return md5.new(data).hexdigest()
     
@@ -272,12 +130,6 @@ class NameAuthorityData:
         self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         return result.getJsonList("response/docs")
-    
-    def isLinked(self, oid):
-        node = self.__manifest.get("manifest//node-%s" % oid)
-        #self.log.info("manifest:{}", self.__manifest)
-        #self.log.info(" ******* nodeid: {}", node)
-        return node is not None
     
     def getSuggestedNames(self):
         # search common forms
@@ -333,10 +185,13 @@ class NameAuthorityData:
         exactMatchRecords = LinkedHashMap()
         map = LinkedHashMap()
         
+        idList = []
+        
         for doc in docs:
             authorName = doc.getList("dc_title").get(0)
             rank = self.getRank(doc.getList("score").get(0))
             id = doc.get("id")
+            idList.append(id)
             #try to do automatch
             if float(rank) == 100.00 and self.isModified() == "false":
                 if exactMatchRecords.containsKey(authorName):
@@ -355,36 +210,49 @@ class NameAuthorityData:
         
         self.__maxScore = max(1.0, float(result.get("response/maxScore")))
         
+        if idList:
+            self.__isLinked(idList, map)
+        
         # Do not auto save if record is live
         if self.__workflowMetadata.get("modified") == "false":
             self.__autoSaveExactRecord(exactMatchRecords)
         
         return map
     
+    def __linkNames(self, records):
+        self.__savingLinkRecord(records)
+        self.__workflowMetadata.set("modified", "true")
+        self.__saveWorkflowMetadata(self.__oid)
+        return '{ status: "ok" }'
+    
     def __autoSaveExactRecord(self, map):
         if map:
             for authorName in map.keySet():
                 authorDocs = map.get(authorName)
-                for doc in authorDocs:
-                    id = doc.get("id")
-                    name = doc.getList("dc_title").get(0)
-                    title = doc.getList("dc_description").get(0)
-                    handle = doc.getList("handle").get(0)
-                    faculty = doc.getList("faculty").get(0)
-                    school = doc.getList("school").get(0)
-                    hash = self.getHash(name)
-                    
-                    self.__manifest.set("manifest/node-%s/title" % (hash), name)
-                    self.__manifest.set("manifest/node-%s/automatch" % (hash), "true")
-                    self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
-                    self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
-                    if handle:
-                        self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
-                    if faculty:
-                        self.__manifest.set("manifest/node-%s/children/node-%s/faculty" % (hash, id), faculty)
-                    if school:
-                        self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
-                self.__saveManifest(self.__oid)
+                self.__savingLinkRecord(authorDocs)
+                
+    def __savingLinkRecord(self, docs):
+        for doc in docs:
+            id = doc.get("id")
+            name = doc.getList("dc_title").get(0)
+            title = doc.getList("dc_description").get(0)
+            handle = doc.getList("handle").get(0)
+            faculty = doc.getList("faculty").get(0)
+            school = doc.getList("school").get(0)
+            hash = self.getHash(name)
+            
+            self.__manifest.set("manifest/node-%s/title" % (hash), name)
+            self.__manifest.set("manifest/node-%s/automatch" % (hash), "true")
+            self.__manifest.set("manifest/node-%s/children/node-%s/id" % (hash, id), id)
+            self.__manifest.set("manifest/node-%s/children/node-%s/title" % (hash, id), title)
+            if handle:
+                self.__manifest.set("manifest/node-%s/children/node-%s/handle" % (hash, id), handle)
+            if faculty:
+                self.__manifest.set("manifest/node-%s/children/node-%s/faculty" % (hash, id), faculty)
+            if school:
+                self.__manifest.set("manifest/node-%s/children/node-%s/school" % (hash, id), school)
+        self.__saveManifest(self.__oid)
+        
     
     def __getMetadata(self, oid):
         req = SearchRequest('id:%s' % oid)
@@ -493,10 +361,6 @@ class NameAuthorityData:
         object.close()
         return metadata
     
-    def __addNode(self):
-        print self.__manifest.toString()
-        return "{}"
-    
     def __saveManifest(self, oid, manifest=None):
         object = self.services.getStorage().getObject(oid)
         sourceId = object.getSourceId()
@@ -529,17 +393,13 @@ class NameAuthorityData:
         req.setParam("fl", "score")
         req.setParam("sort", "score desc")
         
-        # Make sure 'fq' has already been set in the session
-        ##security_roles = self.authentication.get_roles_list();
-        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
-        ##req.addParam("fq", security_query)
-        
         out = ByteArrayOutputStream()
         self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
         
         docs = result.getJsonList("response/docs")
         
+        #Using this map because velocity gave error if LinkHashedMap is used
         map={}
         idList = []
         count = 0
@@ -570,11 +430,6 @@ class NameAuthorityData:
         req.addParam("fq", 'item_type:"object"')
         req.setParam("rows", "9999")
         
-        # Make sure 'fq' has already been set in the session
-        ##security_roles = self.authentication.get_roles_list();
-        ##security_query = 'security_filter:("' + '" OR "'.join(security_roles) + '")'
-        ##req.addParam("fq", security_query)
-        
         out = ByteArrayOutputStream()
         self.__indexer.search(req, out)
         result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
@@ -583,12 +438,19 @@ class NameAuthorityData:
         for doc in result.getJsonList("response/docs"):
             currentList.extend(doc.getList("package_node_id"))
         
-        for author in map.keys():
-            authorList = map[author]
-            for count in authorList:
-                doc = authorList[count]
-                if doc.get("id") in currentList:
-                    doc.set("linked", "true")
+        if type(map).__name__ == "LinkedHashMap":
+            for author in map.keySet():
+                authorDocs = map.get(author)
+                for doc in authorDocs:
+                    if doc.get("id") in currentList:
+                        doc.set("linked", "true")
+        else:
+            for author in map.keys():
+                authorList = map[author]
+                for count in authorList:
+                    doc = authorList[count]
+                    if doc.get("id") in currentList:
+                        doc.set("linked", "true")
     
     def __getAuthorityRecord(self, ids):
         query = 'package_node_id:("' + '" OR "'.join(ids) + '")'
@@ -635,3 +497,118 @@ class NameAuthorityData:
             names[expiry].append(author["author"])
         return affiliations
     
+    ## Functions for navigation
+    def __getNavData(self):
+        query = self.sessionState.get("query")
+        if query == "":
+            query = "*:*"
+        req = SearchRequest(query)
+        req.setParam("fl", "id dc_title")
+        req.setParam("sort", "f_dc_title asc")
+        req.setParam("rows", "10000")   ## TODO there could be more than this
+        req.setParam("facet", "true")
+        req.addParam("facet.field", "workflow_step")
+        req.setParam("facet.sort", "false")
+        
+        pq = self.services.portalManager.get(self.portalId).query
+        req.setParam("fq", pq)
+        req.addParam("fq", 'item_type:"object"')
+        fq = self.sessionState.get("fq")
+        if fq:
+            for q in fq:
+                req.addParam("fq", q)
+        
+        out = ByteArrayOutputStream()
+        self.__indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        oidList = result.getList("response/docs/id")
+        nameList = result.getList("response/docs/dc_title")
+        
+        wfStep = result.getList("facet_counts/facet_fields/workflow_step")
+        self.pending = 0
+        self.confirmed = 0
+        for i in range(len(wfStep)):
+            if wfStep[i] == "pending":
+                self.pending = wfStep[i+1]
+            if wfStep[i] == "live":
+                self.confirmed = wfStep[i+1]
+        
+        self.total = self.pending + self.confirmed
+        return oidList, nameList
+    
+    def __getNavDataUnedited(self):
+        query = self.sessionState.get("query")
+        if query == "":
+            query = "*:*"
+        req = SearchRequest(query)
+        req.setParam("fl", "id dc_title")
+        req.setParam("sort", "f_dc_title asc")
+        req.setParam("rows", "10000")
+        pq = self.services.portalManager.get(self.portalId).query
+        req.setParam("fq", pq)
+        req.addParam("fq", 'item_type:"object"')
+        req.addParam("fq", "workflow_modified:false")
+        fq = self.sessionState.get("fq")
+        if fq:
+            for q in fq:
+                req.addParam("fq", q)
+        out = ByteArrayOutputStream()
+        self.__indexer.search(req, out)
+        result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+        oidList = result.getList("response/docs/id")
+        nameList = result.getList("response/docs/dc_title")
+        return oidList, nameList
+    
+    def __getIndex(self):
+        return self.__oidList.indexOf(self.__oid)
+    
+    def __getUneditedIndex(self):
+        return self.__unEditedOidList.indexOf(self.__oid)
+    
+    def getNextOid(self):
+        i = self.__getIndex()
+        if i+1 < self.__oidList.size():
+            return self.__oidList.get(i+1)
+        return None
+    
+    def getNextName(self):
+        i = self.__getIndex()
+        if i+1 < self.__nameList.size():
+            return self.__nameList.get(i+1)
+        return None
+    
+    def getPrevOid(self):
+        i = self.__getIndex()
+        if i > 0:
+            return self.__oidList.get(i-1)
+        return None
+    
+    def getPrevName(self):
+        i = self.__getIndex()
+        if i > 0:
+            return self.__nameList.get(i-1)
+        return None
+    
+    def getNextUneditedOid(self):
+        i = self.__getUneditedIndex()
+        if i+1 < self.__unEditedOidList.size():
+            return self.__unEditedOidList.get(i+1)
+        return None
+    
+    def getNextUneditedName(self):
+        i = self.__getUneditedIndex()
+        if i+1 < self.__unEditedNameList.size():
+            return self.__unEditedNameList.get(i+1)
+        return None
+    
+    def getPrevUneditedOid(self):
+        i = self.__getUneditedIndex()
+        if i > 0:
+            return self.__unEditedOidList.get(i-1)
+        return None
+    
+    def getPrevUneditedName(self):
+        i = self.__getUneditedIndex()
+        if i > 0:
+            return self.__unEditedNameList.get(i-1)
+        return None
