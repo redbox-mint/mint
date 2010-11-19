@@ -1,0 +1,42 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/data/final_website_dataset_as_at_1_jun_10.csv",
+            "idColumn": "Grant Id",
+            "recordIDPrefix": "http://example.com/nhmrc/",
+            "headerRow": "true",
+            "delimiter": "\t",
+            "ignoredFields": ["Funding Purpose",
+                              "Main Funding Group",
+                              "Grant Subtype",
+                              "State", "Sector ",
+                              "Broad Research Area ",
+                              "Main Category Field Of Research",
+                              "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001",
+                              "2002", "2003", "2004", "2005", "2006", "2007", "2008",
+                              "2009", "2010", "2011", "2012", "2013", "2014", "2015", "Total "
+                              ],
+            "includedFields" : ["Grant Id",
+                                "App Year",
+                                " Start Year",
+                                "Simplified Title",
+                                "Grant Admin Institution",
+                                "Grant Type",
+                                "Field Of Research ",
+                                "CIA Full Name",
+                                "Scientific Title"
+                                ]
+        }
+    },
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "activity-nhmrc.py"
+        },
+        "params": {
+            "repository.name": "NHMRC",
+            "repository.type": "Activity"
+        }
+    }
+}
