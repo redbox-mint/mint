@@ -1,7 +1,7 @@
 # Rule file for NHMRC for dataset downloaded from: 
 # http://www.nhmrc.gov.au/grants/dataset/rmis/index.htm
 # Datasets:
-     # NHMRC research funding dataset 2000–2009 
+     # NHMRC research funding dataset 2000-2009 
      
 import uuid, time
 from au.edu.usq.fascinator.api.storage import StorageException
