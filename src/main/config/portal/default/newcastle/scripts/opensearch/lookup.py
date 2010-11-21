@@ -44,7 +44,7 @@ class LookupData:
         return "request"
     
     def getSearchTerms(self):
-        return self.getFormData("searchTerms", None)
+        return self.getFormData("searchTerms", "")
     
     def getStartPage(self):
         #index = int(self.getStartIndex())
@@ -62,13 +62,18 @@ class LookupData:
     
     def __getSolrData(self):
         prefix = self.getSearchTerms()
-        if prefix:
+        if prefix != "":
             query = '%(prefix)s OR %(prefix)s*' % { "prefix" : prefix }
         else:
             query = "*:*"
         
+        portal = self.services.portalManager.get(self.portalId)
+        if portal.searchQuery != "*:*":
+            query = query + " AND " + portal.searchQuery
         req = SearchRequest(query)
-        req.addParam("fq", 'item_type:"object"')
+        req.setParam("fq", 'item_type:"object"')
+        if portal.query:
+            req.addParam("fq", portal.query)
         req.setParam("fl", "score")
         req.setParam("sort", "score desc")
         req.setParam("start", self.getStartIndex())
@@ -82,7 +87,7 @@ class LookupData:
         except Exception, e:
             self.log.error("Failed to lookup '{}': {}", prefix, str(e))
         
-        return JsonConfigHelper()
+        return JsonConfigHelper('{"response/numFound": 0}')
     
     def getFormData(self, name, default):
         value = self.formData.get(name)
