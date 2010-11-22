@@ -3,15 +3,15 @@
         "type": "oai-pmh",
         "oai-pmh": {
             "url": "http://ogma.newcastle.edu.au/oaiprovider/",
-            "metadataPrefix": "oai_dc",
-            "maxRequests": -1
+            "metadataPrefix": ["marc", "oai_dc"],
+            "maxRequests": 1
         }
     },
 
     "transformer": {
         "harvestQueue": [],
         "indexOnHarvest": "false",
-        "renderQueue": []
+        "renderQueue": ["solrmarc"]
     },
 
     "indexer": {
@@ -22,7 +22,7 @@
         "params": {
             "repository.name": "Newcastle",
             "repository.type": "VITAL",
-            "prefix": "oai_dc"
+            "prefix": "marc"
         }
     }
 }
