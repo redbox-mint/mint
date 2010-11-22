@@ -1,0 +1,54 @@
+#set($noLayout = true)
+#set($results = $self.getResults())
+{
+    "OpenSearchResponse": {
+        "title": "Newcastle activities",
+        "link": "$self.getLink()",
+        "totalResults": "$self.getTotalResults()",
+        "startIndex" : "$self.getStartIndex()",
+        "itemsPerPage": "$self.getItemsPerPage()",
+        "query": {
+            "role": "$self.getRole()",
+            "searchTerms": "$!self.getSearchTerms()",
+            "startPage": "$self.getStartPage()"
+        }
+    },
+    "namespaces": {
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "skos": "http://www.w3.org/2004/02/skos/core#"
+    },
+    "results": [
+        #if($formData.get("level") == "top")
+            #foreach($result in $results)
+                {
+                    "result-metadata": {
+                        "relevance": 1
+                    },
+                    "rdf:about": "$self.getValue($result, 'dc_identifier')",
+                    "rdf:type": "skos:Concept",
+                    "skos:inScheme": "http://namespace.adfi.usq.edu.au/grants",
+                    "skos:broader": "$self.getValue($result, 'skos_broader')",
+                    "skos:narrower": [ $self.getValueList($result, "skos_narrower") ],
+                    "skos:prefLabel": "$self.getValue($result, 'skos_prefLabel')"
+                }
+                #if($velocityCount < $results.size()),#end
+            #end
+        #else
+            #foreach($result in $results)
+                {
+                    "result-metadata": {
+                        "relevance": $result.get("score")
+                    },
+                    "rdf:about": "$self.getValue($result, 'dc_identifier')",
+                    "rdf:type": "skos:Concept",
+                    "skos:inScheme": "$self.getNamespace()",
+                    "skos:broader": "$self.getNamespace()$self.getValue($result, 'repository_name')",
+                    "skos:narrower": [],
+                    "skos:prefLabel": "$self.getValue($result, 'dc_title')"
+                }
+                #if($velocityCount < $results.size()),#end
+            #end
+        #end
+    ]
+}
+
