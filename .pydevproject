@@ -5,6 +5,6 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">jython 2.5</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
-<path>/redbox/src/main/config/portal/default/newcastle/scripts</path>
+<path>/redbox-lacs/src/main/config/portal/default/newcastle/scripts</path>
 </pydev_pathproperty>
 </pydev_project>

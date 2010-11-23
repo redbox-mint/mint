@@ -73,13 +73,6 @@ class LookupData:
         else:
             query = "*:*"
         
-        req = SearchRequest(query)
-        req.addParam("fq", 'item_type:"object"')
-        req.addParam("fq", 'repository_type:"SEO"')
-        req.setParam("fl", "score")
-        req.setParam("sort", "score desc")
-        req.setParam("start", self.getStartIndex())
-        req.setParam("rows", self.getItemsPerPage())
         level = self.getFormData("level", None)
         if level is not None:
             if level=="top":
@@ -87,6 +80,14 @@ class LookupData:
                 query += ' AND dc_identifier:"http://purl.org/anzsrc/seo/#division"'
             else:
                 query += ' AND skos_broader:"%s"' % level
+        
+        req = SearchRequest(query)
+        req.addParam("fq", 'item_type:"object"')
+        req.addParam("fq", 'repository_type:"SEO"')
+        req.setParam("fl", "score")
+        req.setParam("sort", "score desc")
+        req.setParam("start", self.getStartIndex())
+        req.setParam("rows", self.getItemsPerPage())
         
         try:
             out = ByteArrayOutputStream()
