@@ -48,19 +48,27 @@ class LookupData:
         return self.getFormData("searchTerms", "")
     
     def getStartPage(self):
-        index = int(self.getStartIndex())
-        perPage = int(self.getItemsPerPage())
-        return (index / perPage)
+        #index = int(self.getStartIndex())
+        #perPage = int(self.getItemsPerPage())
+        return 0#(index / perPage)
     
     def getResults(self):
         return self.__results
     
     def __getSolrData(self):
         prefix = self.getSearchTerms()
-        query = 'dc_title:"%(prefix)s" OR dc_title:%(prefix)s*' % { "prefix" : prefix }
-        query2 = 'package_node_title:"%(prefix)s" OR package_node_title:%(prefix)s*' % { "prefix" : prefix }
+        if prefix:
+            query = ""
+            parts = prefix.split(" ")
+            if len(parts) > 1:
+                query = '(firstName:%s AND surname:%s)^5.0 OR ' % (parts[0], parts[1])
+            query1 = 'dc_title:"%(prefix)s" OR dc_title:%(prefix)s*' % { "prefix" : prefix }
+            query2 = 'package_node_title:"%(prefix)s" OR package_node_title:%(prefix)s*' % { "prefix" : prefix }
+            query += "(%s)^2.5 OR (%s)^0.5" % (query1, query2)
+        else:
+            query = "*:*"
         
-        req = SearchRequest("(%s)^2.5 OR (%s)^0.5" % (query, query2))
+        req = SearchRequest(query)
         req.addParam("fq", "recordtype:master")
         req.addParam("fq", 'item_type:"object"')
         req.setParam("fl", "score")
@@ -72,8 +80,11 @@ class LookupData:
             out = ByteArrayOutputStream()
             indexer = self.services.getIndexer()
             indexer.search(req, out)
-            return JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+            result = JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+            print result
+            return result
         except Exception, e:
+            e.printStackTrace()
             self.log.error("Failed to lookup '{}': {}", prefix, str(e))
         
         return JsonConfigHelper()
