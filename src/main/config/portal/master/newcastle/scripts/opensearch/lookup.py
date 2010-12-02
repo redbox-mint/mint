@@ -61,7 +61,7 @@ class LookupData:
             query = ""
             parts = prefix.split(" ")
             if len(parts) > 1:
-                query = '(firstName:%s AND surname:%s)^5.0 OR ' % (parts[0], parts[1])
+                query = '(firstName:(%(firstName)s OR %(firstName)s*) AND surname:(%(surname)s OR %(surname)s*))^5.0 OR ' % { "firstName": parts[0], "surname": parts[1] }
             query1 = 'dc_title:"%(prefix)s" OR dc_title:%(prefix)s*' % { "prefix" : prefix }
             query2 = 'package_node_title:"%(prefix)s" OR package_node_title:%(prefix)s*' % { "prefix" : prefix }
             query += "(%s)^2.5 OR (%s)^0.5" % (query1, query2)
