@@ -1,5 +1,10 @@
 #set($noLayout = true)
 #set($results = $self.getResults())
+#if($formData.get("simple"))
+#foreach($result in $results)
+$self.getValue($result, "dc_title")
+#end
+#else
 {
     "OpenSearchResponse": {
         "title": "General Search",
@@ -29,11 +34,11 @@
                 "rdf:about": "$self.getBaseUrl()/master/detail/$result.get('id')",
                 "rdfs:type": ["owl:Thing"],
                 "rdfs:label": "$self.getValue($result, 'dc_title')",
-                "dc:title": $self.getValueList($result, "dc_title"),
-                "dc:description": $self.getValueList($result, "dc_description")
+                "dc:title": "$self.getValue($result, 'dc_title')",
+                "dc:description": "$self.getValue($result, 'dc_description')"
             }
             #if($velocityCount < $results.size()),#end
         #end
     ]
 }
-
+#end

@@ -55,7 +55,10 @@ class LookupData:
         return self.__results
     
     def getValue(self, doc, field):
-        return doc.getList(field).get(0)
+        values = doc.getList(field)
+        if not values.isEmpty():
+            return values.get(0)
+        return ""
     
     def getValueList(self, doc, field):
         return '["%s"]' % '", "'.join(doc.getList(field)) + ""
@@ -75,7 +78,7 @@ class LookupData:
         if portal.query:
             req.addParam("fq", portal.query)
         req.setParam("fl", "score")
-        req.setParam("sort", "score desc")
+        req.setParam("sort", "score desc, f_dc_title asc")
         req.setParam("start", self.getStartIndex())
         req.setParam("rows", self.getItemsPerPage())
         

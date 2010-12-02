@@ -1,0 +1,25 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/data/ISO-639-2_utf-8.txt",
+            "idColumn": "alpha3",
+            "recordIDPrefix": "",
+            "headerRow": false,
+            "headerList": ["alpha3", "alpha3_alt", "alpha2", "english", "french"],
+            "delimiter": "|",
+            "ignoredFields": [],
+            "includedFields" : ["alpha3", "alpha3_alt", "alpha2", "english", "french"]
+        }
+    },
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "iso639-2.py"
+        },
+        "params": {
+            "repository.name": "Language codes (ISO 639.2)",
+            "repository.type": "Library of Congress Standards"
+        }
+    }
+}
