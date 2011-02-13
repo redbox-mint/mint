@@ -15,6 +15,7 @@ class LookupData:
         self.services = context["Services"]
         self.portalId = context["portalId"]
         self.formData = context["formData"]
+
         self.request = context["request"]
         #self.request.setAttribute("Content-Type", "application/x-fascinator-lookup+json")
         self.request.setAttribute("Content-Type", "application/json")
@@ -75,10 +76,12 @@ class LookupData:
         prefix = self.getSearchTerms()
         print "prefix='%s'" % prefix
         if prefix:
-            query = '%(prefix)s OR %(prefix)s*' % { "prefix" : prefix }
+            query = 'dc_title:%(prefix)s OR dc_title:%(prefix)s*' % { "prefix": prefix }
+            query += ' OR f_dc_identifier:%(ns)s%(prefix)s OR f_dc_identifier:%(ns)s%(prefix)s*' % \
+                { "prefix": prefix, "ns": "http\://example.com/arc/" }
         else:
             query = "*:*"
-        
+
         portal = self.services.portalManager.get(self.portalId)
         if portal.searchQuery != "*:*" and portal.searchQuery != "":
             query = query + " AND " + portal.searchQuery
