@@ -2,7 +2,7 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/StaffList.csv",
+            "fileLocation": "${fascinator.home}/data/OrgUnits.csv",
             "idColumn": "ID",
             "recordIDPrefix": "",
             "headerRow": true,
