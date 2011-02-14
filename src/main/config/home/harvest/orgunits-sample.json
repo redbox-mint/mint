@@ -15,7 +15,7 @@
     "indexer": {
         "script": {
             "type": "python",
-            "rules": "staff-sample.py"
+            "rules": "orgunits-sample.py"
         },
         "params": {
             "repository.name": "Organisation Units",
