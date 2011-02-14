@@ -69,8 +69,8 @@ class IndexData:
         jsonPayload.close()
         
         data = json.getMap("data")
-        self.utils.add(self.index, "dc_title", "%s %s" % (data.get("First_Name"), data.get("Last_Name")))
-        self.utils.add(self.index, "dc_description", "%s %s" % (data.get("First_Name"), data.get("Last_Name")))
+        self.utils.add(self.index, "dc_title", "%s %s" % (data.get("firstName"), data.get("surname")))
+        self.utils.add(self.index, "dc_description", "%s %s" % (data.get("firstName"), data.get("surname")))
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
     

@@ -6,10 +6,10 @@
             "idColumn": "ID",
             "recordIDPrefix": "",
             "headerRow": true,
-            "headerList": ["ID", "Honorific", "First Name", "Last Name", "Division", "School"],
+            "headerList": ["ID", "Honorific", "firstName", "surname", "Division", "School"],
             "delimiter": ",",
             "ignoredFields": [],
-            "includedFields" : ["ID", "Honorific", "First_Name", "Last_Name", "Division", "School"]
+            "includedFields" : ["ID", "Honorific", "firstName", "surname", "Division", "School"]
         }
     },
     "indexer": {

@@ -1,8 +1,8 @@
-ID,Honorific,First Name,Last Name,Title,Division,School
-00001234,Mr,Albert,Zweistein,Associate Lecturer,Faculty of Science,Chemistry
-00002222,Mrs,Jane,Crowley,Lecturer,Faculty of Business,International Relations
-10001356,Miss,Ludo,Smith,Research Assistant,Advanced Research Centre,
-12312309,Prof,Ang,Pots,Dean,Faculty of Education,Primary Schooling
-00115534,Dr,Bo,Millett,Lecturer,Faculty of Information Technology,Information Security
-88450274,Dr,Monique,Kimble,Researcher,Faculty of Science,Astro Physics
-74539563,Dr,Cosmo,Costanza,Associate Lecturer,Faculty of Business,Human Resources
+"ID","Honorific","firstName","surname","Title","Division","School"
+1234,"Mr","Albert","Zweistein","Associate Lecturer","Faculty of Science","Chemistry"
+2222,"Mrs","Jane","Crowley","Lecturer","Faculty of Business","International Relations"
+10001356,"Miss","Ludo","Smith","Research Assistant","Advanced Research Centre",
+12312309,"Prof","Ang","Pots","Dean","Faculty of Education","Primary Schooling"
+115534,"Dr","Bo","Millett","Lecturer","Faculty of Information Technology","Information Security"
+88450274,"Dr","Monique","Kimble","Researcher","Faculty of Science","Astro Physics"
+74539563,"Dr","Cosmo","Costanza","Associate Lecturer","Faculty of Business","Human Resources"
