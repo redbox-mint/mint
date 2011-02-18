@@ -104,11 +104,13 @@
             <artifactId>plugin-harvester-csv</artifactId>
             <version>0.7.0-SNAPSHOT</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-storage-fedora3</artifactId>
             <version>0.7.0-SNAPSHOT</version>
         </dependency>
+        -->
         <!-- Fascinator Plugins -->
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
@@ -198,25 +200,31 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Use Groovy to define a clean path to the top level directory. Windows pathing can be problematic, so we fix that here too -->
+            <!-- Use Groovy to define a clean path to the top level directory.
+                 Windows pathing can be problematic, so we fix that here too -->
             <plugin>
                 <groupId>org.codehaus.groovy.maven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <version>1.0</version>
                 <executions>
                     <execution>
+                        <id>default</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>
-                                import java.io.File;
-                                String baseDir = pom.basedir;
-                                File dir = new File(baseDir);
-                                String projectHome = dir.getParentFile().getAbsolutePath();
-                                project.properties['project.home'] = projectHome.replace("\\", "/");
-                            </source>
+                            <source>${project.basedir}/setup.groovy</source>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>clean</id>
+                        <phase>pre-clean</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>${project.basedir}/setup.groovy</source>
                         </configuration>
                     </execution>
                 </executions>
@@ -234,6 +242,22 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Remove previously deployed files -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${dir.server}</directory>
+                            <includes>
+                                <include>lib/*.jar</include>
+                                <include>plugins/*.jar</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
             <!-- Copy dependencies and configuration resources -->
             <plugin>

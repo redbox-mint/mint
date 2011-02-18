@@ -66,7 +66,7 @@ class LookupData:
     def __getSolrData(self):
         prefix = self.getSearchTerms()
         if prefix != "":
-            query = '%(prefix)s OR %(prefix)s*' % { "prefix" : prefix }
+            query = 'dc_title:"%(prefix)s" OR dc_title:"%(prefix)s*"' % { "prefix" : prefix }
         else:
             query = "*:*"
         
