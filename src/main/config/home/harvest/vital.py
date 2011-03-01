@@ -58,7 +58,7 @@ class IndexData:
 
     def __createAuthorRecord(self, title, author):
         hash = title.encode("utf-8") + "#" + author.encode("utf-8")
-        print "Creating author record:", hash
+        #print "Creating author record:", hash
         oid = md5.new(hash).hexdigest()
         index = HashMap()
         self.utils.add(index, "id", oid)
