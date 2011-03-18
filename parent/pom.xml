@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>au.edu.usq.fascinator.redbox</groupId>
-    <artifactId>redbox-lacs-project</artifactId>
+    <groupId>au.edu.usq.fascinator.mint</groupId>
+    <artifactId>mint-project</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>ReDBox LACS - Project</name>
+    <name>The Mint - Project</name>
     <properties>
-        <fascinator.version>0.7.3</fascinator.version>
+        <fascinator.version>0.7.6-SNAPSHOT</fascinator.version>
         <jetty.version>6.1.24</jetty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -17,11 +17,13 @@
                 <groupId>au.edu.usq.fascinator</groupId>
                 <artifactId>fascinator-common</artifactId>
                 <version>${fascinator.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>au.edu.usq.fascinator</groupId>
                 <artifactId>fascinator-core</artifactId>
                 <version>${fascinator.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>au.edu.usq.fascinator</groupId>
@@ -29,14 +31,9 @@
                 <version>${fascinator.version}</version>
             </dependency>
             <dependency>
-                <groupId>fascinator-plugins</groupId>
-                <artifactId>plugin-harvester-csv</artifactId>
-                <version>0.7.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.8.1</version>
+                <version>4.8.2</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
