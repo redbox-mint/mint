@@ -1,7 +1,7 @@
 {
   "portal" : {
-    "name" : "orgunit",
-    "description" : "Organisational Units",
+    "name" : "Parties_Groups",
+    "description" : "Parties - Groups",
     "query" : "recordtype:\"org_unit\"",
     "searchQuery" : "*:*",
     "facet-fields" : {

@@ -1,26 +1,20 @@
 {
   "portal" : {
-    "name" : "author",
-    "description" : "Author Names",
-    "query" : "recordtype:\"author\"",
+    "name" : "Parties_People",
+    "description" : "Parties - People",
+    "query" : "repository_type:\"Parties\" AND repository_name:\"People\"",
     "searchQuery" : "*:*",
     "facet-fields" : {
-      "recordtype" : {
-        "label" : "Record type",
-        "display" : "list"
-      },
       "repository_name" : {
         "label" : "Source",
         "display" : "list"
-      },
-      "repository_type" : {
-        "label" : "Source type",
-        "display" : "list"
-      },
-      "workflow_step_label" : {
-        "label" : "Workflow Step",
-        "display" : "list"
       }
+    },
+    "searchQuery" : "",
+    "facet-display" : "9",
+    "sort-fields" : {
+      "last_modified" : "Last modified",
+      "f_dc_title" : "Title"
     }
   }
 }

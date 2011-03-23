@@ -55,7 +55,7 @@ class IndexData:
         self.utils.add(self.index, "last_modified", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
         self.utils.add(self.index, "harvest_config", self.params.getProperty("jsonConfigOid"))
         self.utils.add(self.index, "harvest_rules",  self.params.getProperty("rulesOid"))
-        self.utils.add(self.index, "display_type", "staff")
+        self.utils.add(self.index, "display_type", "iso639-2")
 
         self.item_security = []
         
@@ -69,23 +69,23 @@ class IndexData:
         jsonPayload.close()
         
         data = json.getMap("data")
-        self.utils.add(self.index, "dc_title", "%s %s" % (data.get("firstName"), data.get("surname")))
-        self.utils.add(self.index, "dc_description", "%s %s" % (data.get("firstName"), data.get("surname")))
+        self.utils.add(self.index, "dc_title", data.get("alpha3"))
+        self.utils.add(self.index, "dc_description", data.get("english"))
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
     
     def __security(self, oid, index):
-        roles = self.utils.getRolesWithAccess(self.oid)
+        roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:
             for role in roles:
-                self.utils.add(self.index, "security_filter", role)
+                self.utils.add(index, "security_filter", role)
         else:
             # Default to guest access if Null object returned
             schema = self.utils.getAccessSchema("derby");
-            schema.setRecordId(self.oid)
+            schema.setRecordId(oid)
             schema.set("role", "guest")
             self.utils.setAccessSchema(schema, "derby")
-            self.utils.add(self.index, "security_filter", "guest")
+            self.utils.add(index, "security_filter", "guest")
 
     def __indexList(self, name, values):
         for value in values:

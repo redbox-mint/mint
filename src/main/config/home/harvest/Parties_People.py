@@ -1,17 +1,7 @@
 #
-# Rules script for ISO 639.2 Language codes
-# Data can be downloaded from:
-#     http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+# Rules script for sample Parties - People data
 #
-import md5, time
-
-from au.edu.usq.fascinator.api.storage import StorageException
-from au.edu.usq.fascinator.common import JsonConfigHelper
-from au.edu.usq.fascinator.common.storage import StorageUtils
-from java.io import ByteArrayInputStream
-from java.lang import Exception, String
-from java.util import HashMap
-from org.apache.commons.codec.digest import DigestUtils
+import time
 
 class IndexData:
     def __init__(self):
@@ -55,7 +45,7 @@ class IndexData:
         self.utils.add(self.index, "last_modified", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
         self.utils.add(self.index, "harvest_config", self.params.getProperty("jsonConfigOid"))
         self.utils.add(self.index, "harvest_rules",  self.params.getProperty("rulesOid"))
-        self.utils.add(self.index, "display_type", "iso639-2")
+        self.utils.add(self.index, "display_type", "parties_people")
 
         self.item_security = []
         
@@ -68,24 +58,25 @@ class IndexData:
         json = self.utils.getJsonObject(jsonPayload.open())
         jsonPayload.close()
         
-        data = json.getMap("data")
-        self.utils.add(self.index, "dc_title", data.get("alpha3"))
-        self.utils.add(self.index, "dc_description", data.get("english"))
+        data = json.getObject("data")
+        self.utils.add(self.index, "dc_title", "%s %s" % (data.get("Given Name"), data.get("Family Name")))
+        self.utils.add(self.index, "dc_description", "%s %s" % (data.get("Given Name"), data.get("Family Name")))
+        self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
     
     def __security(self, oid, index):
-        roles = self.utils.getRolesWithAccess(self.oid)
+        roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:
             for role in roles:
-                self.utils.add(self.index, "security_filter", role)
+                self.utils.add(index, "security_filter", role)
         else:
             # Default to guest access if Null object returned
             schema = self.utils.getAccessSchema("derby");
-            schema.setRecordId(self.oid)
+            schema.setRecordId(oid)
             schema.set("role", "guest")
             self.utils.setAccessSchema(schema, "derby")
-            self.utils.add(self.index, "security_filter", "guest")
+            self.utils.add(index, "security_filter", "guest")
 
     def __indexList(self, name, values):
         for value in values:

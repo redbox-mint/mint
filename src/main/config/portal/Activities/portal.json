@@ -1,7 +1,7 @@
 {
   "portal" : {
-    "name" : "activity",
-    "description" : "Newcastle activities",
+    "name" : "Activities",
+    "description" : "Activities",
     "query" : "repository_type:\"Activity\" AND foaf_name:\"The University of Newcastle\"",
     "searchQuery" : "",
     "records-per-page" : "10",

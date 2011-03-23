@@ -5,7 +5,7 @@
     "query" : "",
     "records-per-page" : "25",
     "facet-count" : "100",
-    "facet-sort-by-count" : "false",
+    "facet-sort-by-count" : "true",
     "debug" : "true",
     "use-session-navigation" : "true",
     "facet-displays" : {
@@ -29,6 +29,12 @@
         "label" : "Workflow Step",
         "display" : "list"
       }
+    },
+    "searchQuery" : "",
+    "facet-display" : "9",
+    "sort-fields" : {
+      "last_modified" : "Last modified",
+      "f_dc_title" : "Title"
     }
   }
 }

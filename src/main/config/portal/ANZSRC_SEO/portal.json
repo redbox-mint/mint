@@ -1,7 +1,7 @@
 {
   "portal" : {
-    "name" : "seo",
-    "description" : "ANZSRC-SEO",
+    "name" : "ANZSRC_SEO",
+    "description" : "ANZSRC SEO",
     "query" : "repository_type:\"SEO\"",
     "searchQuery" : "*:*",
     "facet-fields" : {

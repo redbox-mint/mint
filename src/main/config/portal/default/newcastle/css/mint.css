@@ -1,3 +1,7 @@
+body {
+    font-size: 75%;
+}
+
 h1#branding, .branding {
     background:none repeat scroll 0 0 #C5DAAF;
     padding-bottom:0;
@@ -39,7 +43,7 @@ h1#branding, .branding {
 }
 
 .box h2 a, .box h2 a.visible {
-    //background:url("../images/icons/switch_minus.gif") no-repeat scroll 97% 50% #5E7553;
+    /*background:url("../images/icons/switch_minus.gif") no-repeat scroll 97% 50% #5E7553;*/
     background-color:#5E7553;
     border:medium none;
     color:#FFFFFF;

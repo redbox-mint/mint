@@ -1,7 +1,7 @@
 {
   "portal" : {
-    "name" : "for",
-    "description" : "ANZSRC-FOR",
+    "name" : "ANZSRC_FOR",
+    "description" : "ANZSRC FOR",
     "query" : "repository_type:\"FOR\"",
     "searchQuery" : "*:*",
     "facet-fields" : {

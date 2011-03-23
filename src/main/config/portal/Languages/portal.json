@@ -1,7 +1,7 @@
 {
   "portal" : {
-    "name" : "iso639-2",
-    "description" : "Language Codes",
+    "name" : "Languages",
+    "description" : "Languages",
     "query" : "repository_name:\"Language codes (ISO 639.2)\"",
     "searchQuery" : "*:*",
     "facet-fields" : {
