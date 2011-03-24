@@ -1,26 +1,23 @@
 from au.edu.usq.fascinator.api.indexer import SearchRequest
-from au.edu.usq.fascinator.common import JsonConfig, JsonConfigHelper
+from au.edu.usq.fascinator.common.solr import SolrResult
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream
 from java.lang import Exception
 
 class LookupData:
-    def __init__(self):
-        pass
-    
     def __activate__(self, context):
         self.log = context["log"]
         self.services = context["Services"]
         self.portalId = context["portalId"]
         self.formData = context["formData"]
-        self.request = context["request"]
-        #self.request.setAttribute("Content-Type", "application/x-fascinator-lookup+json")
-        self.request.setAttribute("Content-Type", "application/json")
+        
+        request = context["request"]
+        request.setAttribute("Content-Type", "application/json")
+        
         self.__solrData = self.__getSolrData()
-        self.__results = self.__solrData.getJsonList("response/docs")
-    
-        jc = JsonConfig()
-        baseUrl = jc.get("urlBase")
+        self.__results = self.__solrData.getResults()
+        
+        baseUrl = context["systemConfig"].getString("", ["urlBase"])
         if baseUrl.endswith("/"):
             baseUrl = baseUrl[:-1]
         self.__baseUrl = baseUrl
@@ -32,7 +29,7 @@ class LookupData:
         return ""
     
     def getTotalResults(self):
-        return self.__solrData.get("response/numFound")
+        return self.__solrData.getNumFound()
     
     def getStartIndex(self):
         return self.getFormData("startIndex", "0")
@@ -52,13 +49,10 @@ class LookupData:
         return 0 #(index / perPage)
     
     def getResults(self):
-        return self.__results
+        return self.__solrData.getResults()
     
     def getValue(self, doc, field):
-        values = doc.getList(field)
-        if not values.isEmpty():
-            return values.get(0)
-        return ""
+        return doc.getFirst(field)
     
     def getValueList(self, doc, field):
         return '["%s"]' % '", "'.join(doc.getList(field)) + ""
@@ -66,7 +60,7 @@ class LookupData:
     def __getSolrData(self):
         prefix = self.getSearchTerms()
         if prefix != "":
-            query = 'dc_title:"%(prefix)s" OR dc_title:"%(prefix)s*"' % { "prefix" : prefix }
+            query = 'dc_title:("%(prefix)s" OR "%(prefix)s*")' % { "prefix" : prefix }
         else:
             query = "*:*"
         
@@ -86,15 +80,14 @@ class LookupData:
             out = ByteArrayOutputStream()
             indexer = self.services.getIndexer()
             indexer.search(req, out)
-            return JsonConfigHelper(ByteArrayInputStream(out.toByteArray()))
+            return SolrResult(ByteArrayInputStream(out.toByteArray()))
         except Exception, e:
-            self.log.error("Failed to lookup '{}': {}", prefix, str(e))
+            self.log.error("Failed to lookup '{}': {}", prefix, e.getMessage())
         
-        return JsonConfigHelper('{"response/numFound": 0}')
+        return SolrResult('{ "response": { "numFound": 0 } }')
     
     def getFormData(self, name, default):
         value = self.formData.get(name)
         if value is None or value == "":
             return default
         return value
-

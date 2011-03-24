@@ -19,7 +19,7 @@
         },
         "params": {
             "repository.name": "Languages",
-            "repository.type": "ISO639-2 Language Codes"
+            "repository.type": "Language Codes"
         }
     }
 }

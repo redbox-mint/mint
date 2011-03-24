@@ -1,13 +1,13 @@
 #set($noLayout = true)
 #set($results = $self.getResults())
 #if($formData.get("simple"))
-#foreach($result in $results)
-$self.getValue($result, "dc_title")
-#end
+    #foreach($result in $results)
+        $self.getValue($result, "dc_title")
+    #end
 #else
 {
     "OpenSearchResponse": {
-        "title": "General Search",
+        "title": "Generic Search",
         "link": "$self.getLink()",
         "totalResults": "$self.getTotalResults()",
         "startIndex" : "$self.getStartIndex()",

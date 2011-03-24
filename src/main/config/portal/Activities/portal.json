@@ -3,18 +3,9 @@
     "name" : "Activities",
     "description" : "Activities",
     "query" : "repository_type:\"Activity\" AND foaf_name:\"The University of Newcastle\"",
-    "searchQuery" : "",
-    "records-per-page" : "10",
-    "facet-count" : "25",
-    "facet-display" : "10",
-    "facet-sort-by-count" : "true",
     "facet-fields" : {
       "foaf_name" : {
         "label" : "Organisation",
-        "display" : "list"
-      },
-      "recordtype" : {
-        "label" : "Record type",
         "display" : "list"
       },
       "repository_name" : {
@@ -24,11 +15,11 @@
       "repository_type" : {
         "label" : "Source type",
         "display" : "list"
-      },
-      "workflow_step_label" : {
-        "label" : "Workflow Step",
-        "display" : "list"
       }
+    },
+    "sort-fields" : {
+      "last_modified" : "Last modified",
+      "f_dc_title" : "Title"
     }
   }
 }

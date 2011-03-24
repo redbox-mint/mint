@@ -2,11 +2,10 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/OrgUnits.csv",
+            "fileLocation": "${fascinator.home}/data/Parties_Groups_Sample.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "",
+            "recordIDPrefix": "http://fascinator.usq.edu.au/parties/groups/",
             "headerRow": true,
-            "headerList": ["ID", "Title"],
             "delimiter": ",",
             "ignoredFields": [],
             "includedFields" : ["ID", "Title"]
@@ -15,11 +14,11 @@
     "indexer": {
         "script": {
             "type": "python",
-            "rules": "orgunits-sample.py"
+            "rules": "Parties_Groups.py"
         },
         "params": {
-            "repository.name": "Organisation Units",
-            "repository.type": "Organisation Units"
+            "repository.name": "Groups",
+            "repository.type": "Parties"
         }
     }
 }

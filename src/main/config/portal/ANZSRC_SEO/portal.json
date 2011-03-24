@@ -2,13 +2,8 @@
   "portal" : {
     "name" : "ANZSRC_SEO",
     "description" : "ANZSRC SEO",
-    "query" : "repository_type:\"SEO\"",
-    "searchQuery" : "*:*",
+    "query" : "repository_type:\"ANZSRC\" and repository_name:\"Socio-Economic Objective\"",
     "facet-fields" : {
-      "recordtype" : {
-        "label" : "Record type",
-        "display" : "list"
-      },
       "repository_name" : {
         "label" : "Source",
         "display" : "list"
@@ -16,11 +11,11 @@
       "repository_type" : {
         "label" : "Source type",
         "display" : "list"
-      },
-      "workflow_step_label" : {
-        "label" : "Workflow Step",
-        "display" : "list"
       }
+    },
+    "sort-fields" : {
+      "last_modified" : "Last modified",
+      "f_dc_title" : "Title"
     }
   }
 }

@@ -58,9 +58,15 @@ class IndexData:
         json = self.utils.getJsonObject(jsonPayload.open())
         jsonPayload.close()
         
+        metadata = json.getObject("metadata")
+        self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
+        
         data = json.getObject("data")
-        self.utils.add(self.index, "dc_title", "%s %s" % (data.get("Given Name"), data.get("Family Name")))
-        self.utils.add(self.index, "dc_description", "%s %s" % (data.get("Given Name"), data.get("Family Name")))
+        self.utils.add(self.index, "dc_title", "%s, %s" % (data.get("Family Name"), data.get("Given Name")))
+
+        self.utils.add(self.index, "dc_description", "%s %s %s, %s, %s" %
+                (data.get("Honorific"), data.get("Given Name"), data.get("Family Name"),
+                 data.get("Division"), data.get("School")))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
@@ -81,4 +87,3 @@ class IndexData:
     def __indexList(self, name, values):
         for value in values:
             self.utils.add(self.index, name, value)
-

@@ -3,15 +3,7 @@
 # Data can be downloaded from:
 #     http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
 #
-import md5, time
-
-from au.edu.usq.fascinator.api.storage import StorageException
-from au.edu.usq.fascinator.common import JsonConfigHelper
-from au.edu.usq.fascinator.common.storage import StorageUtils
-from java.io import ByteArrayInputStream
-from java.lang import Exception, String
-from java.util import HashMap
-from org.apache.commons.codec.digest import DigestUtils
+import time
 
 class IndexData:
     def __init__(self):
@@ -55,22 +47,26 @@ class IndexData:
         self.utils.add(self.index, "last_modified", time.strftime("%Y-%m-%dT%H:%M:%SZ"))
         self.utils.add(self.index, "harvest_config", self.params.getProperty("jsonConfigOid"))
         self.utils.add(self.index, "harvest_rules",  self.params.getProperty("rulesOid"))
-        self.utils.add(self.index, "display_type", "iso639-2")
+        self.utils.add(self.index, "display_type", "languages")
 
         self.item_security = []
-        
+    
     def __basicData(self):
         self.utils.add(self.index, "repository_name", self.params["repository.name"])
         self.utils.add(self.index, "repository_type", self.params["repository.type"])
-
+    
     def __metadata(self):
         jsonPayload = self.object.getPayload("metadata.json")
         json = self.utils.getJsonObject(jsonPayload.open())
         jsonPayload.close()
-        
-        data = json.getMap("data")
-        self.utils.add(self.index, "dc_title", data.get("alpha3"))
-        self.utils.add(self.index, "dc_description", data.get("english"))
+
+        metadata = json.getObject("metadata")
+        self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
+
+        data = json.getObject("data")
+        self.utils.add(self.index, "dc_title", data.get("english"))
+        self.utils.add(self.index, "dc_description", "ISO 639-2 Alpha-3 code: %s" % data.get("alpha3"))
+        self.utils.add(self.index, "dc_format", "application/x-mint-language")
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
     
@@ -90,4 +86,3 @@ class IndexData:
     def __indexList(self, name, values):
         for value in values:
             self.utils.add(self.index, name, value)
-

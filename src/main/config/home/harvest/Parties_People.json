@@ -4,7 +4,7 @@
         "csv": {
             "fileLocation": "${fascinator.home}/data/Parties_People_Sample.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "",
+            "recordIDPrefix": "http://fascinator.usq.edu.au/parties/people/",
             "headerRow": true,
             "delimiter": ",",
             "ignoredFields": [],
