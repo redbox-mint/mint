@@ -17,13 +17,11 @@
                 <groupId>au.edu.usq.fascinator</groupId>
                 <artifactId>fascinator-common</artifactId>
                 <version>${fascinator.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>au.edu.usq.fascinator</groupId>
                 <artifactId>fascinator-core</artifactId>
                 <version>${fascinator.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>au.edu.usq.fascinator</groupId>

@@ -138,7 +138,7 @@ public class HandleTransformer implements Transformer {
         // First time execution, prepare storage
         if (storage == null) {
             try {
-                String storageType = config.get("storage/type");
+                String storageType = config.getString(null, "storage", "type");
                 storage = PluginManager.getStorage(storageType);
                 storage.init(JsonSimpleConfig.getSystemFile());
             } catch (Exception ex) {
@@ -150,8 +150,8 @@ public class HandleTransformer implements Transformer {
         if (resolver == null) {
             // Do we have a naming authority? No need to evaluate the
             //  complicated stuff if we don't have this
-            String namingAuthority = config.get(
-                    "transformerDefaults/handle/namingAuthority");
+            String namingAuthority = config.getString(null,
+                    "transformerDefaults", "handle", "namingAuthority");
             if (namingAuthority == null || namingAuthority.equals("")) {
                 throw new TransformerException(
                         "No naming authority specified!");
@@ -271,8 +271,8 @@ public class HandleTransformer implements Transformer {
      */
     private byte[] readPrivateKey() throws TransformerException {
         // Make sure it's configured
-        String keyPath = config.get(
-                "transformerDefaults/handle/privateKeyPath");
+        String keyPath = config.getString(null,
+                "transformerDefaults", "handle", "privateKeyPath");
         if (keyPath == null) {
             throw new TransformerException("No private key provided!");
         }
@@ -316,8 +316,8 @@ public class HandleTransformer implements Transformer {
     private byte[] readPassPhrase(byte[] key) throws TransformerException {
         try {
             if (Util.requiresSecretKey(key)) {
-                String password = config.get(
-                        "transformerDefaults/handle/passPhrase");
+                String password = config.getString(null,
+                        "transformerDefaults", "handle", "passPhrase");
                 if (password == null) {
                     log.error("The private key requires a pass phrase" +
                             " and none was provided!");
