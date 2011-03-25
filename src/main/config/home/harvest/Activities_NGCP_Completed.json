@@ -1,0 +1,33 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/data/Activities_NGCP_Completed.csv",
+            "idColumn": "ID",
+            "recordIDPrefix": "http://arc.gov.au/ngcp/completed/",
+            "headerRow": true,
+            "delimiter": ",",
+            "ignoredFields": [],
+            "includedFields" : [
+                "ID",
+                "Submit Year",
+                "Start Year",
+                "Title",
+                "Description",
+                "Institution",
+                "Investigators",
+                "Discipline"
+            ]
+        }
+    },
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "Activities.py"
+        },
+        "params": {
+            "repository.name": "ARC NGCP Completed Projects",
+            "repository.type": "Research Activities"
+        }
+    }
+}

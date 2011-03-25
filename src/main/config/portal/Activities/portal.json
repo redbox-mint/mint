@@ -1,11 +1,11 @@
 {
   "portal" : {
     "name" : "Activities",
-    "description" : "Activities",
-    "query" : "repository_type:\"Activity\" AND foaf_name:\"The University of Newcastle\"",
+    "description" : "Research Activities",
+    "query" : "repository_type:\"Research Activities\" AND foaf_name:\"The University of Newcastle\"",
     "facet-fields" : {
       "foaf_name" : {
-        "label" : "Organisation",
+        "label" : "Institution",
         "display" : "list"
       },
       "repository_name" : {

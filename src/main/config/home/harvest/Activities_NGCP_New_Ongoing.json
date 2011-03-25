@@ -1,0 +1,33 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/data/Activities_NGCP_New_Ongoing.csv",
+            "idColumn": "ID",
+            "recordIDPrefix": "http://arc.gov.au/ngcp/ongoing/",
+            "headerRow": true,
+            "delimiter": ",",
+            "ignoredFields": [],
+            "includedFields" : [
+                "ID",
+                "Submit Year",
+                "Start Year",
+                "Title",
+                "Description",
+                "Institution",
+                "Investigators",
+                "Discipline"
+            ]
+        }
+    },
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "Activities.py"
+        },
+        "params": {
+            "repository.name": "ARC NGCP New and Ongoing Projects",
+            "repository.type": "Research Activities"
+        }
+    }
+}
