@@ -22,23 +22,31 @@ import au.edu.usq.fascinator.api.PluginDescription;
 import au.edu.usq.fascinator.api.PluginException;
 import au.edu.usq.fascinator.api.PluginManager;
 import au.edu.usq.fascinator.api.storage.DigitalObject;
+import au.edu.usq.fascinator.api.storage.Payload;
 import au.edu.usq.fascinator.api.storage.Storage;
+import au.edu.usq.fascinator.api.storage.StorageException;
 import au.edu.usq.fascinator.api.transformer.Transformer;
 import au.edu.usq.fascinator.api.transformer.TransformerException;
+import au.edu.usq.fascinator.common.JsonObject;
+import au.edu.usq.fascinator.common.JsonSimple;
 import au.edu.usq.fascinator.common.JsonSimpleConfig;
+import au.edu.usq.fascinator.common.storage.StorageUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.PrivateKey;
-import net.handle.hdllib.AbstractMessage;
+import java.util.List;
+import java.util.Properties;
 
+import net.handle.hdllib.AbstractMessage;
 import net.handle.hdllib.AbstractResponse;
 import net.handle.hdllib.AdminRecord;
 import net.handle.hdllib.CreateHandleRequest;
 import net.handle.hdllib.Encoder;
 import net.handle.hdllib.ErrorResponse;
-import net.handle.hdllib.GenericResponse;
 import net.handle.hdllib.HandleException;
 import net.handle.hdllib.HandleResolver;
 import net.handle.hdllib.HandleValue;
@@ -71,13 +79,18 @@ public class HandleTransformer implements Transformer {
     private static String ADMIN_TYPE = "HS_ADMIN";
     private static String DESC_TYPE = "DESC";
 
+    /** Default configuration for items */
+    private static String DEFAULT_SOURCE = "metadata.json";
+    private static String DEFAULT_TEMPLATE = "[[OID]]";
+    private static String[] DEFAULT_PATH = {"data", "Title"};
+    private static String[] DEFAULT_OUTPUT = {"metadata", "dc.identifier"};
+
     /** Logging **/
     private static Logger log = LoggerFactory
             .getLogger(HandleTransformer.class);
 
     /** Configuration */
     private JsonSimpleConfig config;
-    private JsonSimpleConfig itemConfig;
 
     /** Storage layer */
     private Storage storage;
@@ -90,6 +103,9 @@ public class HandleTransformer implements Transformer {
 
     /** Administrative Record */
     private AdminRecord admin;
+
+    /** Naming Authority */
+    private String namingAuthority;
 
     /**
      * Constructor
@@ -150,7 +166,7 @@ public class HandleTransformer implements Transformer {
         if (resolver == null) {
             // Do we have a naming authority? No need to evaluate the
             //  complicated stuff if we don't have this
-            String namingAuthority = config.getString(null,
+            namingAuthority = config.getString(null,
                     "transformerDefaults", "handle", "namingAuthority");
             if (namingAuthority == null || namingAuthority.equals("")) {
                 throw new TransformerException(
@@ -159,7 +175,7 @@ public class HandleTransformer implements Transformer {
             // The methods below want the data as a byte array
             byte[] prefix = null;
             try {
-                prefix = namingAuthority.getBytes("UTF8");
+                prefix = ("0.NA/" + namingAuthority).getBytes("UTF8");
             } catch(Exception ex) {
                 throw new TransformerException(
                         "Error reading naming authority: ", ex);
@@ -167,7 +183,7 @@ public class HandleTransformer implements Transformer {
 
             // Our basic resolver... processes requests when they are ready
             resolver = new HandleResolver();
-            resolver.traceMessages = true;
+            //resolver.traceMessages = true;
 
             // Private key
             PrivateKey privateKey = null;
@@ -289,7 +305,9 @@ public class HandleTransformer implements Transformer {
             FileInputStream stream = new FileInputStream(file);
 
             // Stream the file into a byte array
-            return IOUtils.toByteArray(stream);
+            byte[] response = IOUtils.toByteArray(stream);
+            stream.close();
+            return response;
         } catch (Exception ex) {
             throw new TransformerException("Error accessing file: ", ex);
         }
@@ -322,6 +340,7 @@ public class HandleTransformer implements Transformer {
                     log.error("The private key requires a pass phrase" +
                             " and none was provided!");
                 }
+                return password.getBytes("UTF8");
             }
         } catch(Exception ex) {
             throw new TransformerException("Error during key resolution: ", ex);
@@ -343,6 +362,7 @@ public class HandleTransformer implements Transformer {
     public DigitalObject transform(DigitalObject in, String jsonConfig)
             throws TransformerException {
         // Read item config and reset before we start
+        JsonSimpleConfig itemConfig = null;
         try {
             itemConfig = new JsonSimpleConfig(jsonConfig);
         } catch (IOException ex) {
@@ -350,6 +370,107 @@ public class HandleTransformer implements Transformer {
                     "Error reading item configuration!", ex);
         }
         reset();
+
+        // Do we already have a handle?
+        Properties metadata = null;
+        try {
+            metadata = in.getMetadata();
+        } catch (StorageException ex) {
+            throw new TransformerException("Error retrieving metadata", ex);
+        }
+        String handle = metadata.getProperty("handle");
+        if (handle != null) {
+            log.info("Object already has a handle: '{}'", handle);
+            return in;
+        }
+
+        // Where are we getting out data from?
+        String source = itemConfig.getString(DEFAULT_SOURCE, "source");
+        // .. and the specific path inside
+        List<String> pathList = itemConfig.getStringList("description");
+        String[] pathArray = null;
+        if (pathList == null || pathList.isEmpty()) {
+            pathArray = DEFAULT_PATH;
+        } else {
+            pathArray = pathList.toArray(new String[] {});
+        }
+
+        // Where are we putting the data?
+        List<String> outputList = itemConfig.getStringList("output", "path");
+        String[] outputArray = null;
+        if (outputList == null || outputList.isEmpty()) {
+            outputArray = DEFAULT_OUTPUT;
+        } else {
+            outputArray = outputList.toArray(new String[] {});
+        }
+        String outputField = itemConfig.getString("dc.identifier",
+                "output", "field");
+
+        // What should the handle look like?
+        String template = itemConfig.getString(DEFAULT_TEMPLATE, "template");
+        String suffix = template.replace("[[OID]]", in.getId());
+
+        // Now go get our data
+        Payload payload = null;
+        JsonSimple json = null;
+        try {
+            payload = in.getPayload(source);
+            json = new JsonSimple(payload.open());
+        } catch (StorageException ex) {
+            log.error("Error accessing source payload: '{}'", source, ex);
+            return in;
+        } catch (IOException ex) {
+            log.error("Error parsing json from payload: '{}'", source, ex);
+            return in;
+        } finally {
+            if (payload != null) {
+                try {
+                    payload.close();
+                } catch (Exception ex) {
+                    log.error("Error closing payload: ", ex);
+                }
+            }
+        }
+
+        // What are we going to IN the handle
+        String description = json.getString(null, (Object[]) pathArray);
+        if (description == null || description.equals("")) {
+            log.error("ERROR: The description field for this object is empty!");
+            return in;
+        }
+
+        // We should be ready to go now
+        String response = null;
+        try {
+            response = createHandle(suffix, description);
+        } catch (Exception ex) {
+            log.error("Error during handle creation: ", ex);
+            return in;
+        }
+
+        // Success!
+        log.info("Succeeded in handle creation: '{}'", response);
+
+        // Store the output - in payload
+        JsonObject outputs = json.writeObject((Object[]) outputArray);
+        outputs.put(outputField, response);
+        try {
+            byte[] data = json.toString().getBytes("UTF-8");
+            InputStream stream = new ByteArrayInputStream(data);
+            // Write to the object
+            StorageUtils.createOrUpdatePayload(in, source, stream);
+        } catch (Exception ex) {
+            log.error("Error storage JSON payload: ", ex);
+            // We can't crash here... still need to try writing metadata
+        }
+
+        // Store the output - metadata
+        metadata.setProperty("handle", response);
+        try {
+            in.close();
+        } catch (StorageException ex) {
+            log.error("Error storing metadata for handle: ", ex);
+        }
 
         return in;
     }
@@ -365,9 +486,10 @@ public class HandleTransformer implements Transformer {
     private String createHandle(String suffix, String description)
             throws TransformerException {
         // Make sure the suffix is even valid
-        byte[] suffixBytes = null;
+        String handle = namingAuthority + "/" + suffix;
+        byte[] handleBytes = null;
         try {
-            suffixBytes = suffix.getBytes("UTF8");
+            handleBytes = handle.getBytes("UTF8");
         } catch (Exception ex) {
             throw new TransformerException(
                     "Invalid encoding for Suffix: '" + suffix + "'", ex);
@@ -383,16 +505,16 @@ public class HandleTransformer implements Transformer {
 
         // Now prepare the actualy creationg request for sending
         CreateHandleRequest req = new CreateHandleRequest(
-                suffixBytes, values, authentication);
+                handleBytes, values, authentication);
 
         // And send
-        GenericResponse result = null;
         try {
+            log.info("Sending handle create request ...");
             AbstractResponse response = resolver.processRequest(req);
+            log.info("... response received.");
+
             // Success case
-            if (response.responseCode == AbstractMessage.RC_SUCCESS) {
-                result = (GenericResponse) response;
-            } else {
+            if (response.responseCode != AbstractMessage.RC_SUCCESS) {
                 // Failure case... but expected failure
                 if (response.responseCode ==
                         AbstractMessage.RC_HANDLE_ALREADY_EXISTS) {
@@ -404,6 +526,7 @@ public class HandleTransformer implements Transformer {
                 if (response instanceof ErrorResponse) {
                     throw new TransformerException("Error creating handle: " +
                             ((ErrorResponse) response).toString());
+
                 } else {
                     throw new TransformerException("Unknown error during" +
                             " handle creation. The create API call has" +
@@ -418,8 +541,7 @@ public class HandleTransformer implements Transformer {
                     "Error attempting to create handle:", ex);
         }
 
-        // TODO... lets hope this is the valid handle
-        return result.toString();
+        return "http://hdl.handle.net/" + handle;
     }
 
     /**

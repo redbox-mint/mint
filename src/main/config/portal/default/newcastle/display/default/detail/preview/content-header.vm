@@ -1,0 +1,9 @@
+<div id="anno-root" class="content-preview">
+    <div rel="${oid}-tags">
+        <div class="object-tag-list">Tags: <span class="object-tags"></span></div>
+        ##<div class="location-tag-list">Location: <span class="location-tags"></span></div>
+    </div>
+  #set ($handle = $parent.getProperty("handle"))
+  #if ($handle != $nullValue)
+    <div class="handle">This object has a handle:  <a href="$handle">$handle</a></div>
+  #end

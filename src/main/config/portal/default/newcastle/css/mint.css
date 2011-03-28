@@ -76,3 +76,11 @@ body {
 ul.main li ul li.selected-view a, ul.main li:hover ul li a:hover {
     background-color: #5E7553;
 }
+
+.handle {
+    margin: 3px 0px;
+    padding: 4px;
+    border: 1px solid black;
+    background: #FFFFCC;
+    font-size: 120%;
+}
