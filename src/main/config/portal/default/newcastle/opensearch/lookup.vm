@@ -26,16 +26,17 @@
     },
     "results": [
         #foreach($result in $results)
-            #set($dctitles = $result.getList("dc_title"))
+            #set($dctitles = $result.getList('dc_title'))
             {
                 "result-metadata": {
-                    "relevance": $result.get("score")
+                    "relevance": $result.get('score')
                 },
                 "rdf:about": "$self.getBaseUrl()/master/detail/$result.get('id')",
                 "rdfs:type": ["owl:Thing"],
                 "rdfs:label": "$self.getValue($result, 'dc_title')",
                 "dc:title": "$self.getValue($result, 'dc_title')",
-                "dc:description": "$self.getValue($result, 'dc_description')"
+                "dc:description": "$self.getValue($result, 'dc_description')",
+                "dc:identifier": "$self.getValue($result, 'dc_identifier')"
             }
             #if($velocityCount < $results.size()),#end
         #end

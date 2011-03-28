@@ -65,7 +65,8 @@ class LookupData:
             query = "*:*"
         
         portal = self.services.portalManager.get(self.portalId)
-        if portal.searchQuery != "*:*":
+        sq = portal.searchQuery
+        if sq not in ["", "*:*"]:
             query = query + " AND " + portal.searchQuery
         req = SearchRequest(query)
         req.setParam("fq", 'item_type:"object"')
@@ -84,7 +85,7 @@ class LookupData:
         except Exception, e:
             self.log.error("Failed to lookup '{}': {}", prefix, e.getMessage())
         
-        return SolrResult('{ "response": { "numFound": 0 } }')
+        return SolrResult('{"response":{"numFound":0}}')
     
     def getFormData(self, name, default):
         value = self.formData.get(name)
