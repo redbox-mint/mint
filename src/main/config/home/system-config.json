@@ -137,7 +137,7 @@
             "id": "handle",
             "namingAuthority": "1959.18",
             "privateKeyPath": "${fascinator.home}/handle/admpriv.bin",
-            "passPhrase": "n0varubr1c"
+            "passPhrase": "password"
         },
         "jsonVelocity": {
             "id" : "jsonVelocity",
