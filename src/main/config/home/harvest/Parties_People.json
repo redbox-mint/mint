@@ -11,6 +11,36 @@
             "includedFields" : ["ID", "Honorific", "Given Name", "Family Name", "Division", "School", "Email"]
         }
     },
+
+    "transformer": {
+        "harvestQueue": ["handle"],
+        "indexOnHarvest": "false",
+        "renderQueue": ["jsonVelocity"]
+    },
+
+    "transformerOverrides": {
+        "handle": {
+            "source": "metadata.json",
+            "description": {
+                "seperator": " ",
+                "paths": [
+                    ["data", "Honorific"],
+                    ["data", "Given Name"],
+                    ["data", "Family Name"],
+                ]
+            },
+            "output": {
+                "path": ["metadata"],
+                "field": "dc.identifier"
+            },
+            "template": "gregtest.[[OID]]"
+        },
+        "jsonVelocity": {
+            "templatesPath" : "${fascinator.home}/templates/people",
+            "portalId": "Parties_People"
+        }
+    },
+
     "indexer": {
         "script": {
             "type": "python",

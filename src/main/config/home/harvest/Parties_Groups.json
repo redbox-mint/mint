@@ -11,6 +11,34 @@
             "includedFields" : ["ID", "Title"]
         }
     },
+
+    "transformer": {
+        "harvestQueue": ["handle"],
+        "indexOnHarvest": "false",
+        "renderQueue": ["jsonVelocity"]
+    },
+
+    "transformerOverrides": {
+        "handle": {
+            "source": "metadata.json",
+            "description": {
+                "seperator": "",
+                "paths": [
+                    ["data", "Title"],
+                ]
+            },
+            "output": {
+                "path": ["metadata"],
+                "field": "dc.identifier"
+            },
+            "template": "gregtest.[[OID]]"
+        },
+        "jsonVelocity": {
+            "templatesPath" : "${fascinator.home}/templates/groups",
+            "portalId": "Parties_Groups"
+        }
+    },
+
     "indexer": {
         "script": {
             "type": "python",
