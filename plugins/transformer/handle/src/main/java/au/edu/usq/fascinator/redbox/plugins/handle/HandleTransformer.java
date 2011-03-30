@@ -38,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,6 +55,8 @@ import net.handle.hdllib.PublicKeyAuthenticationInfo;
 import net.handle.hdllib.Util;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -371,28 +374,29 @@ public class HandleTransformer implements Transformer {
         }
         reset();
 
-        // Do we already have a handle?
-        Properties metadata = null;
-        try {
-            metadata = in.getMetadata();
-        } catch (StorageException ex) {
-            throw new TransformerException("Error retrieving metadata", ex);
-        }
-        String handle = metadata.getProperty("handle");
-        if (handle != null) {
-            log.info("Object already has a handle: '{}'", handle);
-            return in;
-        }
-
         // Where are we getting out data from?
         String source = itemConfig.getString(DEFAULT_SOURCE, "source");
-        // .. and the specific path inside
-        List<String> pathList = itemConfig.getStringList("description");
-        String[] pathArray = null;
-        if (pathList == null || pathList.isEmpty()) {
-            pathArray = DEFAULT_PATH;
-        } else {
-            pathArray = pathList.toArray(new String[] {});
+
+        // Path information for the decsription
+        // Looks something like this:
+        //    "description": {
+        //        "seperator": " ",
+        //        "paths": [
+        //            ["data", "Honorific"],
+        //            ["data", "Given Name"],
+        //            ["data", "Family Name"],
+        //        ]
+        //    },
+        String seperator = itemConfig.getString("", "description", "seperator");
+        List<String[]> elementPaths = new ArrayList();
+        // Find the path to each element of the description
+        JSONArray array = itemConfig.getArray("description", "paths");
+        for (Object element : array) {
+            if (element instanceof JSONArray) {
+                List<String> list = JsonSimple.getStringList(
+                        (JSONArray) element);
+                elementPaths.add(list.toArray(new String[] {}));
+            }
         }
 
         // Where are we putting the data?
@@ -432,28 +436,60 @@ public class HandleTransformer implements Transformer {
             }
         }
 
-        // What are we going to IN the handle
-        String description = json.getString(null, (Object[]) pathArray);
-        if (description == null || description.equals("")) {
-            log.error("ERROR: The description field for this object is empty!");
-            return in;
-        }
-
-        // We should be ready to go now
-        String response = null;
+        // Do we already have a handle?
+        Properties metadata = null;
         try {
-            response = createHandle(suffix, description);
-        } catch (Exception ex) {
-            log.error("Error during handle creation: ", ex);
-            return in;
+            metadata = in.getMetadata();
+        } catch (StorageException ex) {
+            throw new TransformerException("Error retrieving metadata", ex);
+        }
+        String handle = metadata.getProperty("handle");
+        boolean propertySet = false;
+        if (handle != null) {
+            propertySet = true;
+            log.info("Object already has a handle: '{}'", handle);
+
+        // A new handle is required
+        } else {
+            // What are we going to IN the handle
+            List<String> descriptionParts = new ArrayList();
+            for (String[] path : elementPaths) {
+                String part = json.getString(null, (Object[]) path);
+                if (part != null) {
+                    descriptionParts.add(part);
+                } else {
+                    log.warn("Description element was empty: '{}'", path);
+                }
+            }
+            if (descriptionParts.isEmpty()) {
+                log.error("Couldn't find any description elements!");
+                return in;
+            }
+            String description = StringUtils.join(descriptionParts, seperator);
+            if (description == null || description.equals("")) {
+                log.error("The description field for this object is empty!");
+                return in;
+            }
+
+            // We should be ready to go now
+            try {
+                handle = createHandle(suffix, description);
+            } catch (Exception ex) {
+                log.error("Error during handle creation: ", ex);
+                return in;
+            }
+
+            // Success!
+            log.info("Succeeded in handle creation: '{}'", handle);
         }
 
-        // Success!
-        log.info("Succeeded in handle creation: '{}'", response);
+        // This logic below runs for both existing and new handles, to ensure
+        //  they are stored appropriately if other transformers/harvesters are
+        //  messing with the payloads.
 
         // Store the output - in payload
         JsonObject outputs = json.writeObject((Object[]) outputArray);
-        outputs.put(outputField, response);
+        outputs.put(outputField, handle);
         try {
             byte[] data = json.toString(true).getBytes("UTF-8");
             InputStream stream = new ByteArrayInputStream(data);
@@ -465,11 +501,13 @@ public class HandleTransformer implements Transformer {
         }
 
         // Store the output - metadata
-        metadata.setProperty("handle", response);
-        try {
-            in.close();
-        } catch (StorageException ex) {
-            log.error("Error storing metadata for handle: ", ex);
+        if (!propertySet) {
+            metadata.setProperty("handle", handle);
+            try {
+                in.close();
+            } catch (StorageException ex) {
+                log.error("Error storing metadata for handle: ", ex);
+            }
         }
 
         return in;
