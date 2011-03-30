@@ -474,6 +474,10 @@ public class HandleTransformer implements Transformer {
             // We should be ready to go now
             try {
                 handle = createHandle(suffix, description);
+                if (handle == null) {
+                    log.error("Error during handle creation!");
+                    return in;
+                }
             } catch (Exception ex) {
                 log.error("Error during handle creation: ", ex);
                 return in;
