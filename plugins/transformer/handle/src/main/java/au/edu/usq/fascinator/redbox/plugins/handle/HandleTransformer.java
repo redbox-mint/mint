@@ -455,7 +455,7 @@ public class HandleTransformer implements Transformer {
         JsonObject outputs = json.writeObject((Object[]) outputArray);
         outputs.put(outputField, response);
         try {
-            byte[] data = json.toString().getBytes("UTF-8");
+            byte[] data = json.toString(true).getBytes("UTF-8");
             InputStream stream = new ByteArrayInputStream(data);
             // Write to the object
             StorageUtils.createOrUpdatePayload(in, source, stream);
