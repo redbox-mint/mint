@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
+	<registryObject group="The University of Newcastle, Australia">
+		<key>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</key>
+		<originatingSource>$urlBase</originatingSource>
+		<party type="group">
+			<identifier type="uri">
+				$util.encodeXml($util.get($item, "metadata", "dc.identifier"))
+			</identifier>
+			<name type="primary">
+				$util.encodeXml($util.get($item, "data", "Title"))
+			</name>
+			<description type="full">
+				$util.encodeXml($util.get($item, "data", "Title"))
+			</description>
+		</party>
+	</registryObject>
+</registryObjects>
