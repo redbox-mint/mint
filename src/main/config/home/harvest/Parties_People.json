@@ -33,7 +33,7 @@
                 "path": ["metadata"],
                 "field": "dc.identifier"
             },
-            "template": "gregtest.[[OID]]"
+            "template": "[[INC]]"
         },
         "jsonVelocity": {
             "templatesPath" : "${fascinator.home}/templates/people",

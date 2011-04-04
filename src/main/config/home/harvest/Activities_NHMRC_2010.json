@@ -2,7 +2,7 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/Activities_NHMRC_2010.csv",
+            "fileLocation": "${fascinator.home}/data/Activities_NHMRC_2010_UoN.csv",
             "idColumn": "ID",
             "recordIDPrefix": "http://www.nhmrc.gov.au/grants/dataset/rmis/",
             "headerRow": true,
@@ -20,6 +20,34 @@
             ]
         }
     },
+
+    "transformer": {
+        "harvestQueue": ["handle"],
+        "indexOnHarvest": "false",
+        "renderQueue": ["jsonVelocity"]
+    },
+
+    "transformerOverrides": {
+        "handle": {
+            "source": "metadata.json",
+            "description": {
+                "seperator": "",
+                "paths": [
+                    ["data", "Title"],
+                ]
+            },
+            "output": {
+                "path": ["metadata"],
+                "field": "dc.identifier"
+            },
+            "template": "[[INC]]"
+        },
+        "jsonVelocity": {
+            "templatesPath" : "${fascinator.home}/templates/activities",
+            "portalId": "Activities"
+        }
+    },
+
     "indexer": {
         "script": {
             "type": "python",

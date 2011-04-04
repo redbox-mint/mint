@@ -52,6 +52,10 @@ class IndexData:
     def __basicData(self):
         self.utils.add(self.index, "repository_name", self.params["repository.name"])
         self.utils.add(self.index, "repository_type", self.params["repository.type"])
+        # Do we have a handle?
+        handle = self.params["handle"]
+        if handle is not None:
+            self.utils.add(self.index, "handle", handle)
 
     def __metadata(self):
         jsonPayload = self.object.getPayload("metadata.json")

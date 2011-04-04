@@ -84,3 +84,21 @@ ul.main li ul li.selected-view a, ul.main li:hover ul li a:hover {
     background: #FFFFCC;
     font-size: 120%;
 }
+.handle-report .row-count {
+    margin: 3px 0px;
+    padding: 4px;
+    border: 1px solid black;
+    background: #FFFFCC;
+    font-size: 120%;
+}
+.handle-report th {
+    background-color: #5E7553;
+    color: #FFFFFF;
+}
+.handle-report .row-count a {
+    background:url("../images/icons/table_save.png");
+    background-position: 0 0.5em;
+    background-repeat: no-repeat;
+    margin-right: 1em;
+    padding: 0.5em 0.5em 0.5em 20px;
+}

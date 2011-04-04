@@ -27,6 +27,7 @@ import au.edu.usq.fascinator.api.storage.Storage;
 import au.edu.usq.fascinator.api.storage.StorageException;
 import au.edu.usq.fascinator.api.transformer.Transformer;
 import au.edu.usq.fascinator.api.transformer.TransformerException;
+import au.edu.usq.fascinator.common.DummyFileLock;
 import au.edu.usq.fascinator.common.JsonObject;
 import au.edu.usq.fascinator.common.JsonSimple;
 import au.edu.usq.fascinator.common.JsonSimpleConfig;
@@ -54,6 +55,7 @@ import net.handle.hdllib.HandleValue;
 import net.handle.hdllib.PublicKeyAuthenticationInfo;
 import net.handle.hdllib.Util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
@@ -85,8 +87,10 @@ public class HandleTransformer implements Transformer {
     /** Default configuration for items */
     private static String DEFAULT_SOURCE = "metadata.json";
     private static String DEFAULT_TEMPLATE = "[[OID]]";
-    private static String[] DEFAULT_PATH = {"data", "Title"};
     private static String[] DEFAULT_OUTPUT = {"metadata", "dc.identifier"};
+
+    /** Lock file for the Incrementing index */
+    private static String INDEX_LOCK_FILE = "index.lock";
 
     /** Logging **/
     private static Logger log = LoggerFactory
@@ -109,6 +113,15 @@ public class HandleTransformer implements Transformer {
 
     /** Naming Authority */
     private String namingAuthority;
+
+    /** Flag whether to use incrementing numbers in handle creation */
+    private boolean useIncrement;
+
+    /** The file on disk to use in storing the incrementing index */
+    private File indexFile;
+
+    /** The lock used to mutex against the index file */
+    private DummyFileLock indexLock;
 
     /**
      * Constructor
@@ -209,9 +222,107 @@ public class HandleTransformer implements Transformer {
             admin = new AdminRecord(prefix, PUBLIC_INDEX,
                     true, true, true, true, true, true,
                     true, true, true, true, true, true);
+
+            // Is an auto-incrementing number required?
+            useIncrement = config.getBoolean(false,
+                    "transformerDefaults", "handle", "useIncrements");
+            if (useIncrement) {
+                // Find where we are storing the index
+                String path = config.getString(null,
+                        "transformerDefaults", "handle", "incrementingFile");
+                if (path == null) {
+                    throw new TransformerException("No auto incrementing" +
+                            " path specified, but required!");
+                }
+
+                // Check it is 'real'
+                indexFile = new File(path);
+                if (indexFile == null || !indexFile.exists()) {
+                    throw new TransformerException("The auto incrementing " +
+                            "file specified does not exist: '" + path +"'");
+                }
+
+                // Create a locking file beside the real file
+                File lockFile = new File(
+                        indexFile.getParentFile(), INDEX_LOCK_FILE);
+                try {
+                    if (!lockFile.exists()) {
+                        lockFile.getParentFile().mkdirs();
+                        lockFile.createNewFile();
+                    }
+                    indexLock = new DummyFileLock(lockFile.getAbsolutePath());
+                } catch(IOException ex) {
+                    throw new TransformerException(
+                            "Error creating lock file: ", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Acquire a lock on the index file. Method will not return until the lock
+     * is acquired or an error is thrown.
+     *
+     * @throws IOException if any errors occur.
+     */
+    private void lockIndex() throws IOException {
+        //log.debug(" * Locking Index : " + getId());
+        indexLock.getLock();
+        //log.debug(" * Index locked : " + getId());
+    }
+
+    /**
+     * Release a lock on the index file. Method will not return until the lock
+     * is released or an error is thrown.
+     *
+     * @throws IOException if any errors occur.
+     */
+    private void unlockIndex() throws IOException {
+        //log.debug(" * Unlocking Index : " + getId());
+        indexLock.release();
+        //log.debug(" * Index unlocked : " + getId());
+    }
+
+    /**
+     * Get the next increment from disk, updating the file for next time.
+     *
+     * @return String: The next increment to use in templates. NULL if errors occur
+     */
+    private String getNextIncrement() {
+        String result = null;
+
+        if (!useIncrement) {
+            return null;
         }
 
-        // Each execution, check config for this item
+        // Lock the index file
+        try {
+            lockIndex();
+        } catch (IOException ex) {
+            log.error("Error acquiring file lock: ", ex);
+            return null;
+        }
+
+        // Do our thing
+        try {
+            String oldInc = FileUtils.readFileToString(indexFile);
+            int inc = Integer.valueOf(oldInc);
+            inc++;
+            result = String.valueOf(inc);
+            FileUtils.writeStringToFile(indexFile, result);
+        } catch (IOException ex) {
+            log.error("Error releasing file lock: ", ex);
+        }
+
+        // Unlock the index file
+        try {
+            unlockIndex();
+        } catch (IOException ex) {
+            log.error("Error releasing file lock: ", ex);
+        }
+
+        return result;
+
     }
 
     /**
@@ -412,7 +523,6 @@ public class HandleTransformer implements Transformer {
 
         // What should the handle look like?
         String template = itemConfig.getString(DEFAULT_TEMPLATE, "template");
-        String suffix = template.replace("[[OID]]", in.getId());
 
         // Now go get our data
         Payload payload = null;
@@ -473,7 +583,7 @@ public class HandleTransformer implements Transformer {
 
             // We should be ready to go now
             try {
-                handle = createHandle(suffix, description);
+                handle = createHandle(template, in.getId(), description);
                 if (handle == null) {
                     log.error("Error during handle creation!");
                     return in;
@@ -518,15 +628,23 @@ public class HandleTransformer implements Transformer {
     }
 
     /**
-     * Create a handle for the specified description
+     * Create a handle for the specified description, using the required
+     * template.
      *
-     * @param handle: The handle suffix desired
+     * @param template: The handle suffix template
+     * @param oid: The ID of the object we are transforming
      * @param description: The description to allocate to the new handle
      * @return String: The newly created handle, NULL if the suffix is not free
      * @throws TransformerException: If any errors occur during the process
      */
-    private String createHandle(String suffix, String description)
-            throws TransformerException {
+    private String createHandle(String template, String oid,
+            String description) throws TransformerException {
+
+        String suffix = resolveTemplate(template, oid);
+        if (suffix == null) {
+            throw new TransformerException("Error building the handle suffix");
+        }
+
         // Make sure the suffix is even valid
         String handle = namingAuthority + "/" + suffix;
         byte[] handleBytes = null;
@@ -561,7 +679,13 @@ public class HandleTransformer implements Transformer {
                 if (response.responseCode ==
                         AbstractMessage.RC_HANDLE_ALREADY_EXISTS) {
                     log.warn("Handle '{}' already in use", suffix);
-                    return null;
+
+                    // If configured, try again
+                    if (template.contains("[[INC]]")) {
+                        if (useIncrement) {
+                            return createHandle(template, oid, description);
+                        }
+                    }
                 }
 
                 // Failure case... unexpected cause
@@ -584,6 +708,33 @@ public class HandleTransformer implements Transformer {
         }
 
         return "http://hdl.handle.net/" + handle;
+    }
+
+    /**
+     * Resolve the handle template to a suffix. If appropriately configured this
+     * includes incrementing the index file.
+     *
+     * @param template: The handle suffix template
+     * @param oid: The ID of the object we are transforming
+     * @return String: The next suffix to use
+     */
+    private String resolveTemplate(String template, String oid) {
+        String suffix = template.replace("[[OID]]", oid);
+        if (template.contains("[[INC]]")) {
+            if (useIncrement) {
+                String inc = getNextIncrement();
+                if (inc == null) {
+                    log.error("Error accessing next increment!");
+                    return null;
+                }
+                suffix = suffix.replace("[[INC]]", inc);
+            } else {
+                log.error("[[INC]] used in template," +
+                        " and increments not configured");
+                return null;
+            }
+        }
+        return suffix;
     }
 
     /**
