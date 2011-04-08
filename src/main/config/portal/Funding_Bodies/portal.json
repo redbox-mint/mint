@@ -1,6 +1,6 @@
 {
   "portal" : {
-    "name" : "Funding Bodies",
+    "name" : "Funding_Bodies",
     "description" : "Funding Bodies",
     "query" : "repository_type:\"Funding Bodies\"",
     "facet-fields" : {

@@ -52,15 +52,21 @@ class LookupData:
         return self.__solrData.getResults()
     
     def getValue(self, doc, field):
-        return doc.getFirst(field)
+        return doc.getFirst(field).strip()
     
     def getValueList(self, doc, field):
-        return '["%s"]' % '", "'.join(doc.getList(field)) + ""
+        return ('["%s"]' % '", "'.join(doc.getList(field)) + "").strip()
     
     def __getSolrData(self):
         prefix = self.getSearchTerms()
         if prefix != "":
-            query = 'dc_title:("%(prefix)s" OR "%(prefix)s*")' % { "prefix" : prefix }
+            terms = prefix.split(" ")
+            if len(terms)>1:
+                termsQuery = " OR %s" ' OR '.join(terms)
+            else:
+                termsQuery = ""
+            queryValue = "%(prefix)s OR %(prefix)s*%(terms)s" % { "prefix": prefix, "terms": termsQuery }
+            query = 'dc_title:(%(qv)s)^2 OR dc_identifier:(%(qv)s)^0.5' % { "qv": queryValue }
         else:
             query = "*:*"
         

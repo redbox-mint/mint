@@ -69,6 +69,7 @@ class IndexData:
         self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
 
         data = json.getObject("data")
+        self.utils.add(self.index, "grant_number", data.get("ID"))
         self.utils.add(self.index, "dc_date_submitted", data.get("Submit Year"))
         self.utils.add(self.index, "dc_date", data.get("Start Year"))
         self.utils.add(self.index, "dc_title", data.get("Title"))

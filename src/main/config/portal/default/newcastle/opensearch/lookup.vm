@@ -29,9 +29,10 @@
             #set($dctitles = $result.getList('dc_title'))
             {
                 "result-metadata": {
-                    "relevance": $result.get('score')
+                    "relevance": $result.get('score'),
+                    "all": $result
                 },
-                "rdf:about": "$self.getBaseUrl()/master/detail/$result.get('id')",
+                "rdf:about": "$self.getBaseUrl()/detail/$result.get('id')",
                 "rdfs:type": ["owl:Thing"],
                 "rdfs:label": "$self.getValue($result, 'dc_title')",
                 "dc:title": "$self.getValue($result, 'dc_title')",

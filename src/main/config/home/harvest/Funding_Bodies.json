@@ -2,7 +2,7 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/FundingBodies.csv",
+            "fileLocation": "${fascinator.home}/data/Funding_Bodies_Sample.csv",
             "idColumn": "ID",
             "recordIDPrefix": "http://fascinator.usq.edu.au/funding_bodies/",
             "headerRow": true,
