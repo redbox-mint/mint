@@ -52,7 +52,10 @@ class LookupData:
         return self.__solrData.getResults()
     
     def getValue(self, doc, field):
-        return doc.getFirst(field).strip()
+        value = doc.getFirst(field)
+        if value:
+            return value.strip()
+        return ""
     
     def getValueList(self, doc, field):
         return ('["%s"]' % '", "'.join(doc.getList(field)) + "").strip()
