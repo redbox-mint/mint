@@ -38,6 +38,9 @@ set JETTY_OPTS=-Djetty.port=${server.port} -Djetty.logs=%JETTY_LOGS% -Djetty.hom
 REM solr settings
 set SOLR_OPTS=-Dsolr.solr.home="${dir.solr}" -Djava.util.logging.config.file="${dir.solr}/logging.properties"
 
+Rem Geonames
+set GEONAMES=-Dgeonames.solr.home="${dir.geonames}"
+
 REM proxy data
 set PROXY_OPTS=-Dhttp.proxyHost=%PROXY_HOST% -Dhttp.proxyPort=%PROXY_PORT% -Dhttp.nonProxyHosts="*.newcastle.edu.au^|localhost"
 

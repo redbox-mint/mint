@@ -22,6 +22,7 @@
         <dir.server>${project.home}/server</dir.server>
         <dir.solr>${project.home}/solr</dir.solr>
         <dir.storage>${project.home}/storage</dir.storage>
+        <dir.geonames>${dir.home}/geonames/solr</dir.geonames>
     </properties>
     <modules>
         <module>parent</module>
