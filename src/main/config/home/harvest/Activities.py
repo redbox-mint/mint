@@ -56,6 +56,8 @@ class IndexData:
         handle = self.params["handle"]
         if handle is not None:
             self.utils.add(self.index, "handle", handle)
+            self.utils.add(self.index, "oai_identifier", handle)
+        self.utils.add(self.index, "oai_set", "Activities")
 
     def __metadata(self):
         self.utils.registerNamespace("dc", "http://purl.org/dc/terms/")

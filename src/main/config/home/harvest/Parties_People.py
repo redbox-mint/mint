@@ -56,6 +56,8 @@ class IndexData:
         handle = self.params["handle"]
         if handle is not None:
             self.utils.add(self.index, "handle", handle)
+            self.utils.add(self.index, "oai_identifier", handle)
+        self.utils.add(self.index, "oai_set", "Parties_People")
 
     def __metadata(self):
         jsonPayload = self.object.getPayload("metadata.json")

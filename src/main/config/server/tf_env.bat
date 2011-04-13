@@ -50,4 +50,4 @@ set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="${dir.porta
 REM additional settings
 set EXTRA_OPTS=-Dserver.url.base="${server.url.base}" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}
 
-set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%
+set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %GEONAMES% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%
