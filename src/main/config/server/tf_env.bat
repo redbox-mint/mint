@@ -48,6 +48,6 @@ REM directories
 set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="${dir.portal}" -Dstorage.home="${dir.storage}"
 
 REM additional settings
-set EXTRA_OPTS=-Dserver.url.base="${server.url.base}" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}
+set EXTRA_OPTS=-Dserver.url.base="${server.url.base}" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}  -Dsmtp.host="${smtp.host}" -Dadmin.email="${admin.email}"
 
 set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %GEONAMES% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%

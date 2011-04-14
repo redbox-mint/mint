@@ -16,13 +16,15 @@
         <server.port>9001</server.port>
         <amq.port>9201</amq.port>
         <amq.stomp.port>9202</amq.stomp.port>
-        <server.url.base>http://localhost:${server.port}/mint/</server.url.base>
         <dir.home>${project.home}/home</dir.home>
         <dir.portal>${project.home}/portal</dir.portal>
         <dir.server>${project.home}/server</dir.server>
         <dir.solr>${project.home}/solr</dir.solr>
         <dir.storage>${project.home}/storage</dir.storage>
         <dir.geonames>${dir.home}/geonames/solr</dir.geonames>
+        <server.url.base>http://${ip.address}:${server.port}/mint/</server.url.base>
+        <smtp.host>localhost</smtp.host>
+        <admin.email>admin@localhost</admin.email>
     </properties>
     <modules>
         <module>parent</module>
@@ -155,6 +157,8 @@
             </activation>
             <properties>
                 <server.url.base>http://novadev1.newcastle.usq.edu.au/mint/</server.url.base>
+                <smtp.host>smtp.newcastle.edu.aut</smtp.host>
+                <admin.email>dave.huthnance@newcastle.edu.au</admin.email>
             </properties>
         </profile>
         <profile>
@@ -167,41 +171,16 @@
             </activation>
             <properties>
                 <server.url.base>http://novadev2.newcastle.usq.edu.au/mint/</server.url.base>
+                <smtp.host>smtp.newcastle.edu.aut</smtp.host>
+                <admin.email>dave.huthnance@newcastle.edu.au</admin.email>
             </properties>
         </profile>
         <profile>
-            <id>test-server</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Get the machine's IP adress, Laptops move around -->
-                    <plugin>
-                        <groupId>org.codehaus.groovy.maven</groupId>
-                        <artifactId>gmaven-plugin</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <source>
-                                        java.net.InetAddress address = InetAddress.getByName("${env.COMPUTERNAME}");
-                                        project.properties["ip.address"] = address.getHostAddress();
-                                        println "Computer IP Address: " + project.properties["ip.address"];
-                                    </source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
+            <id>no-config</id>
+            <!-- Used for creating an install - omits local build system settings -->
             <properties>
-                <server.url.base>http://${ip.address}:${server.port}/mint/</server.url.base>
-            </properties>
+                <server.url.base>http://localhost:${server.port}/mint/</server.url.base>
+        </properties>
         </profile>
     </profiles>
     <build>
@@ -234,7 +213,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>${project.basedir}/setup.groovy</source>
+                            <source>${pom.basedir}/setup.groovy</source>
                         </configuration>
                     </execution>
                     <execution>
@@ -244,7 +223,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>${project.basedir}/setup.groovy</source>
+                            <source>${pom.basedir}/setup.groovy</source>
                         </configuration>
                     </execution>
                 </executions>

@@ -51,7 +51,7 @@ GEONAMES="-Dgeonames.solr.home=${dir.geonames}"
 CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=${dir.portal} -Dstorage.home=${dir.storage}"
 
 # additional settings
-EXTRA_OPTS="-Dserver.url.base=${server.url.base} -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}"
+EXTRA_OPTS="-Dserver.url.base=${server.url.base} -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port} -Dsmtp.host=${smtp.host} -Dadmin.email=${admin.email}"
 
 # set options for maven to use
 export JAVA_OPTS="$JVM_OPTS $JETTY_OPTS $SOLR_OPTS $PROXY_OPTS $CONFIG_DIRS $EXTRA_OPTS $GEONAMES"
