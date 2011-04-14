@@ -2,7 +2,7 @@
     "version": "0.7.17",
     "configured": true,
     "urlBase": "${server.url.base}",
-    "email": "${admin.email}",
+    "email": "DO_NOT_CHANGE",
     "sso": {
         "plugins": [],
         "urlExclusions": {
