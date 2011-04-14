@@ -251,7 +251,7 @@
                     "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
                     "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
                 },
-                "rif_cs": {
+                "rif": {
                     "enabledInAllViews": false,
                     "enabledViews": ["Parties_Groups", "Parties_People", "Activities"],
                     "schema": "http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/registryObjects.xsd",
