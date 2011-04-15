@@ -1,5 +1,5 @@
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
-    <registryObject person="The University of Newcastle, Australia">
+    <registryObject group="The University of Newcastle, Australia">
         <key>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</key>
         <originatingSource>$urlBase</originatingSource>
         <party type="person">
