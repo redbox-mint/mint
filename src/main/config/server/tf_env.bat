@@ -1,6 +1,8 @@
 @echo off
 REM this script sets the environment for the fascinator scripts
-set FASCINATOR_HOME=${dir.home}
+set SERVER_URL=${server.url.base}
+set PROJECT_HOME=${project.home}
+set FASCINATOR_HOME=%PROJECT_HOME%/home
 set CLASSPATH=plugins/*;lib/*
 
 REM Logging directories
@@ -33,21 +35,21 @@ REM jvm memory settings
 set JVM_OPTS=-XX:MaxPermSize=256m -Xmx512m
 
 REM jetty settings
-set JETTY_OPTS=-Djetty.port=${server.port} -Djetty.logs=%JETTY_LOGS% -Djetty.home=${dir.server}/jetty
+set JETTY_OPTS=-Djetty.port=${server.port} -Djetty.logs=%JETTY_LOGS% -Djetty.home=%PROJECT_HOME%/server/jetty
 
 REM solr settings
-set SOLR_OPTS=-Dsolr.solr.home="${dir.solr}" -Djava.util.logging.config.file="${dir.solr}/logging.properties"
+set SOLR_OPTS=-Dsolr.solr.home="%PROJECT_HOME%/solr" -Djava.util.logging.config.file="%PROJECT_HOME%/home/solr/logging.properties"
 
 Rem Geonames
-set GEONAMES=-Dgeonames.solr.home="${dir.geonames}"
+set GEONAMES=-Dgeonames.solr.home="%PROJECT_HOME%/home/geonames/solr"
 
 REM proxy data
 set PROXY_OPTS=-Dhttp.proxyHost=%PROXY_HOST% -Dhttp.proxyPort=%PROXY_PORT% -Dhttp.nonProxyHosts="*.newcastle.edu.au^|localhost"
 
 REM directories
-set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="${dir.portal}" -Dstorage.home="${dir.storage}"
+set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="%PROJECT_HOME%/portal" -Dstorage.home="%PROJECT_HOME%/storage"
 
 REM additional settings
-set EXTRA_OPTS=-Dserver.url.base="${server.url.base}" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}  -Dsmtp.host="${smtp.host}" -Dadmin.email="${admin.email}"
+set EXTRA_OPTS=-Dserver.url.base="%SERVER_URL%" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}  -Dsmtp.host="${smtp.host}" -Dadmin.email="${admin.email}"
 
 set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %GEONAMES% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%

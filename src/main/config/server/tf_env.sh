@@ -4,9 +4,9 @@
 #
 
 # set fascinator home directory
-if [ -z "$TF_HOME" ]; then
-	export TF_HOME="${dir.home}"
-fi
+export SERVER_URL="${server.url.base}"
+export PROJECT_HOME="${project.home}"
+export TF_HOME="$PROJECT_HOME/home"
 
 # java class path
 export CLASSPATH="plugins/*:lib/*"
@@ -39,16 +39,16 @@ else
 fi
 
 # jetty settings
-JETTY_OPTS="-Djetty.port=${server.port} -Djetty.logs=$JETTY_LOGS -Djetty.home=${dir.server}/jetty"
+JETTY_OPTS="-Djetty.port=${server.port} -Djetty.logs=$JETTY_LOGS -Djetty.home=$PROJECT_HOME/server/jetty"
 
 # solr settings
-SOLR_OPTS="-Dsolr.solr.home=${dir.solr} -Djava.util.logging.config.file=${dir.solr}/logging.properties"
+SOLR_OPTS="-Dsolr.solr.home=$PROJECT_HOME/solr -Djava.util.logging.config.file=$PROJECT_HOME/solr/logging.properties"
 
 # Geonames
-GEONAMES="-Dgeonames.solr.home=${dir.geonames}"
+GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/home/geonames/solr"
 
 # directories
-CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=${dir.portal} -Dstorage.home=${dir.storage}"
+CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=$PROJECT_HOME/home/portal -Dstorage.home=$PROJECT_HOME/storage"
 
 # additional settings
 EXTRA_OPTS="-Dserver.url.base=${server.url.base} -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port} -Dsmtp.host=${smtp.host} -Dadmin.email=${admin.email}"
