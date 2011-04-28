@@ -1,7 +1,14 @@
 @echo off
-REM this script sets the environment for the fascinator scripts
+
 set SERVER_URL=${server.url.base}
+set LOCAL_PORT=${server.port}
 set PROJECT_HOME=${project.home}
+set AMQ_PORT=${amq.port}
+set AMQ_STOMP_PORT=${amq.stomp.port}
+set SMTP_HOST=${smtp.host}
+set ADMIN_EMAIL=${admin.email}
+
+REM this script sets the environment for the fascinator scripts
 set FASCINATOR_HOME=%PROJECT_HOME%/home
 set CLASSPATH=plugins/*;lib/*
 
@@ -35,7 +42,7 @@ REM jvm memory settings
 set JVM_OPTS=-XX:MaxPermSize=256m -Xmx512m
 
 REM jetty settings
-set JETTY_OPTS=-Djetty.port=${server.port} -Djetty.logs=%JETTY_LOGS% -Djetty.home=%PROJECT_HOME%/server/jetty
+set JETTY_OPTS=-Djetty.port=%LOCAL_PORT% -Djetty.logs=%JETTY_LOGS% -Djetty.home=%PROJECT_HOME%/server/jetty
 
 REM solr settings
 set SOLR_OPTS=-Dsolr.solr.home="%PROJECT_HOME%/solr" -Djava.util.logging.config.file="%PROJECT_HOME%/home/solr/logging.properties"
@@ -50,6 +57,6 @@ REM directories
 set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="%PROJECT_HOME%/portal" -Dstorage.home="%PROJECT_HOME%/storage"
 
 REM additional settings
-set EXTRA_OPTS=-Dserver.url.base="%SERVER_URL%" -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port}  -Dsmtp.host="${smtp.host}" -Dadmin.email="${admin.email}"
+set EXTRA_OPTS=-Dserver.url.base="%SERVER_URL%" -Damq.port=%AMQ_PORT% -Damq.stomp.port=%AMQ_STOMP_PORT%  -Dsmtp.host="%SMTP_HOST%" -Dadmin.email="%ADMIN_EMAIL%"
 
 set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %GEONAMES% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%

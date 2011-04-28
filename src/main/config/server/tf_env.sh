@@ -3,9 +3,15 @@
 # this script sets the environment for other fascinator scripts
 #
 
-# set fascinator home directory
 export SERVER_URL="${server.url.base}"
+export LOCAL_PORT="${server.port}"
 export PROJECT_HOME="${project.home}"
+export AMQ_PORT="${amq.port}"
+export AMQ_STOMP_PORT="${amq.stomp.port}"
+export SMTP_HOST="${smtp.host}"
+export ADMIN_EMAIL="${admin.email}"
+
+# set fascinator home directory
 export TF_HOME="$PROJECT_HOME/home"
 
 # java class path
@@ -39,7 +45,7 @@ else
 fi
 
 # jetty settings
-JETTY_OPTS="-Djetty.port=${server.port} -Djetty.logs=$JETTY_LOGS -Djetty.home=$PROJECT_HOME/server/jetty"
+JETTY_OPTS="-Djetty.port=$LOCAL_PORT -Djetty.logs=$JETTY_LOGS -Djetty.home=$PROJECT_HOME/server/jetty"
 
 # solr settings
 SOLR_OPTS="-Dsolr.solr.home=$PROJECT_HOME/solr -Djava.util.logging.config.file=$PROJECT_HOME/solr/logging.properties"
@@ -51,7 +57,7 @@ GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/home/geonames/solr"
 CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=$PROJECT_HOME/home/portal -Dstorage.home=$PROJECT_HOME/storage"
 
 # additional settings
-EXTRA_OPTS="-Dserver.url.base=${server.url.base} -Damq.port=${amq.port} -Damq.stomp.port=${amq.stomp.port} -Dsmtp.host=${smtp.host} -Dadmin.email=${admin.email}"
+EXTRA_OPTS="-Dserver.url.base=$SERVER_URL -Damq.port=$AMQ_PORT -Damq.stomp.port=$AMQ_STOMP_PORT -Dsmtp.host=$SMTP_HOST -Dadmin.email=$ADMIN_EMAIL"
 
 # set options for maven to use
 export JAVA_OPTS="$JVM_OPTS $JETTY_OPTS $SOLR_OPTS $PROXY_OPTS $CONFIG_DIRS $EXTRA_OPTS $GEONAMES"
