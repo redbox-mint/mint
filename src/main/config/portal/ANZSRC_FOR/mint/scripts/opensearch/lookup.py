@@ -54,7 +54,7 @@ class LookupData:
     def getValue(self, doc, field):
         value = doc.getFirst(field)
         if value:
-            return value.strip()
+            return value.replace('"',"'").replace('\n','').strip()
         return ""
 
     def getValueList(self, doc, field):
