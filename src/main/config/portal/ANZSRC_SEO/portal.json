@@ -2,7 +2,7 @@
   "portal" : {
     "name" : "ANZSRC_SEO",
     "description" : "ANZSRC SEO",
-    "query" : "repository_type:\"ANZSRC\" and repository_name:\"Socio-Economic Objective\"",
+    "query" : "repository_type:\"ANZSRC\" AND repository_name:\"Socio-Economic Objective\"",
     "facet-fields" : {
       "repository_name" : {
         "label" : "Source",

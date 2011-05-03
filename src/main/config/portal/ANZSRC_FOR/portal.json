@@ -2,7 +2,7 @@
   "portal" : {
     "name" : "ANZSRC_FOR",
     "description" : "ANZSRC FOR",
-    "query" : "repository_type:\"ANZSRC\" and repository_name:\"Fields of Research\"",
+    "query" : "repository_type:\"ANZSRC\" AND repository_name:\"Fields of Research\"",
     "facet-fields" : {
       "repository_name" : {
         "label" : "Source",
