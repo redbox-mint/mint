@@ -586,4 +586,25 @@
             </plugin>
         </plugins>
     </build>
+    <scm>
+        <url>http://fascinator.usq.edu.au/svn/code/the-fascinator2</url>
+        <connection>scm:svn:https://redbox-mint.googlecode.com/svn/mint</connection>
+        <developerConnection>scm:svn:https://redbox-mint.googlecode.com/svn/mint</developerConnection>
+    </scm>
+   <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>The MINT Releases</name>
+            <url>https://fascinator.usq.edu.au/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>The MINT Snapshots</name>
+            <url>https://fascinator.usq.edu.au/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <site>
+            <id>mint</id>
+            <url>file:///var/www/hudson/the-fascinator-full/mint/url>
+        </site>
+    </distributionManagement>
 </project>
