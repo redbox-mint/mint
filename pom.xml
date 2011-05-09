@@ -80,7 +80,7 @@
         </dependency>
         <!-- Mint Plugins -->
         <dependency>
-            <groupId>au.edu.usq.fascinator.mint</groupId>
+            <groupId>com.googlecode.redbox-mint</groupId>
             <artifactId>plugin-transformer-handle</artifactId>
             <version>${project.version}</version>
         </dependency>
