@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>The Mint</name>
     <parent>
         <groupId>com.googlecode.redbox-mint</groupId>
         <artifactId>mint-project</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.9.0-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
     <properties>
@@ -88,19 +88,19 @@
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-harvester-skos</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-harvester-csv</artifactId>
-            <version>${fascinator.version}-SNAPSHOT</version>
+            <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>au.edu.usq.fascinator.plugins</groupId>
             <artifactId>plugin-transformer-jsonVelocity</artifactId>
-            <version>${fascinator.version}-SNAPSHOT</version>
+            <version>${fascinator.version}</version>
         </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
@@ -587,24 +587,8 @@
         </plugins>
     </build>
     <scm>
-        <url>http://fascinator.usq.edu.au/svn/code/the-fascinator2</url>
-        <connection>scm:svn:https://redbox-mint.googlecode.com/svn/mint</connection>
-        <developerConnection>scm:svn:https://redbox-mint.googlecode.com/svn/mint</developerConnection>
+        <url>http://redbox-mint.googlecode.com/svn/mint/trunk</url>
+        <connection>scm:svn:http://redbox-mint.googlecode.com/svn/mint/trunk</connection>
+        <developerConnection>scm:svn:https://redbox-mint.googlecode.com/svn/mint/trunk</developerConnection>
     </scm>
-   <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>The MINT Releases</name>
-            <url>https://fascinator.usq.edu.au/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>The MINT Snapshots</name>
-            <url>https://fascinator.usq.edu.au/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <site>
-            <id>mint</id>
-            <url>file:///var/www/hudson/the-fascinator-full/mint</url>
-        </site>
-    </distributionManagement>
 </project>
