@@ -24,12 +24,15 @@
                 "result-metadata": {
                     "relevance": $result.get("score")
                 },
-                "rdf:about": "$self.getValue($result, 'dc_identifier')",
+                #set($uri = $self.getValue($result, 'dc_identifier'))
+                "rdf:about": "$uri",
                 "rdf:type": "skos:Concept",
                 "skos:inScheme": "$self.getValue($result, 'skos_inScheme')",
                 "skos:broader": "$self.getValue($result, 'skos_broader')",
                 "skos:narrower": $self.getValueList($result, "skos_narrower"),
-                "skos:prefLabel": "$self.getValue($result, 'skos_prefLabel')"
+                #set($lastIndex = $uri.lastIndexOf('/') + 1 )
+                #set($code = $uri.substring($lastIndex) )
+                "skos:prefLabel": "$code - $self.getValue($result, 'skos_prefLabel')"
             }
             #if($velocityCount < $results.size()),#end
         #end
