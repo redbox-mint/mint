@@ -33,7 +33,7 @@
     <dependencies>
         <!-- Fascinator Portal Web App -->
         <dependency>
-            <groupId>au.edu.usq.fascinator</groupId>
+            <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-portal</artifactId>
             <type>war</type>
             <classifier>skinny</classifier>
@@ -41,21 +41,21 @@
         </dependency>
         <!-- Fascinator Portal Dependencies -->
         <dependency>
-            <groupId>au.edu.usq.fascinator</groupId>
+            <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-portal</artifactId>
             <type>warpath</type>
             <version>${fascinator.version}</version>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator</groupId>
+            <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-common</artifactId>
         </dependency>
         <!-- Solr Web App -->
         <dependency>
             <groupId>org.apache.solr</groupId>
-            <artifactId>solr-webapp</artifactId>
+            <artifactId>solr</artifactId>
+            <version>3.3.0</version>
             <type>war</type>
-            <version>1.4.0</version>
         </dependency>
         <!-- Jetty Web Server -->
         <dependency>
@@ -86,61 +86,61 @@
         </dependency>
         <!-- Contrib plugins -->
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-skos</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-csv</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-transformer-jsonVelocity</artifactId>
             <version>${fascinator.version}</version>
         </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-access-derby</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-authentication-internal</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-workflow</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-indexer-solr</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-roles-internal</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-storage-filesystem</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator.plugins</groupId>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-subscriber-solrEventLog</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
@@ -293,7 +293,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>au.edu.usq.fascinator.plugins</includeGroupIds>
+                            <includeGroupIds>com.googlecode.the-fascinator.plugins</includeGroupIds>
                             <includeArtifactIds>plugin-harvester-skos</includeArtifactIds>
                             <includes>harvest/**,data/**</includes>
                             <outputDirectory>${dir.home}</outputDirectory>
@@ -311,7 +311,7 @@
                             <outputDirectory>${dir.home}/harvest</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>au.edu.usq.fascinator</groupId>
+                                    <groupId>com.googlecode.the-fascinator</groupId>
                                     <artifactId>fascinator-common</artifactId>
                                 </artifactItem>
                             </artifactItems>
@@ -328,7 +328,7 @@
                             <outputDirectory>${dir.server}/webapps</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>au.edu.usq.fascinator</groupId>
+                                    <groupId>com.googlecode.the-fascinator</groupId>
                                     <artifactId>fascinator-portal</artifactId>
                                     <type>war</type>
                                     <classifier>skinny</classifier>
@@ -336,9 +336,9 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.solr</groupId>
-                                    <artifactId>solr-webapp</artifactId>
-                                    <type>war</type>
+                                    <artifactId>solr</artifactId>
                                     <destFileName>solr.war</destFileName>
+                                    <type>war</type>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -355,7 +355,7 @@
                             <outputDirectory>${project.home}</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>au.edu.usq.fascinator.plugins</groupId>
+                                    <groupId>com.googlecode.the-fascinator.plugins</groupId>
                                     <artifactId>plugin-indexer-solr</artifactId>
                                 </artifactItem>
                             </artifactItems>
@@ -373,7 +373,7 @@
                             <outputDirectory>${project.home}</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>au.edu.usq.fascinator</groupId>
+                                    <groupId>com.googlecode.the-fascinator</groupId>
                                     <artifactId>fascinator-portal</artifactId>
                                     <type>war</type>
                                     <classifier>skinny</classifier>
@@ -389,7 +389,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>au.edu.usq.fascinator.plugins</includeGroupIds>
+                            <includeGroupIds>com.googlecode.the-fascinator.plugins</includeGroupIds>
                             <outputDirectory>${dir.server}/plugins</outputDirectory>
                             <excludeTransitive>true</excludeTransitive>
                         </configuration>
@@ -403,7 +403,7 @@
                         </goals>
                         <configuration>
                             <excludeTypes>war,warpath</excludeTypes>
-                            <excludeGroupIds>au.edu.usq.fascinator.plugins,org.mortbay.jetty</excludeGroupIds>
+                            <excludeGroupIds>com.googlecode.the-fascinator.plugins,org.mortbay.jetty</excludeGroupIds>
                             <outputDirectory>${dir.server}/lib</outputDirectory>
                         </configuration>
                     </execution>

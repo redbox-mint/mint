@@ -1,4 +1,4 @@
-from au.edu.usq.fascinator.common import JsonConfig
+from com.googlecode.fascinator.common import JsonConfig
 
 class DescriptionData:
     def __init__(self):

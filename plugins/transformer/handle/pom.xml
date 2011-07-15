@@ -14,12 +14,14 @@
     </parent>
     <dependencies>
         <dependency>
-            <groupId>au.edu.usq.fascinator</groupId>
+            <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-common</artifactId>
+            <version>${fascinator.version}</version>
         </dependency>
         <dependency>
-            <groupId>au.edu.usq.fascinator</groupId>
+            <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-plugin-api</artifactId>
+            <version>${fascinator.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

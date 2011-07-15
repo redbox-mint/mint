@@ -1,8 +1,8 @@
 import md5
 
-from au.edu.usq.fascinator.api.indexer import SearchRequest
-from au.edu.usq.fascinator.common import JsonConfigHelper
-from au.edu.usq.fascinator.portal.services import PortalManager
+from com.googlecode.fascinator.api.indexer import SearchRequest
+from com.googlecode.fascinator.common import JsonConfigHelper
+from com.googlecode.fascinator.portal.services import PortalManager
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader
 from java.lang import Exception, String

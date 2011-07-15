@@ -1,5 +1,5 @@
-from au.edu.usq.fascinator.api.indexer import SearchRequest
-from au.edu.usq.fascinator.common import JsonConfigHelper
+from com.googlecode.fascinator.api.indexer import SearchRequest
+from com.googlecode.fascinator.common import JsonConfigHelper
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream
 

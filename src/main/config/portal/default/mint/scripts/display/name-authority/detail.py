@@ -9,7 +9,7 @@
 #        DefaultDetailData.__activate__(self, context)
 #    
 
-from au.edu.usq.fascinator.common import JsonConfigHelper
+from com.googlecode.fascinator.common import JsonConfigHelper
 
 from java.io import InputStreamReader
 
