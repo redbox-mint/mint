@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+
+<!--
+	nicnames.xsd - an XML schema to describe the nicnames internal data format
+	Copyright (c) 2009
+	
+	This file is part of NicNames.
+	
+	NicNames is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as 
+	published by the Free Software Foundation, either version 3 of
+	the License, or (at your option) any later version.
+	
+	NicNames is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with NicNames.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--
+	
+	The NicNames XML data format reproduces the way the NicNames application stores data
+	internally.  It is a common import and export format supported by all NicNames
+	installations.  Data can be translated between this format and other formats for
+	compatibility with other applications.
+
+	Namespace: http://swin.edu.au/lib/research/nicnames
+	The namespace is a unique string identifying all XML data that adheres to this 
+	standard.	It's not intended as a URL of a web page that you can visit and should not
+	be altered unless developing a separate, non-interoperable standard.
+	
+-->
+
+<xs:schema 
+	xmlns:xs           = "http://www.w3.org/2001/XMLSchema"
+	targetNamespace    = "http://swin.edu.au/lib/research/nicnames"
+	xmlns              = "http://swin.edu.au/lib/research/nicnames"
+	elementFormDefault = "qualified"
+	>
+
+<!-- nicnames: the root element of a nicnames XML document.  There are no child elements
+that are mandatory; an empty document is valid and will just be interpreted as a document
+containing no identities. -->
+	
+<xs:element name="nicnames">
+	<xs:complexType>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="message"/>
+			<xs:element ref="identity"/>
+			<xs:element ref="stub"/>
+		</xs:choice>
+	</xs:complexType>
+</xs:element>
+
+<!-- message: a way of conveying status messages containing information about the enclosed 
+result.  Optional, and not part of the data to be stored.  The NicNames API sometimes 
+sends messages back in response to queries to provide information such as error status, 
+total number of results, etc.  -->
+
+<xs:element name="message">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="code" type="xs:Name" default="notice"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:element>
+
+<!-- identity: the main type of record in nicnames; represents a known person and all of 
+their properties.  An identity can contain lots of "identity information" elements.
+Note that a single NicNames XML document may contain any number of identities, though at
+this time a maximum of 1000 is recommended for manageability. -->
+
+<xs:element name="identity">
+	<xs:complexType>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<!-- can have any number of identityinformation elements, and
+			they can be in any order.  should have at least one name element,
+			but this may not be the case when information is kept private. -->
+			<xs:element ref="name"/>
+			<xs:element ref="resource"/>
+			<xs:element ref="event"/>
+			<xs:element ref="organisation"/>
+			<xs:element ref="person"/>
+			<xs:element ref="classification"/>
+			<xs:element ref="identifier"/>
+		</xs:choice>
+		<xs:attribute name="comment" type="xs:string"/>
+		<xs:attribute name="id" type="xs:integer"/>
+		<xs:attribute name="birthyear" type="xs:gYear"/>
+		<xs:attribute name="affiliation" default="none">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="affiliated"/>
+					<xs:enumeration value="previouslyaffiliated"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="createddate" type="xs:dateTime"/>
+		<xs:attribute name="lastmodifieddate" type="xs:dateTime"/>
+		<xs:attribute name="status" type="xs:Name"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- stub: information about an identity that has been deleted or merged into another 
+record. May be useful when synchronising an outside application with NicNames data. -->
+
+<xs:element name="stub">
+	<xs:complexType>
+		<xs:attribute name="id" type="xs:integer" use="required" />
+		<xs:attribute name="resolution" default="deleted">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="deleted"/>
+					<xs:enumeration value="merged"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="refid" type="xs:integer"/>
+		<xs:attribute name="createddate" type="xs:dateTime"/>
+		<xs:attribute name="lastmodifieddate" type="xs:dateTime"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- name: a person's name.  birthname, legalname, publishedasname, employeename, 
+nickname, etc -->
+
+<xs:element name="name">
+	<xs:complexType>
+		<xs:all>
+			<xs:element name="surname" type="xs:string"/>
+			<xs:element name="givennames" type="xs:string" minOccurs="0"/>
+			<xs:element name="title" type="xs:string" minOccurs="0"/>
+		</xs:all>
+		<xs:attribute name="id" type="xs:integer"/>
+		<xs:attribute name="surnamefirst" type="xs:boolean" default="false"/>
+		<xs:attribute name="type" use="required" type="xs:Name"/>
+		<xs:attribute name="incidence" type="xs:integer" default="1"/>
+		<xs:attribute name="verified" type="xs:boolean" default="false"/>
+		<xs:attribute name="comment" type="xs:string"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- resource: a thing that the person is associated with, whether it is a resource this 
+person authored, edited, was cited in, contributed to, etc.  Resources include journals, 
+books, etc. -->
+
+<xs:element name="resource">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:integer"/>
+				<xs:attribute name="type" use="required" type="xs:Name"/>
+				<xs:attribute name="reltype" use="required" type="xs:Name"/>
+				<xs:attribute name="startyear" type="xs:gYear"/>
+				<xs:attribute name="endyear" type="xs:gYear"/>
+				<xs:attribute name="incidence" type="xs:integer" default="1"/>
+				<xs:attribute name="verified" type="xs:boolean" default="false"/>
+				<xs:attribute name="comment" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:element>
+
+<!-- event: an event that the person spoke at, attended, organised etc. -->
+
+<xs:element name="event">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:integer"/>
+				<xs:attribute name="type" use="required" type="xs:Name"/>
+				<xs:attribute name="reltype" use="required" type="xs:Name"/>
+				<xs:attribute name="startyear" type="xs:gYear"/>
+				<xs:attribute name="endyear" type="xs:gYear"/>
+				<xs:attribute name="incidence" type="xs:integer" default="1"/>
+				<xs:attribute name="verified" type="xs:boolean" default="false"/>
+				<xs:attribute name="comment" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:element>
+
+<!-- organisation: a company, institution, publisher etc associated with this person -->
+
+<xs:element name="organisation">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:integer"/>
+				<xs:attribute name="type" use="required" type="xs:Name"/>
+				<xs:attribute name="reltype" use="required" type="xs:Name"/>
+				<xs:attribute name="startyear" type="xs:gYear"/>
+				<xs:attribute name="endyear" type="xs:gYear"/>
+				<xs:attribute name="incidence" type="xs:integer" default="1"/>
+				<xs:attribute name="verified" type="xs:boolean" default="false"/>
+				<xs:attribute name="comment" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:element>
+
+<!-- person: another person that is related somehow to this person, such as by being a 
+colleague or co-author.  Note that a person can contain any other property including names, 
+events, resources,even other people; therefore infinite recursion is possible if care is 
+not taken -->
+
+<xs:element name="person">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element ref="identity"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:integer"/>
+		<xs:attribute name="type" use="required" type="xs:Name"/>
+		<xs:attribute name="startyear" type="xs:gYear"/>
+		<xs:attribute name="endyear" type="xs:gYear"/>
+		<xs:attribute name="incidence" type="xs:integer" default="1"/>
+		<xs:attribute name="verified" type="xs:boolean" default="false"/>
+		<xs:attribute name="comment" type="xs:string"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- classification: a classification for this person's work, such as FOR (field of research)
+codes, or LCSH, LCC, dewey or other.  Each entry may include both a numeric and text
+field separated as described. -->
+
+<xs:element name="classification">
+	<xs:complexType>
+		<xs:choice>
+			<!-- allow either code, code and text, text and code, or text -->
+			<xs:sequence>
+				<xs:element name="code" type="xs:string"/>
+				<xs:element name="text" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element name="text" type="xs:string"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+		<xs:attribute name="id" type="xs:integer"/>
+		<xs:attribute name="type" use="required" type="xs:Name"/>
+		<xs:attribute name="startyear" type="xs:gYear"/>
+		<xs:attribute name="endyear" type="xs:gYear"/>
+		<xs:attribute name="incidence" type="xs:integer" default="1"/>
+		<xs:attribute name="verified" type="xs:boolean" default="false"/>
+		<xs:attribute name="comment" type="xs:string"/>
+	</xs:complexType>
+</xs:element>
+
+<!-- identifier: way in which this person is identified in another system.  this could
+include an email address, openid, scopusid, lccn, etc -->
+
+<xs:element name="identifier">
+	<xs:complexType>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:integer"/>
+				<xs:attribute name="type" use="required" type="xs:Name"/>
+				<xs:attribute name="href" type="xs:anyURI"/>
+				<xs:attribute name="startyear" type="xs:gYear"/>
+				<xs:attribute name="endyear" type="xs:gYear"/>
+				<xs:attribute name="incidence" type="xs:integer" default="1"/>
+				<xs:attribute name="verified" type="xs:boolean" default="false"/>
+				<xs:attribute name="comment" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:element>
+	
+</xs:schema>

@@ -1,0 +1,104 @@
+body {
+    font-size: 75%;
+}
+
+h1#branding, .branding {
+    background:none repeat scroll 0 0 #C5DAAF;
+    padding-bottom:0;
+}
+
+.subtitle {
+    font-size:larger;
+    padding-bottom:0.5em;
+    padding-left:0.85em;
+}
+
+.menu .selected,.menu .selected:hover {
+    background: #92A385;
+}
+
+.facet-list .portal-facet {
+    background: #92A385;
+    font-style: italic;
+}
+
+.box {
+    background: #CAE8B2;
+}
+
+.box h2 {
+    background: #5E7553;
+}
+
+.grid_4 .box h2 a {
+    background-position:97% 50%;
+}
+
+.box h2 a {
+    background-image:url("../images/icons/switch_plus.gif");
+}
+
+.box h2 a:hover {
+    background-color: #555555;
+}
+
+.box h2 a, .box h2 a.visible {
+    /*background:url("../images/icons/switch_minus.gif") no-repeat scroll 97% 50% #5E7553;*/
+    background-color:#5E7553;
+    border:medium none;
+    color:#FFFFFF;
+    display:block;
+    margin:-6px -12px;
+    padding:6px 12px;
+}
+
+fieldset {
+    background: #E2FFCD;
+}
+
+thead th {
+    background: #92A385;
+}
+
+tbody th,tbody td {
+    background: #E2FFCD;
+}
+/*
+body {
+    background: #B7DAA0;
+}
+
+.container_16 {
+    background: #E2FFCD;
+}
+*/
+
+ul.main li ul li.selected-view a, ul.main li:hover ul li a:hover {
+    background-color: #5E7553;
+}
+
+.handle {
+    margin: 3px 0px;
+    padding: 4px;
+    border: 1px solid black;
+    background: #FFFFCC;
+    font-size: 120%;
+}
+.handle-report .row-count {
+    margin: 3px 0px;
+    padding: 4px;
+    border: 1px solid black;
+    background: #FFFFCC;
+    font-size: 120%;
+}
+.handle-report th {
+    background-color: #5E7553;
+    color: #FFFFFF;
+}
+.handle-report .row-count a {
+    background:url("../images/icons/table_save.png");
+    background-position: 0 0.5em;
+    background-repeat: no-repeat;
+    margin-right: 1em;
+    padding: 0.5em 0.5em 0.5em 20px;
+}

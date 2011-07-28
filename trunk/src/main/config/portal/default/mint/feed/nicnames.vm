@@ -1,0 +1,30 @@
+#macro(displayField $key $tag)
+    #set($valueList = $doc.getList($key))
+    #if($valueList)
+        #if($valueList.size())
+            #foreach($value in $valueList)
+                <$tag>$value</$tag>
+            #end
+        #else
+            <$tag>$valueList</$tag>
+        #end
+    #end
+#end
+#set($noLayout = true)
+#set($docs = $self.getFeed().getJsonList("response/docs"))
+<nicnames xmlns="http://swin.edu.au/lib/research/nicnames" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://swin.edu.au/lib/research/nicnames nicnames.xsd">
+#foreach($doc in $docs)
+    <identity affiliation="affiliated">
+        <name type="birthname">
+            #displayField("surname" "surname")
+            <givennames>
+                $doc.getList("firstName").get(0)
+                $doc.getList("secondName").get(0)
+            </givennames>
+            #displayField("nameTitle" "title")
+        </name>
+        <identifier type="emailaddress">$doc.getList("email").get(0)</identifier>
+        ##<raw>$doc.toString()</raw>
+    </identity>
+#end
+</nicnames>

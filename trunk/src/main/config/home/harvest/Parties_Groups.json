@@ -1,0 +1,52 @@
+{
+    "harvester": {
+        "type": "csv",
+        "csv": {
+            "fileLocation": "${fascinator.home}/data/Parties_Groups_Sample.csv",
+            "idColumn": "ID",
+            "recordIDPrefix": "http://fascinator.usq.edu.au/parties/groups/",
+            "headerRow": true,
+            "delimiter": ",",
+            "ignoredFields": [],
+            "includedFields" : ["ID", "Title"]
+        }
+    },
+
+    "transformer": {
+        "harvestQueue": ["handle"],
+        "indexOnHarvest": "false",
+        "renderQueue": ["jsonVelocity"]
+    },
+
+    "transformerOverrides": {
+        "handle": {
+            "source": "metadata.json",
+            "description": {
+                "seperator": "",
+                "paths": [
+                    ["data", "Title"],
+                ]
+            },
+            "output": {
+                "path": ["metadata"],
+                "field": "dc.identifier"
+            },
+            "template": "[[INC]]"
+        },
+        "jsonVelocity": {
+            "templatesPath" : "${fascinator.home}/templates/groups",
+            "portalId": "Parties_Groups"
+        }
+    },
+
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "Parties_Groups.py"
+        },
+        "params": {
+            "repository.name": "Groups",
+            "repository.type": "Parties"
+        }
+    }
+}

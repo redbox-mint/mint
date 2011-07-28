@@ -1,0 +1,63 @@
+#if ($self.isCSV())
+#if (!$page.authentication.is_admin())
+ERROR! You are not an administrator.
+#else
+"ID","Link","Title","Handle","RIF-CS","Data Source"
+#foreach ($item in $self.getRows())
+"$item.getFirst("id")","${urlBase}default/detail/$item.getFirst("id")","$item.getFirst("dc_title")","$item.getFirst("handle")","$item.getFirst("repository_type")","$item.getFirst("repository_name")"
+#end
+#end
+#else
+    #set($pageTitle = 'Handle Report')
+    <h2 id="page-heading">
+      <span>$pageTitle</span>
+    </h2>
+
+    #if (!$page.authentication.is_admin())
+      <div class="box">
+        <div class="block">
+          <div class="login-error">
+            Sorry, but you need to be logged in as an administrator to use this screen.
+          </div>
+        </div>
+      </div>
+
+    #else
+      <div class="grid_16">
+      #set($contentTitle = "Handle Report")
+      #parse($page.getTemplate('wrapping/content-block-open.vm'))
+      #set($contentTitle = $nullValue)
+        <div class="block handle-report">
+    #set ($count = $self.getRowCount())
+    #if ($count == 0)
+          <div>No handles match that search!</div>
+    #else
+          <div class="row-count">$count records found: <a href="$portalPath/handles.ajax?csv=true">CSV</a></div>
+
+    <table>
+      <tr>
+        <th>ID (and link)</th>
+        <th>Title</th>
+        <th>Handle</th>
+        <th>RIF-CS</th>
+        <th>Data Source</th>
+      </tr>
+      #foreach ($item in $self.getRows())
+      <tr>
+        <td><a href="${urlBase}default/detail/$item.getFirst("id")">$item.getFirst("id")</a></td>
+        <td>$item.getFirst("dc_title")</td>
+        <td>$item.getFirst("handle")</td>
+        <td>$item.getFirst("repository_type")</td>
+        <td>$item.getFirst("repository_name")</td>
+      </tr>
+      #end
+    </table>
+
+    #end
+        </div>
+      #parse($page.getTemplate('wrapping/content-block-close.vm'))
+      </div>
+
+      <div class="clear"></div>
+    #end
+#end

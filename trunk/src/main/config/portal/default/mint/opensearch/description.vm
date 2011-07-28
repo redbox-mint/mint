@@ -1,0 +1,11 @@
+#set($noLayout = true)
+#set($baseUrl = $self.getBaseUrl())
+<?xml version="1.0"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>Mint ($page.getPortalName())</ShortName>
+    <Description>Mint Linked Authority Control Service ($page.getPortalName())</Description>
+    <Image height="16" width="16" type="image/x-icon">http://fascinator.usq.edu.au/favicon.ico</Image>
+    <Url type="text/html" method="get" template="$baseUrl/search?query={searchTerms}" />
+    <Url type="application/x-suggestions+json" method="get" template="$baseUrl/opensearch/suggest?query={searchTerms}" rel="suggestions" />
+    <Url type="application/x-fascinator-lookup+json" method="get" template="$baseUrl/opensearch/lookup?searchTerms={searchTerms}&amp;startIndex={startIndex?}&amp;count={count?}" rel="suggestions" />
+</OpenSearchDescription>

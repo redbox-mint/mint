@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.googlecode.redbox-mint</groupId>
+    <artifactId>mint-project</artifactId>
+    <version>1.0.1</version>
+    <packaging>pom</packaging>
+    <name>The Mint - Project</name>
+    <parent>
+        <groupId>com.googlecode.redbox-mint</groupId>
+        <artifactId>redbox-meta</artifactId>
+        <version>1.1</version>
+    </parent>
+    <properties>
+        <fascinator.version>1.0.3</fascinator.version>
+        <jetty.version>6.1.24</jetty.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.googlecode.the-fascinator</groupId>
+                <artifactId>fascinator-common</artifactId>
+                <version>${fascinator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.the-fascinator</groupId>
+                <artifactId>fascinator-core</artifactId>
+                <version>${fascinator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.the-fascinator</groupId>
+                <artifactId>fascinator-plugin-api</artifactId>
+                <version>${fascinator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.8.2</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Compile for Java 6 -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.1</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+  <scm>
+    <connection>scm:svn:http://redbox-mint.googlecode.com/svn/redbox-meta/tags/mint-1.0.1/mint-project</connection>
+    <developerConnection>scm:svn:https://redbox-mint.googlecode.com/svn/redbox-meta/tags/mint-1.0.1/mint-project</developerConnection>
+    <url>http://redbox-mint.googlecode.com/svn/redbox-meta/tags/mint-1.0.1/mint-project</url>
+  </scm>
+</project>

@@ -1,0 +1,2 @@
+<link rel="stylesheet" type="text/css" href="$portalPath/css/mint.css" />
+<link rel="search" type="application/opensearchdescription+xml" href="$portalPath/opensearch/description" title="Mint ($page.getPortalName())" />

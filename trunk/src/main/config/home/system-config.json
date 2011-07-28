@@ -1,0 +1,271 @@
+{
+    "version": "0.7.17",
+    "configured": true,
+    "urlBase": "${server.url.base}",
+    "email": "DO_NOT_CHANGE",
+    "sso": {
+        "plugins": [],
+        "urlExclusions": {
+            "startsWith": ["css/", "feed/", "images/", "js/", "flowplayer/"],
+            "endsWith": [".ico"],
+            "equals": ["css"]
+        },
+        "trustTokens": {
+        }
+    },
+    "accesscontrol": {
+        "type": "derby",
+        "derby": {
+        }
+    },
+    "authentication": {
+        "type": "internal",
+        "internal": {
+            "path": "${fascinator.home}/security/users.properties"
+        }
+    },
+    "roles": {
+        "type": "internal",
+        "internal": {
+            "path": "${fascinator.home}/security/roles.properties"
+        }
+    },
+    "storage": {
+        "type": "file-system",
+        "file-system": {
+            "home": "${storage.home}"
+        }
+    },
+    "messaging": {
+        "url": "tcp://localhost:${amq.port}",
+        "stompUrl": "stomp://localhost:${amq.stomp.port}",
+        "home": "${fascinator.home}/activemq-data",
+        "threads": [
+            {
+                "id": "render",
+                "description": "Render queue for priority objects requested by the user.",
+                "priority": "8",
+                "config": {
+                    "name": "renderUser"
+                }
+            },
+            {
+                "id": "render",
+                "description": "Render queue for most standard documents.",
+                "priority": "5",
+                "config": {
+                    "name": "renderNormal"
+                }
+            },
+            {
+                "id": "harvest",
+                "description": "Priority queue for user actions, allows access to the render queues faster.",
+                "priority": "8",
+                "config": {
+                    "name": "harvestUser",
+                    "normal-renderers": {
+                        "default": "renderNormal"
+                    },
+                    "user-renderer": "renderUser"
+                }
+            },
+            {
+                "id": "harvest",
+                "description": "Standard harvest queue for new object. May optionally run some fast transformers and an index before routing to the render queues.",
+                "priority": "7",
+                "config": {
+                    "name": "harvest",
+                    "normal-renderers": {
+                        "default": "renderNormal"
+                    },
+                    "user-renderer": "renderUser"
+                }
+            },
+            {
+                "id": "solrwrapper",
+                "description": "Wrapper for ingest into main Solr core.",
+                "priority": "5",
+                "config": {
+                    "name": "solrwrapper"
+                }
+            },
+            {
+                "id": "emailnotification",
+                "description": "Queue to send email notifications",
+                "priority": "8",
+                "config": {
+                    "name": "emailnotification",
+                    "debug": false,
+                    "from": {
+                        "email": "${admin.email}",
+                        "name": "The Mint"
+                    },
+                    "smtp": {
+                        "host": "${smtp.host}"
+                    },
+                    "defaults": {
+                        "subject": "Notification",
+                        "body": "Default email message"
+                    }
+                }
+            }
+        ]
+    },
+    "indexer": {
+        "type": "solr",
+        "properties": "TF-OBJ-META",
+        "useCache": true,
+        "buffer": {
+            "docLimit": "200",
+            "sizeLimit": "204800",
+            "timeLimit": "30"
+        },
+        "solr": {
+            "uri": "http://localhost:${jetty.port}/solr/fascinator",
+            "coreName": "fascinator",
+            "autocommit": false,
+            "embedded": false
+        },
+        "anotar": {
+            "uri": "http://localhost:${jetty.port}/solr/anotar",
+            "coreName": "anotar",
+            "autocommit": true
+        }
+    },
+    "transformerDefaults": {
+        "handle": {
+            "id": "handle",
+            "namingAuthority": "1959.18",
+            "privateKeyPath": "${fascinator.home}/handle/admpriv.bin",
+            "passPhrase": "password",
+            "useIncrements": true,
+            "incrementingFile": "${fascinator.home}/handle/index.txt"
+        },
+        "jsonVelocity": {
+            "id" : "jsonVelocity",
+            "sourcePayload" : "metadata.json",
+            "templatesPath" : "${fascinator.home}/templates",
+            "portalId": "default"
+        }
+    },
+    "uploader": {
+    },
+    "mime-types": {
+        "tfpackage": "application/x-fascinator-package"
+    },
+    "database-service": {
+        "derbyHome": "${fascinator.home}/database-service"
+    },
+    "portal": {
+        "home": "${portal.home}",
+        "contentDir": "${fascinator.home}/content",
+        "defaultView": "default",
+        "skins": {
+            "default": "default",
+            "order": [ "local", "mint" ]
+        },
+        "caching": {
+            "caches": {
+                "scriptObjects": {
+                    "label": "Cache for Jython scripts",
+                    "profile": "dynamic",
+                    "lastModifiedCheck": true
+                },
+                "pathLookup": {
+                    "label": "Cache for path lookups",
+                    "profile": "full"
+                }
+            },
+            "profiles": {
+                "default": {
+                    "label": "Factory defaults",
+                    "refreshIntervalSeconds": 30,
+                    "maxElementsInMemory": 10000,
+                    "eternal": false,
+                    "timeToIdleSeconds": 120,
+                    "timeToLiveSeconds": 120,
+                    "overflowToDisk": false,
+                    "maxElementsOnDisk": 10000,
+                    "diskPersistent": false,
+                    "memoryStoreEvictionPolicy": "LRU"
+                },
+                "off": {
+                    "label": "Disabled",
+                    "maxElementsInMemory": 1,
+                    "eternal": false,
+                    "timeToIdleSeconds": 0,
+                    "timeToLiveSeconds": 0,
+                    "overflowToDisk": false,
+                    "maxElementsOnDisk": 1,
+                    "diskPersistent": false,
+                    "memoryStoreEvictionPolicy": "LRU"
+                },
+                "dynamic": {
+                    "label": "Dynamic - Caches are refreshed periodically",
+                    "maxElementsInMemory": 25000,
+                    "eternal": false,
+                    "timeToIdleSeconds": 120,
+                    "timeToLiveSeconds": 300,
+                    "overflowToDisk": false,
+                    "maxElementsOnDisk": 25000,
+                    "diskPersistent": false,
+                    "memoryStoreEvictionPolicy": "LRU"
+                },
+                "full": {
+                    "label": "Full - Caches never expire",
+                    "maxElementsInMemory": 100000,
+                    "eternal": true,
+                    "timeToIdleSeconds": 0,
+                    "timeToLiveSeconds": 0,
+                    "overflowToDisk": true,
+                    "maxElementsOnDisk": 100000,
+                    "diskPersistent": false,
+                    "memoryStoreEvictionPolicy": "LRU"
+                }
+            }
+        },
+        "layout": "layout",
+        "nativeJython": true,
+        "packageTypes": {
+            "default": {
+                "jsonconfig": "packaging-config.json",
+                "packages-in-package": false
+            }
+        },
+        "harvestFiles": "${fascinator.home}/harvest",
+        "houseKeeping": {
+            "config": {
+                "derbyHome": "${fascinator.home}/database",
+                "quartzConfig": "${fascinator.home}/quartz.properties",
+                "desktop": true,
+                "frequency": "3600",
+                "jobs": []
+            }
+        },
+        "oai-pmh": {
+            "sessionExpiry": "300000",
+            "metadataFormats": {
+                "oai_dc": {
+                    "enabledInAllViews": true,
+                    "enabledViews": ["Parties_Groups", "Parties_People", "Activities"],
+                    "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
+                    "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
+                },
+                "eac_cpf": {
+                    "enabledInAllViews": false,
+                    "enabledViews": ["Parties_People"],
+                    "schema": "urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd",
+                    "metadataNamespace": "urn:isbn:1-931666-33-4"
+                },
+                "rif": {
+                    "enabledInAllViews": false,
+                    "enabledViews": ["Parties_Groups", "Parties_People", "Activities"],
+                    "schema": "http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/registryObjects.xsd",
+                    "metadataNamespace": "http://ands.org.au/standards/rif-cs/registryObjects"
+                }
+            }
+        }
+    },
+    "subscriber": {
+    }
+}
