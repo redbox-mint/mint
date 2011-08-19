@@ -45,7 +45,7 @@ REM jetty settings
 set JETTY_OPTS=-Djetty.port=%LOCAL_PORT% -Djetty.logs=%JETTY_LOGS% -Djetty.home=%PROJECT_HOME%/server/jetty
 
 REM solr settings
-set SOLR_OPTS=-Dsolr.solr.home="%PROJECT_HOME%/solr" -Djava.util.logging.config.file="%PROJECT_HOME%/home/solr/logging.properties"
+set SOLR_OPTS=-Dsolr.solr.home="%PROJECT_HOME%/solr"
 
 Rem Geonames
 set GEONAMES=-Dgeonames.solr.home="%PROJECT_HOME%/home/geonames/solr"

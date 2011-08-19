@@ -48,7 +48,7 @@ fi
 JETTY_OPTS="-Djetty.port=$LOCAL_PORT -Djetty.logs=$JETTY_LOGS -Djetty.home=$PROJECT_HOME/server/jetty"
 
 # solr settings
-SOLR_OPTS="-Dsolr.solr.home=$PROJECT_HOME/solr -Djava.util.logging.config.file=$PROJECT_HOME/solr/logging.properties"
+SOLR_OPTS="-Dsolr.solr.home=$PROJECT_HOME/solr
 
 # Geonames
 GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/home/geonames/solr"
