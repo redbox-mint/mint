@@ -90,6 +90,15 @@
                 }
             },
             {
+                "id": "subscriber",
+                "description": "Subscriber queue for event log.",
+                "priority": "7",
+                "config": {
+                    "name": "subscriber",
+                    "subscribers": ["solr-event-log"]
+                }
+            },
+            {
                 "id": "emailnotification",
                 "description": "Queue to send email notifications",
                 "priority": "8",
@@ -267,5 +276,21 @@
         }
     },
     "subscriber": {
+        "solr-event-log": {
+            "uri": "http://localhost:${jetty.port}/solr/eventlog",
+            "buffer": {
+                "docLimit": "200",
+                "sizeLimit": "204800",
+                "timeLimit": "30"
+            }
+        },
+        "solr": {
+            "uri": "http://localhost:${jetty.port}/solr/eventlog",
+            "buffer": {
+                "docLimit": "200",
+                "sizeLimit": "204800",
+                "timeLimit": "30"
+            }
+        }
     }
 }
