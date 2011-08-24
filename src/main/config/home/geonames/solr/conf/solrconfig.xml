@@ -3,25 +3,27 @@
   <abortOnConfigurationError>true</abortOnConfigurationError>
   <dataDir>${geonames.solr.home:./solr}/data</dataDir>
 
-  <!-- This index shouldn't receive updates... so these settings don't matter -->
   <indexDefaults>
     <useCompoundFile>false</useCompoundFile>
-    <mergeFactor>10</mergeFactor>
-    <ramBufferSizeMB>32</ramBufferSizeMB>
-    <maxMergeDocs>2147483647</maxMergeDocs>
+    <mergeFactor>25</mergeFactor>
+    <ramBufferSizeMB>128</ramBufferSizeMB>
     <maxFieldLength>10000</maxFieldLength>
     <writeLockTimeout>1000</writeLockTimeout>
     <commitLockTimeout>10000</commitLockTimeout>
-    <lockType>single</lockType>
+    <lockType>native</lockType>
   </indexDefaults>
 
   <mainIndex>
     <useCompoundFile>false</useCompoundFile>
-    <ramBufferSizeMB>32</ramBufferSizeMB>
-    <mergeFactor>10</mergeFactor>
-    <maxMergeDocs>2147483647</maxMergeDocs>
-    <maxFieldLength>10000</maxFieldLength>
+    <ramBufferSizeMB>128</ramBufferSizeMB>
+    <mergeFactor>25</mergeFactor>
     <unlockOnStartup>false</unlockOnStartup>
+    <reopenReaders>false</reopenReaders>
+    <deletionPolicy class="solr.SolrDeletionPolicy">
+      <str name="maxCommitsToKeep">1</str>
+      <str name="maxOptimizedCommitsToKeep">0</str>
+    </deletionPolicy>
+    <infoStream file="INFOSTREAM.txt">false</infoStream>
   </mainIndex>
 
   <query>
@@ -63,5 +65,8 @@
        <str name="fl">basic_name,country_code</str>
      </lst>
   </requestHandler>
+
+  <updateHandler class="solr.DirectUpdateHandler2"></updateHandler>
+  <requestHandler name="/update" class="solr.XmlUpdateRequestHandler" />
 
 </config>

@@ -57,6 +57,19 @@
             <version>3.3.0</version>
             <type>war</type>
         </dependency>
+        <!-- Geonames Web App + harvester-->
+        <dependency>
+            <groupId>com.googlecode.solr-geonames</groupId>
+            <artifactId>solr-geonames-server</artifactId>
+            <type>war</type>
+            <classifier>skinny</classifier>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.solr-geonames</groupId>
+            <artifactId>solr-geonames-harvester</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!-- Jetty Web Server -->
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
@@ -329,7 +342,7 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                    <!-- Fascinator application -->
+                    <!-- Fascinator + Geonames applications -->
                     <execution>
                         <id>copy-webapp</id>
                         <phase>package</phase>
@@ -345,6 +358,13 @@
                                     <type>war</type>
                                     <classifier>skinny</classifier>
                                     <destFileName>portal.war</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.googlecode.solr-geonames</groupId>
+                                    <artifactId>solr-geonames-server</artifactId>
+                                    <type>war</type>
+                                    <classifier>skinny</classifier>
+                                    <destFileName>geonames.war</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -421,7 +441,7 @@
                             <excludeTransitive>true</excludeTransitive>
                         </configuration>
                     </execution>
-                    <!-- Plugin dependencies -->
+                    <!-- Plugin dependencies + Geo harvester -->
                     <execution>
                         <id>copy-plugin-dependencies</id>
                         <phase>package</phase>
