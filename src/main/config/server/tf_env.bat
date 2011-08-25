@@ -10,6 +10,7 @@ set ADMIN_EMAIL=${admin.email}
 
 REM this script sets the environment for the fascinator scripts
 set FASCINATOR_HOME=%PROJECT_HOME%/home
+set REDBOX_VERSION=${project.version}
 set CLASSPATH=plugins/*;lib/*
 
 REM Logging directories
@@ -57,6 +58,6 @@ REM directories
 set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="%PROJECT_HOME%/portal" -Dstorage.home="%PROJECT_HOME%/storage"
 
 REM additional settings
-set EXTRA_OPTS=-Dserver.url.base="%SERVER_URL%" -Damq.port=%AMQ_PORT% -Damq.stomp.port=%AMQ_STOMP_PORT%  -Dsmtp.host="%SMTP_HOST%" -Dadmin.email="%ADMIN_EMAIL%"
+set EXTRA_OPTS=-Dserver.url.base="%SERVER_URL%" -Damq.port=%AMQ_PORT% -Damq.stomp.port=%AMQ_STOMP_PORT%  -Dsmtp.host="%SMTP_HOST%" -Dadmin.email="%ADMIN_EMAIL%" -Dredbox.version="%REDBOX_VERSION%"
 
 set JAVA_OPTS=%JVM_OPTS% %SOLR_OPTS% %GEONAMES% %PROXY_OPTS% %JETTY_OPTS% %CONFIG_DIRS% %EXTRA_OPTS%

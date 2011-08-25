@@ -1,0 +1,70 @@
+#macro(pluginList $plugins $type)
+    #foreach($plugin in $plugins)
+        <div class="pluginAbout" id="$plugin.id">
+            <h3>$plugin.name</h3>
+            $self.getAboutPage($plugin.id, $type)
+        </div>
+    #end
+#end
+#set($pageTitle = "About")
+<h2 id="page-heading"><span>About</span></h2>
+<div class="grid_16">
+    #set($contentTitle = "Description")
+    #parseTemplate("wrapping/content-block-open.vm")
+    <div class="article first">
+        <p><b>ReDBox/Mint version:</b> $systemConfig.getString("Unknown", "redbox.version.string")</p>
+        <p>Mint provides services for uploading name authority information and
+        an index system for making this data easily available to web-based user
+        interfaces (such as ReDBox). Instead of providing one big search set,
+        Mint uses Views to partition your data - meaning that you only get
+        researcher names returned for user selection.</p>
+        <p>Please see the <a href="http://sites.google.com/site/redboxmint/">ReDBox/Mint project page</a>
+        for more information.</p>
+    </div>
+    <p/>
+    #if($page.authentication.is_admin())
+    #parseTemplate("wrapping/content-block-close.vm")
+    #set($contentTitle = "Plugins")
+    #parseTemplate("wrapping/content-block-open.vm")
+    <div id="plugin-tabs">
+        <ul>
+            <li><a href="#indexer">Indexer</a></li>
+            <li><a href="#storage">Storage</a></li>
+            <li><a href="#harvester">Harvester</a></li>
+            <li><a href="#transformer">Transformer</a></li>
+            <li><a href="#access-control">Access control</a></li>
+            <li><a href="#authentication">Authentication</a></li>
+            <li><a href="#roles">Roles</a></li>
+            <li><a href="#subscriber">Subscriber</a></li>
+        </ul>
+        <div id="indexer">
+            #pluginList($self.indexerPlugins, "indexer")
+        </div>
+        <div id="storage">
+            #pluginList($self.storagePlugins, "storage")
+        </div>
+        <div id="harvester">
+            #pluginList($self.harvesterPlugins, "harvester")
+        </div>
+        <div id="transformer">
+            #pluginList($self.transformerPlugins, "transformer")
+        </div>
+        <div id="access-control">
+            #pluginList($self.accessControlPlugins, "access")
+        </div>
+        <div id="authentication">
+            #pluginList($self.authenticationPlugins, "authentication")
+        </div>
+        <div id="roles">
+            #pluginList($self.rolesPlugins, "roles")
+        </div>
+        <div id="subscriber">
+            #pluginList($self.subscriberPlugins, "subscriber")
+        </div>
+    </div>
+    #parseTemplate("wrapping/content-block-close.vm")
+    <script type="text/javascript">
+    $(function(){ $("#plugin-tabs").tabs(); });
+    </script>
+    #end
+</div>

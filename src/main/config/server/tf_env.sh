@@ -13,6 +13,7 @@ export ADMIN_EMAIL="${admin.email}"
 
 # set fascinator home directory
 export TF_HOME="$PROJECT_HOME/home"
+export REDBOX_VERSION="${project.version}"
 
 # java class path
 export CLASSPATH="plugins/*:lib/*"
@@ -57,7 +58,7 @@ GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/home/geonames/solr"
 CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=$PROJECT_HOME/portal -Dstorage.home=$PROJECT_HOME/storage"
 
 # additional settings
-EXTRA_OPTS="-Dserver.url.base=$SERVER_URL -Damq.port=$AMQ_PORT -Damq.stomp.port=$AMQ_STOMP_PORT -Dsmtp.host=$SMTP_HOST -Dadmin.email=$ADMIN_EMAIL"
+EXTRA_OPTS="-Dserver.url.base=$SERVER_URL -Damq.port=$AMQ_PORT -Damq.stomp.port=$AMQ_STOMP_PORT -Dsmtp.host=$SMTP_HOST -Dadmin.email=$ADMIN_EMAIL -Dredbox.version=$REDBOX_VERSION"
 
 # set options for maven to use
 export JAVA_OPTS="$JVM_OPTS $JETTY_OPTS $SOLR_OPTS $PROXY_OPTS $CONFIG_DIRS $EXTRA_OPTS $GEONAMES"
