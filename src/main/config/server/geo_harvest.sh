@@ -23,6 +23,6 @@ if [ -f $1 ]; then
     echo "Geonames Solr Index building."
     echo "Logging to: '$LOG_FILE' ..."
 
-    CLASSPATH="$PROJECT_HOME/home/geonames/solr/conf;$CLASSPATH"
+    export CLASSPATH="$PROJECT_HOME/home/geonames/solr/conf;$CLASSPATH"
     java $JAVA_OPTS -cp $CLASSPATH com.googlecode.solrgeonames.harvester.Harvester $INPUT_FILE > $LOG_FILE 2>&1
 fi

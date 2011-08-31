@@ -11,8 +11,7 @@ echo "Geonames Solr Index building."
 echo "Logging to: '%LOG_FILE%'"
 
 set CLASSPATH=%PROJECT_HOME%/home/geonames/solr/conf;%CLASSPATH%
-echo bob > "%LOG_FILE%bob"
-REM call java %JAVA_OPTS% -cp %CLASSPATH% com.googlecode.solrgeonames.harvester.Harvester "%PROGRAM_DIR%%1" > "%LOG_FILE%"
+call java %JAVA_OPTS% -cp %CLASSPATH% com.googlecode.solrgeonames.harvester.Harvester "%PROGRAM_DIR%%1" > "%LOG_FILE%"
 goto end
 
 :usage
