@@ -241,7 +241,6 @@ public class HandleTransformer implements Transformer {
                     throw new TransformerException("The auto incrementing " +
                             "file specified does not exist: '" + path +"'");
                 }
-
                 // Create a locking file beside the real file
                 File lockFile = new File(
                         indexFile.getParentFile(), INDEX_LOCK_FILE);
@@ -254,6 +253,12 @@ public class HandleTransformer implements Transformer {
                 } catch(IOException ex) {
                     throw new TransformerException(
                             "Error creating lock file: ", ex);
+                }
+
+                // Check we can read/use it
+                if (!checkIncrementFile()) {
+                    throw new TransformerException(
+                            "Error on initial check of increment file!");
                 }
             }
         }
@@ -310,8 +315,8 @@ public class HandleTransformer implements Transformer {
             inc++;
             result = String.valueOf(inc);
             FileUtils.writeStringToFile(indexFile, result);
-        } catch (IOException ex) {
-            log.error("Error releasing file lock: ", ex);
+        } catch (Exception ex) {
+            log.error("Error reading/updating increment: ", ex);
         }
 
         // Unlock the index file
@@ -322,7 +327,61 @@ public class HandleTransformer implements Transformer {
         }
 
         return result;
+    }
 
+    /**
+     * Check the contents of the increment file. Will remove spaces and
+     * non-printables, but fail if the contents are not an integer.
+     *
+     * @return booelan: True if the file contains usable content, otherwise False
+     */
+    private boolean checkIncrementFile() {
+        boolean result = true;
+        if (!useIncrement) {
+            return result;
+        }
+
+        // Lock the index file
+        try {
+            lockIndex();
+        } catch (IOException ex) {
+            log.error("Error acquiring file lock: ", ex);
+            return false;
+        }
+
+        // Do our thing
+        try {
+            String contents = FileUtils.readFileToString(indexFile);
+
+            // Do we need to 'fix' the contents?
+            String newContents = contents.replaceAll("\\r|\\n|\\s", "");
+            if (!newContents.equals(contents)) {
+                log.warn("Removing extra whitespace from increment file!");
+                FileUtils.writeStringToFile(indexFile, newContents);
+            }
+
+            // Make sure it is a number
+            try {
+                int inc = Integer.valueOf(newContents);
+                result = true;
+            } catch (Exception ex) {
+                log.error("Error parsing integer '{}'; cannot use.", newContents, ex);
+                result = false;
+            }
+        } catch (Exception ex) {
+            log.error("Error accessing file: ", ex);
+            result = false;
+        }
+
+        // Unlock the index file
+        try {
+            unlockIndex();
+        } catch (IOException ex) {
+            log.error("Error releasing file lock: ", ex);
+            return false;
+        }
+
+        return result;
     }
 
     /**
