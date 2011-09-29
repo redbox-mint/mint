@@ -1,5 +1,5 @@
 {
-    "version": "1.0.5.2",
+    "version": "1.0.5.3",
     "redbox.version.string": "${redbox.version}",
     "configured": true,
     "urlBase": "${server.url.base}",
@@ -41,45 +41,23 @@
         "url": "tcp://localhost:${amq.port}",
         "stompUrl": "stomp://localhost:${amq.stomp.port}",
         "home": "${fascinator.home}/activemq-data",
+        "startup": {
+            "delay": "5000",
+            "timer": "15000"
+        },
+        "statistics": {
+            "enabled": true,
+            "destination": "houseKeeping"
+        },
+        "toolChainQueue": "transactionManager",
         "threads": [
             {
-                "id": "render",
-                "description": "Render queue for priority objects requested by the user.",
-                "priority": "8",
-                "config": {
-                    "name": "renderUser"
-                }
-            },
-            {
-                "id": "render",
-                "description": "Render queue for most standard documents.",
+                "id": "transactionManager",
+                "description": "Transaction Manager Queue for complicated tool chains.",
                 "priority": "5",
                 "config": {
-                    "name": "renderNormal"
-                }
-            },
-            {
-                "id": "harvest",
-                "description": "Priority queue for user actions, allows access to the render queues faster.",
-                "priority": "8",
-                "config": {
-                    "name": "harvestUser",
-                    "normal-renderers": {
-                        "default": "renderNormal"
-                    },
-                    "user-renderer": "renderUser"
-                }
-            },
-            {
-                "id": "harvest",
-                "description": "Standard harvest queue for new object. May optionally run some fast transformers and an index before routing to the render queues.",
-                "priority": "7",
-                "config": {
-                    "name": "harvest",
-                    "normal-renderers": {
-                        "default": "renderNormal"
-                    },
-                    "user-renderer": "renderUser"
+                    "name": "transactionManager",
+                    "transactionManagerPlugin": "curation-mint"
                 }
             },
             {
@@ -120,6 +98,11 @@
                 }
             }
         ]
+    },
+    "curation": {
+        "curationEmailAddress": "${admin.email}",
+        "curationRequiresConfirmation": false,
+        "pidProperty": "handle"
     },
     "indexer": {
         "type": "solr",
@@ -256,20 +239,20 @@
             "sessionExpiry": "300000",
             "metadataFormats": {
                 "oai_dc": {
-                    "enabledInAllViews": true,
-                    "enabledViews": ["Parties_Groups", "Parties_People", "Activities"],
+                    "enabledInAllViews": false,
+                    "enabledViews": ["published"],
                     "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
                     "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
                 },
                 "eac_cpf": {
                     "enabledInAllViews": false,
-                    "enabledViews": ["Parties_People"],
+                    "enabledViews": ["published"],
                     "schema": "urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd",
                     "metadataNamespace": "urn:isbn:1-931666-33-4"
                 },
                 "rif": {
                     "enabledInAllViews": false,
-                    "enabledViews": ["Parties_Groups", "Parties_People", "Activities"],
+                    "enabledViews": ["published"],
                     "schema": "http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/registryObjects.xsd",
                     "metadataNamespace": "http://ands.org.au/standards/rif-cs/registryObjects"
                 }

@@ -43,6 +43,7 @@ class IndexData:
         self.pid = self.payload.getId()
         metadataPid = self.params.getProperty("metaPid", "DC")
 
+        self.utils.add(self.index, "storage_id", self.oid)
         if self.pid == metadataPid:
             self.itemType = "object"
         else:

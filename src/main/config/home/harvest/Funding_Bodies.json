@@ -4,13 +4,17 @@
         "csv": {
             "fileLocation": "${fascinator.home}/data/Funding_Bodies_Sample.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "http://fascinator.usq.edu.au/funding_bodies/",
+            "recordIDPrefix": "redbox-mint.googlecode.com/funding_bodies/",
             "headerRow": true,
             "headerList": ["ID"],
             "delimiter": ",",
             "ignoredFields": [],
             "includedFields" : ["ID"]
         }
+    },
+    "curation": {
+        "neverPublish": true,
+        "alreadyCurated": true
     },
     "indexer": {
         "script": {

@@ -5,5 +5,38 @@
     </div>
   #set ($handle = $parent.getProperty("handle"))
   #if ($handle != $nullValue)
-    <div class="handle">This object has a handle:  <a href="$handle">$handle</a></div>
+    <div class="handle">This object has a Persistent ID:  <a href="$handle">$handle</a></div>
+  #else
+    #if($page.authentication.is_admin())
+    <div class="handle">
+        <a id="curate-now" href="#">CURATE NOW</a>
+        <span id="curate-sent" class="hidden"></span>
+    </div>
+    <script type="text/javascript">
+    <!--
+        $(function() {
+            $("#curate-now").click(function() {
+                $("#curate-now").hide();
+                $("#curate-sent").show();
+                jQuery.ajax({
+                    type : "POST",
+                    url : "$portalPath/actions/curate.ajax",
+                    success:
+                        function(data, status) {
+                            $("#curate-sent").html(data);
+                        },
+                    error:
+                        function (data, status, e) {
+                            $("#curate-sent").html(data.responseText);
+                        },
+                    data: {
+                        oid: "${oid}"
+                    }
+                });
+                return false;
+            });
+        });
+    -->
+    </script>
+    #end
   #end

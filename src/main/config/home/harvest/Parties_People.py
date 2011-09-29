@@ -33,6 +33,7 @@ class IndexData:
         self.pid = self.payload.getId()
         metadataPid = self.params.getProperty("metaPid", "DC")
 
+        self.utils.add(self.index, "storage_id", self.oid)
         if self.pid == metadataPid:
             self.itemType = "object"
         else:
@@ -55,9 +56,14 @@ class IndexData:
         # Do we have a handle?
         handle = self.params["handle"]
         if handle is not None:
+            self.utils.add(self.index, "known_ids", handle)
             self.utils.add(self.index, "handle", handle)
             self.utils.add(self.index, "oai_identifier", handle)
         self.utils.add(self.index, "oai_set", "Parties_People")
+        # Publication
+        published = self.params["published"]
+        if published is not None:
+            self.utils.add(self.index, "published", "true")
 
     def __metadata(self):
         jsonPayload = self.object.getPayload("metadata.json")
@@ -68,15 +74,25 @@ class IndexData:
         self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
         
         data = json.getObject("data")
-        self.utils.add(self.index, "dc_title", "%s, %s" % (data.get("Family Name"), data.get("Given Name")))
+        self.utils.add(self.index, "dc_title", "%s, %s" % (data.get("Family_Name"), data.get("Given_Name")))
 
         self.utils.add(self.index, "dc_description", "%s %s %s, %s, %s" %
-                (data.get("Honorific"), data.get("Given Name"), data.get("Family Name"),
+                (data.get("Honorific"), data.get("Given_Name"), data.get("Family_Name"),
                  data.get("Division"), data.get("School")))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
-    
+        
+        idFields = ["ID", "URI", "NLA_Party_Identifier", "ResearcherID", "openID", "Personal_URI"]
+        for field in idFields:
+            if data.containsKey(field):
+                value = data.get(field)
+                if value != "":
+                    self.utils.add(self.index, "known_ids", value)
+        identifier = json.getString(None, ["metadata", "dc.identifier"])
+        if identifier is not None:
+            self.utils.add(self.index, "known_ids", identifier)
+
     def __security(self, oid, index):
         roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:

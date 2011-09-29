@@ -3,8 +3,13 @@
     xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
     xmlns:dc="http://purl.org/dc/elements/1.1/">
 
-    <dc:identifier>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</dc:identifier>
-    <dc:title>$util.encodeXml($util.get($item, "data", "Title"))</dc:title>
-    <dc:description>'Parties' entry for '$util.encodeXml($util.get($item, "data", "Title"))'</dc:description>
+## Handle is first preference
+#set ($id = $util.get($item, "metadata", "rdf:resource"))
+#if ("$!id" == "")
+    #set ($id = $util.get($item, "metadata", "dc.identifier"))
+#end
+    <dc:identifier>$util.encodeXml($id)</dc:identifier>
+    <dc:title>$util.encodeXml($util.get($item, "data", "Name"))</dc:title>
+    <dc:description>'Parties' entry for '$util.encodeXml($util.get($item, "data", "Name"))'</dc:description>
 
 </oai_dc:dc>

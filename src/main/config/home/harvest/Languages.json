@@ -12,6 +12,10 @@
             "includedFields" : ["alpha3", "alpha3_alt", "alpha2", "english", "french"]
         }
     },
+    "curation": {
+        "neverPublish": true,
+        "alreadyCurated": true
+    },
     "indexer": {
         "script": {
             "type": "python",

@@ -2,20 +2,23 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/Parties_Groups_Sample.csv",
+            "fileLocation": "${fascinator.home}/data/Group_Sample.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "http://fascinator.usq.edu.au/parties/groups/",
+            "recordIDPrefix": "redbox-mint.googlecode.com/parties/group/",
             "headerRow": true,
             "delimiter": ",",
             "ignoredFields": [],
-            "includedFields" : ["ID", "Title"]
+            "includedFields" : ["ID", "Name", "Email", "Phone", "Parent_Group_ID", "URI", "NLA_Party_Identifier", "Homepage", "Description"]
         }
     },
 
     "transformer": {
-        "harvestQueue": ["handle"],
-        "indexOnHarvest": "false",
-        "renderQueue": ["jsonVelocity"]
+        "curation": ["handle"],
+        "metadata": ["jsonVelocity"]
+    },
+    "curation": {
+        "neverPublish": false,
+        "alreadyCurated": false
     },
 
     "transformerOverrides": {
@@ -24,12 +27,12 @@
             "description": {
                 "seperator": "",
                 "paths": [
-                    ["data", "Title"],
+                    ["data", "Name"],
                 ]
             },
             "output": {
                 "path": ["metadata"],
-                "field": "dc.identifier"
+                "field": "rdf:resource"
             },
             "template": "[[INC]]"
         },

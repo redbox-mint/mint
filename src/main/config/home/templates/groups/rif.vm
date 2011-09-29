@@ -1,13 +1,18 @@
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
     <registryObject group="The University of Newcastle, Australia">
-        <key>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</key>
+## Handle is first preference
+#set ($id = $util.get($item, "metadata", "rdf:resource"))
+#if ("$!id" == "")
+    #set ($id = $util.get($item, "metadata", "dc.identifier"))
+#end
+        <key>$util.encodeXml($id)</key>
         <originatingSource>$urlBase</originatingSource>
         <party type="group">
-            <identifier type="uri">$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</identifier>
+            <identifier type="uri">$util.encodeXml($id)</identifier>
             <name type="primary">
-                <namePart type="title">$util.encodeXml($util.get($item, "data", "Title"))</namePart>
+                <namePart type="title">$util.encodeXml($util.get($item, "data", "Name"))</namePart>
             </name>
-            <description type="full">$util.encodeXml($util.get($item, "data", "Title"))</description>
+            <description type="full">$util.encodeXml($util.get($item, "data", "Name"))</description>
         </party>
     </registryObject>
 </registryObjects>

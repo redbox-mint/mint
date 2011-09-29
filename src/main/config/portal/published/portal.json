@@ -1,0 +1,21 @@
+{
+  "portal" : {
+    "name" : "published",
+    "description" : "Published Objects",
+    "query" : "published:\"true\"",
+    "facet-fields" : {
+      "repository_name" : {
+        "label" : "Source",
+        "display" : "list"
+      },
+      "repository_type" : {
+        "label" : "Source type",
+        "display" : "list"
+      }
+    },
+    "sort-fields" : {
+      "last_modified" : "Last modified",
+      "f_dc_title" : "Title"
+    }
+  }
+}

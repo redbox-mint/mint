@@ -4,7 +4,7 @@
         "csv": {
             "fileLocation": "${fascinator.home}/data/Activities_NHMRC_2010_UoN.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "http://www.nhmrc.gov.au/grants/dataset/rmis/",
+            "recordIDPrefix": "http://purl.org/au-research/grants/nhmrc/",
             "headerRow": true,
             "delimiter": ",",
             "ignoredFields": [],
@@ -22,26 +22,15 @@
     },
 
     "transformer": {
-        "harvestQueue": ["handle"],
-        "indexOnHarvest": "false",
-        "renderQueue": ["jsonVelocity"]
+        "curation": [],
+        "metadata": []
+    },
+    "curation": {
+        "neverPublish": true,
+        "alreadyCurated": true
     },
 
     "transformerOverrides": {
-        "handle": {
-            "source": "metadata.json",
-            "description": {
-                "seperator": "",
-                "paths": [
-                    ["data", "Title"],
-                ]
-            },
-            "output": {
-                "path": ["metadata"],
-                "field": "dc.identifier"
-            },
-            "template": "[[INC]]"
-        },
         "jsonVelocity": {
             "templatesPath" : "${fascinator.home}/templates/activities",
             "portalId": "Activities"

@@ -2,20 +2,23 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/Parties_People_Sample.csv",
+            "fileLocation": "${fascinator.home}/data/People_Sample.csv",
             "idColumn": "ID",
-            "recordIDPrefix": "http://fascinator.usq.edu.au/parties/people/",
+            "recordIDPrefix": "redbox-mint.googlecode.com/parties/people/",
             "headerRow": true,
             "delimiter": ",",
             "ignoredFields": [],
-            "includedFields" : ["ID", "Honorific", "Given Name", "Family Name", "Division", "School", "Email"]
+            "includedFields" : ["ID", "Given_Name", "Other_Names", "Family_Name", "Pref_Name", "Honorific", "Email", "Job_Title", "GroupID_1", "GroupID_2", "GroupID_3", "ANZSRC_FOR_1", "ANZSRC_FOR_2", "ANZSRC_FOR_3", "URI", "NLA_Party_Identifier", "ResearcherID", "openID", "Personal_URI", "Personal_Homepage", "Staff_Profile_Homepage", "Description"]
         }
     },
 
     "transformer": {
-        "harvestQueue": ["handle"],
-        "indexOnHarvest": "false",
-        "renderQueue": ["jsonVelocity"]
+        "curation": ["handle"],
+        "metadata": ["jsonVelocity"]
+    },
+    "curation": {
+        "neverPublish": false,
+        "alreadyCurated": false
     },
 
     "transformerOverrides": {
@@ -25,13 +28,13 @@
                 "seperator": " ",
                 "paths": [
                     ["data", "Honorific"],
-                    ["data", "Given Name"],
-                    ["data", "Family Name"],
+                    ["data", "Given_Name"],
+                    ["data", "Family_Name"],
                 ]
             },
             "output": {
                 "path": ["metadata"],
-                "field": "dc.identifier"
+                "field": "rdf:resource"
             },
             "template": "[[INC]]"
         },
