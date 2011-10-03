@@ -14,7 +14,7 @@
 
     "transformer": {
         "curation": ["handle"],
-        "metadata": ["jsonVelocity"]
+        "metadata": ["ingest-relations", "jsonVelocity"]
     },
     "curation": {
         "neverPublish": false,
@@ -22,6 +22,27 @@
     },
 
     "transformerOverrides": {
+        "ingest-relations": {
+            "sourcePid": "metadata.json",
+            "sourcePath": ["data"],
+            "relations": {
+                "GroupID_1": {
+                    "prefix": "redbox-mint.googlecode.com/parties/group/",
+                    "relation": "isMemberOf",
+                    "reverseRelation": "hasMember"
+                },
+                "GroupID_2": {
+                    "prefix": "redbox-mint.googlecode.com/parties/group/",
+                    "relation": "isMemberOf",
+                    "reverseRelation": "hasMember"
+                },
+                "GroupID_3": {
+                    "prefix": "redbox-mint.googlecode.com/parties/group/",
+                    "relation": "isMemberOf",
+                    "reverseRelation": "hasMember"
+                }
+            }
+        },
         "handle": {
             "source": "metadata.json",
             "description": {

@@ -102,3 +102,17 @@ ul.main li ul li.selected-view a, ul.main li:hover ul li a:hover {
     margin-right: 1em;
     padding: 0.5em 0.5em 0.5em 20px;
 }
+
+.ticked {
+    background-image: url(../images/icons/tick.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+    padding-right: 20px;
+}
+
+.waiting {
+    background-image: url(../images/icons/hourglass.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+    padding-right: 20px;
+}

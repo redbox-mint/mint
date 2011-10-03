@@ -3,10 +3,53 @@
         <div class="object-tag-list">Tags: <span class="object-tags"></span></div>
         ##<div class="location-tag-list">Location: <span class="location-tags"></span></div>
     </div>
+  #### HANDLE
+  #set ($allCurated = true)
   #set ($handle = $parent.getProperty("handle"))
   #if ($handle != $nullValue)
     <div class="handle">This object has a Persistent ID:  <a href="$handle">$handle</a></div>
-  #else
+  #end
+
+  #### CURATION DATA
+  #if($page.authentication.is_admin())
+    #set($curationData = $self.getCurationData($oid))
+    #if ($curationData.get("error"))
+        <div class="handle">
+            <dl>
+                <dt><b>Curation Data</b></dt>
+                <dd class="stop-error">Error accessing curation data. Please see system logs.</dd>
+            </dl>
+        </div>
+
+    #else
+        #set ($relations = $curationData.get("relationships"))
+        #if (!$relations.isEmpty())
+            <div class="handle">
+                <dl>
+                    <dt><b>Curation Data</b> - Related Objects</dt>
+                    #foreach ($relation in $relations)
+                        #set($field = $relation.get("field"))
+                        #set($relationship = $relation.get("relationship"))
+                        #set($isCurated = $relation.get("isCurated"))
+                        <dd>
+                            #if ($isCurated)
+                                #set($curatedPid = $relation.get("curatedPid"))
+                                <span class="ticked">$relationship =&gt; $curatedPid</span> (curated)
+                            #else
+                                #set ($allCurated = false)
+                                #set($identifier = $relation.get("identifier"))
+                                <span class="waiting">$relationship =&gt; $identifier</span> (waiting on curation)
+                            #end
+                        </dd>
+                    #end
+                </dl>
+            </div>
+        #end
+    #end
+  #end
+
+  #### MANUAL CURATION
+  #if ($handle == $nullValue || $allCurated == false)
     #if($page.authentication.is_admin())
     <div class="handle">
         <a id="curate-now" href="#">CURATE NOW</a>

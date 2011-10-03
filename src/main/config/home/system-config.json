@@ -126,6 +126,9 @@
         }
     },
     "transformerDefaults": {
+        "ingest-relations": {
+            "id": "ingest-relations"
+        },
         "handle": {
             "id": "handle",
             "namingAuthority": "1959.18",

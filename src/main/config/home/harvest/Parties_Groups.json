@@ -14,7 +14,7 @@
 
     "transformer": {
         "curation": ["handle"],
-        "metadata": ["jsonVelocity"]
+        "metadata": ["ingest-relations", "jsonVelocity"]
     },
     "curation": {
         "neverPublish": false,
@@ -22,6 +22,17 @@
     },
 
     "transformerOverrides": {
+        "ingest-relations": {
+            "sourcePid": "metadata.json",
+            "sourcePath": ["data"],
+            "relations": {
+                "Parent_Group_ID": {
+                    "prefix": "redbox-mint.googlecode.com/parties/group/",
+                    "relation": "isPartOf",
+                    "reverseRelation": "hasPart"
+                }
+            }
+        },
         "handle": {
             "source": "metadata.json",
             "description": {

@@ -16,6 +16,7 @@ class IndexData:
         self.params = context["params"]
         self.utils = context["pyUtils"]
         self.config = context["jsonConfig"]
+        self.log = context["log"]
 
         # Common data
         self.__newDoc()
@@ -76,13 +77,12 @@ class IndexData:
         data = json.getObject("data")
         self.utils.add(self.index, "dc_title", "%s, %s" % (data.get("Family_Name"), data.get("Given_Name")))
 
-        self.utils.add(self.index, "dc_description", "%s %s %s, %s, %s" %
-                (data.get("Honorific"), data.get("Given_Name"), data.get("Family_Name"),
-                 data.get("Division"), data.get("School")))
+        self.utils.add(self.index, "dc_description", data.get("Description"))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
         for key in data.keySet():
             self.utils.add(self.index, key, data.get(key))
-        
+
+        # Known IDs
         idFields = ["ID", "URI", "NLA_Party_Identifier", "ResearcherID", "openID", "Personal_URI"]
         for field in idFields:
             if data.containsKey(field):
@@ -92,6 +92,23 @@ class IndexData:
         identifier = json.getString(None, ["metadata", "dc.identifier"])
         if identifier is not None:
             self.utils.add(self.index, "known_ids", identifier)
+
+        # Primary group membership
+        basicGroupId = data.get("GroupID_1")
+        if basicGroupId is not None and basicGroupId != "":
+            # Look through each relationship
+            relationships = json.getArray("relationships")
+            if relationships is not None:
+                for relationship in relationships:
+                    # Does it end with our basic group?
+                    identifier = relationship.get("identifier")
+                    if identifier is not None and identifier.endswith("/group/%s" % basicGroupId):
+                        # We've found it, just check if it is curated yet
+                        curatedPid = relationship.get("curatedPid")
+                        if curatedPid is not None and curatedPid != "":
+                            self.utils.add(self.index, "primary_group_id", curatedPid)
+                        else:
+                            self.utils.add(self.index, "primary_group_id", identifier)
 
     def __security(self, oid, index):
         roles = self.utils.getRolesWithAccess(oid)
