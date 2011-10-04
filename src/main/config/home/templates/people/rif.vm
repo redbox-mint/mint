@@ -8,11 +8,94 @@
         <key>$util.encodeXml($id)</key>
         <originatingSource>$urlBase</originatingSource>
         <party type="person">
+
             <identifier type="uri">$util.encodeXml($id)</identifier>
+
+            ### Name
             <name type="primary">
-                <namePart type="family">$util.encodeXml($util.get($item, 'data', 'Family_Name'))</namePart>
                 <namePart type="given">$util.encodeXml($util.get($item, 'data', 'Given_Name'))</namePart>
+
+                #set ($value = $util.get($item, "data", "Family_Name"))
+                #if ("$!value" != "")
+                <namePart type="family">$util.encodeXml($value)</namePart>
+                #end
+
+                #set ($value = $util.get($item, "data", "Honorific"))
+                #if ("$!value" != "")
+                <namePart type="title">$util.encodeXml($value)</namePart>
+                #end
             </name>
+
+            <location>
+            ### Home Page
+            #set ($value = $util.get($item, "data", "Staff_Profile_Homepage"))
+            #if ("$!value" != "")
+                <address>
+                    <electronic type="url">
+                        <value>$util.encodeXml($value)</value>
+                    </electronic>
+                </address>
+            #else
+                #set ($value = $util.get($item, "data", "Personal_Homepage"))
+                #if ("$!value" != "")
+                <address>
+                    <electronic type="url">
+                        <value>$util.encodeXml($value)</value>
+                    </electronic>
+                </address>
+                #end
+            #end
+
+            ### Email address
+            #set ($value = $util.get($item, "data", "Email"))
+            #if ("$!value" != "")
+                <address>
+                    <electronic type="email">
+                        <value>$util.encodeXml($value)</value>
+                    </electronic>
+                </address>
+            #end
+            </location>
+
+            ### ANZSRC
+            #set ($value = $util.get($item, "data", "ANZSRC_FOR_1"))
+            #if ("$!value" != "")
+            <subject type="anzsrc-for">$util.encodeXml($value)</subject>
+            #end
+            #set ($value = $util.get($item, "data", "ANZSRC_FOR_2"))
+            #if ("$!value" != "")
+            <subject type="anzsrc-for">$util.encodeXml($value)</subject>
+            #end
+            #set ($value = $util.get($item, "data", "ANZSRC_FOR_3"))
+            #if ("$!value" != "")
+            <subject type="anzsrc-for">$util.encodeXml($value)</subject>
+            #end
+
+            ### Description
+            #set ($value = $util.get($item, "data", "Description"))
+            #if ("$!value" != "")
+            <description type="full">$util.encodeXml($value)</description>
+            #else
+            <description type="full">$util.encodeXml($util.get($item, "data", "Name"))</description>
+            #end
+
+            ### Relations
+            #set($valueList = $item.getJsonSimpleList("relationships"))
+            #if($valueList)
+                #foreach($value in $valueList)
+                    #if ($value.getBoolean(false, "isCurated"))
+                        #set($key = $value.getString("empty", "curatedPid"))
+                        #set($rel = $value.getString("hasAssociationWith", "relationship"))
+                        #if ($key != "empty")
+            <relatedObject>
+                <key>$util.encodeXml($key)</key>
+                <relation type="$util.encodeXml($rel)"/>
+            </relatedObject>
+                        #end
+                    #end
+                #end
+            #end
+
         </party>
     </registryObject>
 </registryObjects>
