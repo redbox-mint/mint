@@ -82,6 +82,11 @@ class IndexData:
         self.utils.add(self.index, "dc_format", "application/x-mint-research-activity")
         self.__indexList("dc_contributor", data.get("Investigators").split(";"))
 
+        # Known IDs
+        identifier = json.getString(None, ["metadata", "dc.identifier"])
+        if identifier is not None:
+            self.utils.add(self.index, "known_ids", identifier)
+
     def __security(self, oid, index):
         roles = self.utils.getRolesWithAccess(oid)
         if roles is not None:
