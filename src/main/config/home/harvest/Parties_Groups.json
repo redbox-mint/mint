@@ -38,7 +38,7 @@
             "description": {
                 "seperator": "",
                 "paths": [
-                    ["data", "Name"],
+                    ["data", "Name"]
                 ]
             },
             "output": {

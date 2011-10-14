@@ -50,7 +50,7 @@
                 "paths": [
                     ["data", "Honorific"],
                     ["data", "Given_Name"],
-                    ["data", "Family_Name"],
+                    ["data", "Family_Name"]
                 ]
             },
             "output": {
