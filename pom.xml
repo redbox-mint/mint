@@ -28,8 +28,9 @@
     </properties>
     <modules>
         <module>parent</module>
-        <module>plugins/transformer/handle</module>
         <module>plugins/transaction/curation</module>
+        <module>plugins/transformer/handle</module>
+        <module>plugins/transformer/local</module>
     </modules>
     <dependencies>
         <!-- Fascinator Portal Web App -->
@@ -107,6 +108,11 @@
         <dependency>
             <groupId>com.googlecode.redbox-mint</groupId>
             <artifactId>plugin-transformer-handle</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.redbox-mint</groupId>
+            <artifactId>plugin-transformer-local</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

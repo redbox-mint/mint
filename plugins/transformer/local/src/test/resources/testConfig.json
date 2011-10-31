@@ -1,0 +1,14 @@
+{
+    "storage": {
+        "type": "ram",
+        "ram": {}
+    },
+    "curation": {
+        "pidProperty": "testPid"
+    },
+    "transformerDefaults": {
+        "local": {
+            "useIncrements": false
+        }
+    }
+}
