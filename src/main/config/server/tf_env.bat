@@ -5,8 +5,8 @@ set LOCAL_PORT=${server.port}
 set PROJECT_HOME=${project.home}
 set AMQ_PORT=${amq.port}
 set AMQ_STOMP_PORT=${amq.stomp.port}
-set SMTP_HOST=${smtp.host}
-set ADMIN_EMAIL=${admin.email}
+set SMTP_HOST=smtp.cqu.edu.au
+set ADMIN_EMAIL=g.pendlebury@cqu.edu.au
 
 REM this script sets the environment for the fascinator scripts
 set FASCINATOR_HOME=%PROJECT_HOME%/home
