@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * <p>Create and store Persistent Identifiers based on configurable templates.</p>
  *
  * <h3>Configuration</h3>
- * <p>Keep in mind that each data source can provide and overriding template.</p>
+ * <p>Keep in mind that each data source can provide an overriding template.</p>
  *
  * <table border="1">
  * <tr>

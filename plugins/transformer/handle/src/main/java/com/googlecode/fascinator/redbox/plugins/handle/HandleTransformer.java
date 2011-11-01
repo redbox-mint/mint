@@ -38,6 +38,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ import java.util.Properties;
 
 import net.handle.hdllib.AbstractMessage;
 import net.handle.hdllib.AbstractResponse;
+import net.handle.hdllib.AddValueRequest;
 import net.handle.hdllib.AdminRecord;
 import net.handle.hdllib.CreateHandleRequest;
 import net.handle.hdllib.Encoder;
@@ -52,6 +55,7 @@ import net.handle.hdllib.ErrorResponse;
 import net.handle.hdllib.HandleException;
 import net.handle.hdllib.HandleResolver;
 import net.handle.hdllib.HandleValue;
+import net.handle.hdllib.ModifyValueRequest;
 import net.handle.hdllib.PublicKeyAuthenticationInfo;
 import net.handle.hdllib.Util;
 
@@ -74,15 +78,154 @@ import org.slf4j.LoggerFactory;
  * on handle creation: src.java/net/handle/apps/simple/HDLCreate.java
  * </p>
  *
+ * <h3>Configuration</h3>
+ * <p>Keep in mind that each data source can provide an overriding values.</p>
+ *
+ * <table border="1">
+ * <tr>
+ *   <th>Option</th>
+ *   <th>Description</th>
+ *   <th>Required</th>
+ *   <th>Default</th>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>id</td>
+ *   <td>Id of the transformer</td>
+ *   <td><b>Yes</b></td>
+ *   <td>handle</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>namingAuthority</td>
+ *   <td>Your registered Handle naming authority (or prefix).</td>
+ *   <td><b>Yes</b></td>
+ *   <td>N/A</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>privateKeyPath</td>
+ *   <td>The path to a binary private key on disk. This is created as part of your Handle Server installation.</td>
+ *   <td><b>Yes</b></td>
+ *   <td>N/A</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>passPhrase</td>
+ *   <td>Pass phrase to unlock the private key (if it requires such).</td>
+ *   <td><b>No</b></td>
+ *   <td>N/A</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>template</td>
+ *   <td>The template to evaluate in creating Handle suffixes. Supports
+ * placeholder values:
+ *     <ul>
+ *       <li><b>[[OID]]</b> - The Object ID being transformed</li>
+ *       <li><b>[[INC]]</b> - An auto-incrementing number (if configured)</li>
+ *     </ul>
+ *   </td>
+ *   <td><b>No</b></td>
+ *   <td>pid:[[OID]]</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>urlTemplate</td>
+ *   <td>Similar to above, but this template decides how to build the URL this
+ * Handle will resolve to. If none is provided, the Handle will not resolve.
+ * Supports placeholder values:
+ *     <ul>
+ *       <li><b>[[OID]]</b> - The Object ID being transformed</li>
+ *       <li><b>[[HANDLE]]</b> - The Handle value (this requires a two step creation process).</li>
+ *     </ul>
+ *   </td>
+ *   <td><b>No</b></td>
+ *   <td>N/A</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>updateUrl</td>
+ *   <td>Boolean flag used to force an update on URLs in Handles. For
+ * performance reasons it is advised that this should only be set to 'true' if
+ * the template for resolvable URLs has changed.</td>
+ *   <td><b>No</b></td>
+ *   <td>false</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>source</td>
+ *   <td>The source payload where description data can be found. The special
+ * value of '.tfpackage' can be used to find whichever payload contains the
+ * Facsinator package (eg. ReDBox Collections).</td>
+ *   <td><b>No</b></td>
+ *   <td>metadata.json</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>description</td>
+ *   <td>Instructs the Transformer on how to build a description String from
+ * the source metadata. Has two child nodes:
+ *     <ul>
+ *       <li><b>seperator</b> - A basic String to use in between value.
+ * Defaults to an empty String ("").</li>
+ *       <li><b>paths</b> - A List of JSON paths (each being a List of Strings)
+ * into the metadata in order of how they should be used in the description.
+ * Has no default values, but if none are provided, or if none of those
+ * provided are not found in the source, no Handle will be generated.</li>
+ *     </ul>
+ *   </td>
+ *   <td><b>No</b></td>
+ *   <td>N/A</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>output</td>
+ *   <td>The path to store the resulting Handle in the source metadata. Has two child nodes:
+ *     <ul>
+ *       <li><b>path</b> - A JSON Path (List of String) where the field will be.</li>
+ *       <li><b>field</b> - The final field name to store the Handle in.</li>
+ *     </ul>
+ *   </td>
+ *   <td><b>No</b></td>
+ *   <td>Combination of both values defaults to "metadata" > "dc:identifier"</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>useIncrements</td>
+ *   <td>Boolean flag to decide if auto-incrementing numbers are in use.</td>
+ *   <td><b>No</b></td>
+ *   <td>false</td>
+ * </tr>
+ * 
+ * <tr>
+ *   <td>incrementingFile</td>
+ *   <td>If the above flag is set, this File is used to store/read the current
+ * value of the sequence.</td>
+ *   <td><b>Yes</b> (if 'useIncrements' is set)</td>
+ *   <td>N/A</td>
+ * </tr>
+ * </table>
+ * 
+ * <p>There is also some related configuration in the Curation Manager that this
+ * Transformer looks for under "curation" > "pidProperty". This value decides
+ * on the metadata property where the Handle should be stored for the
+ * Curation Manager to find it.</p>
+ * 
  * @author Greg Pendlebury
  */
 public class HandleTransformer implements Transformer {
 
+    /** The web domain to stick in front of our servers */
+    private static String HANDLE_DOMAIN = "http://hdl.handle.net/";
+
     /** Static values used during handle creation */
     private static int ADMIN_INDEX = 100;
     private static int PUBLIC_INDEX = 300;
+    private static int URL_INDEX = 3;
     private static String ADMIN_TYPE = "HS_ADMIN";
     private static String DESC_TYPE = "DESC";
+    private static String URL_TYPE = "URL";
 
     /** Default configuration for items */
     private static String DEFAULT_SOURCE = "metadata.json";
@@ -385,6 +528,26 @@ public class HandleTransformer implements Transformer {
     }
 
     /**
+     * Create a HandleValue object holding a resolvable URL for the handle
+     *
+     * @param url: The URL to resolve to
+     * @return HandleValue: The instantiated value, NULL if errors occurred.
+     */
+    private HandleValue getUrlHandleValue(String url) {
+        byte[] type = null;
+        byte[] urlBytes = null;
+        try {
+            type = URL_TYPE.getBytes("UTF8");
+            urlBytes = url.getBytes("UTF8");
+        } catch (Exception ex) {
+            log.error("Error creating URL handle value: ", ex);
+            return null;
+        }
+
+        return createHandleValue(URL_INDEX, type, urlBytes);
+    }
+
+    /**
      * Create a HandleValue object holding a public description for the handle
      *
      * @param description: The description to use
@@ -605,6 +768,22 @@ public class HandleTransformer implements Transformer {
             }
         }
 
+        // URL Logic - Step 1
+        boolean resolvable = false; // Are we resolving at all?
+        boolean updateUrl = false;  // Are we forcing an update?
+        boolean twoStepUrl = false; // Two-step process? (if URL contains the Handle)
+        String urlTemplate = itemConfig.getString(null, "urlTemplate");
+        String resolvedUrl = null;
+        if (urlTemplate != null && !"".equals(urlTemplate)) {
+            resolvable = true;
+            updateUrl = itemConfig.getBoolean(updateUrl, "updateUrl");
+            if (urlTemplate.contains("[[HANDLE]]")) {
+                twoStepUrl = true;
+            } else {
+                resolvedUrl = resolveUrlTemplate(urlTemplate, in.getId(), null);
+            }
+        }
+
         // Do we already have a handle?
         Properties metadata = null;
         try {
@@ -617,6 +796,10 @@ public class HandleTransformer implements Transformer {
         if (handle != null) {
             propertySet = true;
             log.info("Object already has a handle: '{}'", handle);
+            // We are reseting this, since the URL should have been allocated
+            //   on first creation. The 'updateUrl' flag needs to be set
+            //   before we force another update.
+            twoStepUrl = false;
 
         // A new handle is required
         } else {
@@ -642,7 +825,9 @@ public class HandleTransformer implements Transformer {
 
             // We should be ready to go now
             try {
-                handle = createHandle(template, in.getId(), description);
+                // URL may or may not be NULL at this point
+                handle = createHandle(template, in.getId(), description,
+                        resolvedUrl);
                 if (handle == null) {
                     log.error("Error during handle creation!");
                     return in;
@@ -683,6 +868,17 @@ public class HandleTransformer implements Transformer {
             }
         }
 
+        // URL Logic - Step 2 - If we need to Add/Update a
+        //            resolvable URL to an existing Handle
+        if (resolvable && (updateUrl || twoStepUrl)) {
+            resolvedUrl = resolveUrlTemplate(urlTemplate, in.getId(), handle);
+            if (resolvedUrl == null) {
+                log.error("Error making Handle resolvable!");
+                return in;
+            }
+            updateUrl(handle, resolvedUrl);
+        }
+
         return in;
     }
 
@@ -697,7 +893,7 @@ public class HandleTransformer implements Transformer {
      * @throws TransformerException: If any errors occur during the process
      */
     private String createHandle(String template, String oid,
-            String description) throws TransformerException {
+            String description, String url) throws TransformerException {
 
         String suffix = resolveTemplate(template, oid);
         if (suffix == null) {
@@ -720,7 +916,16 @@ public class HandleTransformer implements Transformer {
         if (adminVal == null || descVal == null) {
             throw new TransformerException("Error creating HandleValues!");
         }
+
         HandleValue[] values = {adminVal, descVal};
+        // Has URL - modify the array
+        if (url != null) {
+            HandleValue urlVal = getUrlHandleValue(url);
+            if (urlVal == null) {
+                throw new TransformerException("Error creating HandleValues!");
+            }
+            values = new HandleValue[] {adminVal, descVal, urlVal};
+        }
 
         // Now prepare the actualy creationg request for sending
         CreateHandleRequest req = new CreateHandleRequest(
@@ -742,7 +947,8 @@ public class HandleTransformer implements Transformer {
                     // If configured, try again
                     if (template.contains("[[INC]]")) {
                         if (useIncrement) {
-                            return createHandle(template, oid, description);
+                            return createHandle(
+                                    template, oid, description, url);
                         }
                     }
                 }
@@ -766,7 +972,110 @@ public class HandleTransformer implements Transformer {
                     "Error attempting to create handle:", ex);
         }
 
-        return "http://hdl.handle.net/" + handle;
+        return HANDLE_DOMAIN + handle;
+    }
+
+    /**
+     * Update the URL that the given handle resolves to.
+     *
+     * @param handle: The handle to update (including handle.net domain).
+     * @param newUrl: The new URL to resolve to
+     * @throws TransformerException: If any errors occur during the process
+     */
+    private void updateUrl(String handle, String newUrl)
+            throws TransformerException {
+        String basicHandle = handle.replace(HANDLE_DOMAIN, "");
+        byte[] handleBytes = null;
+        try {
+            handleBytes = basicHandle.getBytes("UTF8");
+        } catch (Exception ex) {
+            throw new TransformerException(
+                    "Invalid encoding for Handle: '" + handle + "'", ex);
+        }
+
+        HandleValue urlVal = getUrlHandleValue(newUrl);
+        if (urlVal == null) {
+            throw new TransformerException("Error creating HandleValues!");
+        }
+
+        // Now prepare the actualy creationg request for sending
+        ModifyValueRequest req = new ModifyValueRequest(
+                handleBytes, urlVal, authentication);
+
+        // And send
+        try {
+            log.info("Sending handle updating request for URL...");
+            AbstractResponse response = resolver.processRequest(req);
+            log.info("... response received.");
+
+            // Check for errors
+            if (response.responseCode != AbstractMessage.RC_SUCCESS) {
+                // Failure case... but expected failure
+                if (response.responseCode ==
+                        AbstractMessage.RC_VALUES_NOT_FOUND) {
+                    log.info("Handle '{}' has no URL, adding", handle);
+                    addUrl(handleBytes, urlVal);
+                    return;
+                }
+
+                if (response instanceof ErrorResponse) {
+                    throw new TransformerException("Error creating handle: " +
+                            ((ErrorResponse) response).toString());
+
+                } else {
+                    throw new TransformerException("Unknown error during" +
+                            " handle creation. The create API call has" +
+                            " failed, but no error response was returned." +
+                            " Message: '" +
+                            AbstractMessage.getResponseCodeMessage(
+                            response.responseCode) + "'");
+                }
+            }
+        } catch (HandleException ex) {
+            throw new TransformerException(
+                    "Error attempting to update handle:", ex);
+        }
+    }
+
+    /**
+     * Basic add URL call to follow an update failure against a Handle that
+     * doesn't have a URL. The parameter are expected to have already been
+     * prepared inside of updateUrl().
+     *
+     * @param handleBytes: The Handle to update in byte array form
+     * @param newUrl: The prepared HandleValue containing the URL
+     * @throws TransformerException: If any errors occur during the process
+     */
+    private void addUrl(byte[] handleBytes, HandleValue newUrl)
+            throws TransformerException {
+        AddValueRequest req = new AddValueRequest(
+                handleBytes, newUrl, authentication);
+
+        // And send
+        try {
+            log.info("Sending handle ADD request for URL...");
+            AbstractResponse response = resolver.processRequest(req);
+            log.info("... response received.");
+
+            // Check for errors
+            if (response.responseCode != AbstractMessage.RC_SUCCESS) {
+                if (response instanceof ErrorResponse) {
+                    throw new TransformerException("Error creating handle: " +
+                            ((ErrorResponse) response).toString());
+
+                } else {
+                    throw new TransformerException("Unknown error during" +
+                            " handle creation. The create API call has" +
+                            " failed, but no error response was returned." +
+                            " Message: '" +
+                            AbstractMessage.getResponseCodeMessage(
+                            response.responseCode) + "'");
+                }
+            }
+        } catch (HandleException ex) {
+            throw new TransformerException(
+                    "Error attempting to update handle:", ex);
+        }
     }
 
     /**
@@ -794,6 +1103,33 @@ public class HandleTransformer implements Transformer {
             }
         }
         return suffix;
+    }
+
+    /**
+     * Resolve the URL template to a completed URL. Also validate that it can
+     * be used as a URL.
+     * 
+     * @param template: The handle suffix template
+     * @param oid: The ID of the object we are transforming
+     * @param handle: The handle this URL will be put into
+     * @return String: The complete and valid URL. Null if invalid or errors occur
+     */
+    private String resolveUrlTemplate(String template, String oid,
+            String handle) {
+        // Object IDs
+        String response = template.replace("[[OID]]", oid);
+        // Handle
+        if (handle != null) {
+            response = response.replace("[[HANDLE]]", handle);
+        }
+        try {
+            // Validate
+            URL url = new URL(response);
+            return url.toString();
+        } catch (MalformedURLException ex) {
+            log.error("URL ({}) is invalid: ", response, ex);
+            return null;
+        }
     }
 
     /**
