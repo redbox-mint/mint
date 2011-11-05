@@ -266,6 +266,9 @@ public class HandleTransformer implements Transformer {
     /** The lock used to mutex against the index file */
     private DummyFileLock indexLock;
 
+    /** Curation PID Property */
+    private String pidProperty;
+
     /**
      * Constructor
      */
@@ -323,6 +326,14 @@ public class HandleTransformer implements Transformer {
 
         // First time execution of some of the Handle details
         if (resolver == null) {
+            // Where are we storing our finished PIDs
+            pidProperty = config.getString("handle",
+                    "curation", "pidProperty");
+            if (pidProperty == null || "".equals(pidProperty)) {
+                throw new TransformerException("No (or invalid) PID property"
+                        + " found in config");
+            }
+
             // Do we have a naming authority? No need to evaluate the
             //  complicated stuff if we don't have this
             namingAuthority = config.getString(null,
@@ -791,7 +802,7 @@ public class HandleTransformer implements Transformer {
         } catch (StorageException ex) {
             throw new TransformerException("Error retrieving metadata", ex);
         }
-        String handle = metadata.getProperty("handle");
+        String handle = metadata.getProperty(pidProperty);
         boolean propertySet = false;
         if (handle != null) {
             propertySet = true;
@@ -860,7 +871,7 @@ public class HandleTransformer implements Transformer {
 
         // Store the output - metadata
         if (!propertySet) {
-            metadata.setProperty("handle", handle);
+            metadata.setProperty(pidProperty, handle);
             try {
                 in.close();
             } catch (StorageException ex) {
