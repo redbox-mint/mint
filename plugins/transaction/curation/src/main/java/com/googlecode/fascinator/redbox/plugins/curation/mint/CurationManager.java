@@ -526,8 +526,12 @@ public class CurationManager extends GenericTransactionManager {
                     for (String id : list) {
                         JsonObject order = newTransform(response, id, oid);
                         JsonObject config = (JsonObject) order.get("config");
-                        config.putAll(itemConfig.getObject(
-                                "transformerOverrides", id));
+                        // Make sure it even has an override...
+                        JsonObject override = itemConfig.getObject(
+                                "transformerOverrides", id);
+                        if (override != null) {
+                            config.putAll(override);
+                        }
                     }
 
                 } else {
