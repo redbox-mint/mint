@@ -672,6 +672,10 @@ public class CurationManager extends GenericTransactionManager {
                         relObject.put("broker", brokerUrl);
                         relObject.put("isCurated", true);
                         relObject.put("relationship", reverseRelationship);
+                        // Make sure we send OID to local records
+                        if (localRecord) {
+                            relObject.put("oid", thisOid);
+                        }
                         JSONArray newRelations = new JSONArray();
                         newRelations.add(relObject);
                         task.put("relationships", newRelations);
