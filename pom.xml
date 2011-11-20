@@ -130,7 +130,7 @@
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-csv</artifactId>
-            <version>${fascinator.version}</version>
+            <version>${fascinator.version}.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
