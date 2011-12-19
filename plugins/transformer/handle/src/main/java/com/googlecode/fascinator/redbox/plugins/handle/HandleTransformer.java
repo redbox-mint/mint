@@ -205,6 +205,15 @@ import org.slf4j.LoggerFactory;
  *   <td><b>Yes</b> (if 'useIncrements' is set)</td>
  *   <td>N/A</td>
  * </tr>
+ * 
+ * <tr>
+ *   <td>publishedDomain</td>
+ *   <td>The publicly accessible domain you will use to publish your Handles.
+ * Technically you can point this to your local Handle server, but it is
+ * <b>strongly<b> advised that the default Handle Network domain should be used.</td>
+ *   <td><b>No</b></td>
+ *   <td>hdl.handle.net</td>
+ * </tr>
  * </table>
  * 
  * <p>There is also some related configuration in the Curation Manager that this
@@ -217,7 +226,7 @@ import org.slf4j.LoggerFactory;
 public class HandleTransformer implements Transformer {
 
     /** The web domain to stick in front of our servers */
-    private static String HANDLE_DOMAIN = "http://hdl.handle.net/";
+    private static String HANDLE_DEFAULT_DOMAIN = "hdl.handle.net";
 
     /** Static values used during handle creation */
     private static int ADMIN_INDEX = 100;
@@ -268,6 +277,9 @@ public class HandleTransformer implements Transformer {
 
     /** Curation PID Property */
     private String pidProperty;
+
+    /** The base URL to prepend to Handles */
+    private String handleBaseUrl;
 
     /**
      * Constructor
@@ -415,6 +427,11 @@ public class HandleTransformer implements Transformer {
                             "Error on initial check of increment file!");
                 }
             }
+
+            // Work out what the base URL for finished Handles will look like
+            String handleDomain = config.getString(null,
+                    "transformerDefaults", "handle", "publishedDomain");
+            handleBaseUrl = "http://"+handleDomain+"/";
         }
     }
 
@@ -983,7 +1000,7 @@ public class HandleTransformer implements Transformer {
                     "Error attempting to create handle:", ex);
         }
 
-        return HANDLE_DOMAIN + handle;
+        return handleBaseUrl + handle;
     }
 
     /**
@@ -995,7 +1012,7 @@ public class HandleTransformer implements Transformer {
      */
     private void updateUrl(String handle, String newUrl)
             throws TransformerException {
-        String basicHandle = handle.replace(HANDLE_DOMAIN, "");
+        String basicHandle = handle.replace(handleBaseUrl, "");
         byte[] handleBytes = null;
         try {
             handleBytes = basicHandle.getBytes("UTF8");
