@@ -7,6 +7,7 @@ set AMQ_PORT=${amq.port}
 set AMQ_STOMP_PORT=${amq.stomp.port}
 set SMTP_HOST=${smtp.host}
 set ADMIN_EMAIL=${admin.email}
+set NON_PROXY_HOSTS="${non.proxy.hosts}"
 
 REM this script sets the environment for the fascinator scripts
 set FASCINATOR_HOME=%PROJECT_HOME%/home
@@ -56,7 +57,7 @@ Rem Geonames
 set GEONAMES=-Dgeonames.solr.home="%PROJECT_HOME%/home/geonames/solr"
 
 REM proxy data
-set PROXY_OPTS=-Dhttp.proxyHost=%PROXY_HOST% -Dhttp.proxyPort=%PROXY_PORT% -Dhttp.nonProxyHosts="*.newcastle.edu.au^|localhost"
+set PROXY_OPTS=-Dhttp.proxyHost=%PROXY_HOST% -Dhttp.proxyPort=%PROXY_PORT% -Dhttp.nonProxyHosts=%NON_PROXY_HOSTS%
 
 REM directories
 set CONFIG_DIRS=-Dfascinator.home="%FASCINATOR_HOME%" -Dportal.home="%PROJECT_HOME%/portal" -Dstorage.home="%PROJECT_HOME%/storage"

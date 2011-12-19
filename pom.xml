@@ -25,6 +25,9 @@
         <server.url.base>http://${ip.address}:${server.port}/mint/</server.url.base>
         <smtp.host>localhost</smtp.host>
         <admin.email>admin@localhost</admin.email>
+        <!-- Control scripts try to auto-detect proxy. Use this value if you
+             want Java to specifically exclude certain hosts from proxying. -->
+        <non.proxy.hosts>localhost</non.proxy.hosts>
     </properties>
     <modules>
         <module>parent</module>
@@ -136,7 +139,8 @@
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-transformer-jsonVelocity</artifactId>
-            <version>${fascinator.version}</version>
+            <version>1.0.6-SNAPSHOT</version>
+            <!--<version>${fascinator.version}</version>-->
         </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
@@ -148,6 +152,12 @@
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-authentication-internal</artifactId>
+            <version>${fascinator.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.the-fascinator.plugins</groupId>
+            <artifactId>plugin-harvester-oai-pmh</artifactId>
             <version>${fascinator.version}</version>
             <scope>runtime</scope>
         </dependency>

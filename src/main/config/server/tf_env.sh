@@ -10,6 +10,7 @@ export AMQ_PORT="${amq.port}"
 export AMQ_STOMP_PORT="${amq.stomp.port}"
 export SMTP_HOST="${smtp.host}"
 export ADMIN_EMAIL="${admin.email}"
+export NON_PROXY_HOSTS="${non.proxy.hosts}"
 
 # set fascinator home directory
 export TF_HOME="$PROJECT_HOME/home"
@@ -45,7 +46,7 @@ if [ -n "$http_proxy" ]; then
 	_TMP=${http_proxy##*:}
 	PROXY_PORT=${_TMP%/}
 	echo " * Detected HTTP proxy host:'$PROXY_HOST' port:'$PROXY_PORT'"
-	PROXY_OPTS="-Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttp.nonProxyHosts=localhost"
+	PROXY_OPTS="-Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttp.nonProxyHosts=$NON_PROXY_HOSTS"
 else
 	echo " * No HTTP proxy detected"
 fi

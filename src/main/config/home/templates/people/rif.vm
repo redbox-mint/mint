@@ -1,10 +1,11 @@
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
-    <registryObject group="The University of Newcastle, Australia">
-## Handle is first preference
-#set ($id = $util.getMetadata($object, "handle"))
-#if ("$!id" == "")
-    #set ($id = $util.get($item, "metadata", "dc.identifier"))
-#end
+    #set($defaultOnError = "&Invalid XML placeholder... prevents ANDS Harvesting records in error&")
+    <registryObject group="$systemConfig.getString($defaultOnError, "redbox.identity", "RIF-CS Group")">
+        ## Handle is first preference
+        #set ($id = $util.getMetadata($object, "handle"))
+        #if ("$!id" == "")
+            #set ($id = $util.get($item, "metadata", "dc.identifier"))
+        #end
         <key>$util.encodeXml($id)</key>
         <originatingSource>$urlBase</originatingSource>
         <party type="person">

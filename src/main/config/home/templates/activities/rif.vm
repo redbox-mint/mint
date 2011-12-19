@@ -1,5 +1,6 @@
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
-    <registryObject group="The University of Newcastle, Australia">
+    #set($defaultOnError = "&Invalid XML placeholder... prevents ANDS Harvesting records in error&")
+    <registryObject group="$systemConfig.getString($defaultOnError, "redbox.identity", "RIF-CS Group")">
     <key>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</key>
     <originatingSource>$urlBase</originatingSource>
         <activity type="project">
