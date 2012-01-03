@@ -53,11 +53,16 @@ class IndexData:
     def __basicData(self):
         self.utils.add(self.index, "repository_name", self.params["repository.name"])
         self.utils.add(self.index, "repository_type", self.params["repository.type"])
-        # Do we have a handle?
-        handle = self.params["handle"]
-        if handle is not None:
-            self.utils.add(self.index, "handle", handle)
-            self.utils.add(self.index, "oai_identifier", handle)
+        # Persistent Identifiers
+        pidProperty = self.config.getString(None, ["curation", "pidProperty"])
+        if pidProperty is None:
+            self.log.error("No configuration found for persistent IDs!")
+        else:
+            pid = self.params[pidProperty]
+            if pid is not None:
+                self.utils.add(self.index, "known_ids", pid)
+                self.utils.add(self.index, "pidProperty", pid)
+                self.utils.add(self.index, "oai_identifier", pid)
         self.utils.add(self.index, "oai_set", "Activities")
 
     def __metadata(self):

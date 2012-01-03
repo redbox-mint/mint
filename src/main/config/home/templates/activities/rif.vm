@@ -1,10 +1,23 @@
+#set($defaultOnError = "&Invalid XML placeholder... prevents ANDS Harvesting records in error&")
+#set($group = $systemConfig.getString($defaultOnError, "redbox.identity", "RIF-CS Group"))
+
+##### START Identifier resolution
+#set($pidProperty = $systemConfig.getString($defaultOnError, "curation", "pidProperty"))
+#set ($pid = $util.getMetadata($object, $pidProperty))
+#if ("$!pid" == "")
+    #set ($pid = $util.get($item, "metadata", "rdf:resource"))
+    #if ("$!pid" == "")
+        #set ($pid = $util.get($item, "metadata", "dc.identifier"))
+    #end
+#end
+##### END Identifier resolution
+
 <registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/home/orca/schemata/1.2.0/registryObjects.xsd">
-    #set($defaultOnError = "&Invalid XML placeholder... prevents ANDS Harvesting records in error&")
-    <registryObject group="$systemConfig.getString($defaultOnError, "redbox.identity", "RIF-CS Group")">
-    <key>$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</key>
+    <registryObject group="$util.encodeXml($group)">
+    <key>$util.encodeXml($pid)</key>
     <originatingSource>$urlBase</originatingSource>
         <activity type="project">
-            <identifier type="uri">$util.encodeXml($util.get($item, "metadata", "dc.identifier"))</identifier>
+            <identifier type="uri">$util.encodeXml($pid)</identifier>
             <name type="primary"><namePart>$util.encodeXml($util.get($item, "data", "Title"))</namePart></name>
             <description type="full">$util.encodeXml($util.get($item, "data", "Description"))</description>
         </activity>

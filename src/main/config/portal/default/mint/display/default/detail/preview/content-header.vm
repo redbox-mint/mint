@@ -3,18 +3,20 @@
         <div class="object-tag-list">Tags: <span class="object-tags"></span></div>
         ##<div class="location-tag-list">Location: <span class="location-tags"></span></div>
     </div>
-  #### HANDLE
+  #### Persistent Identifiers
   #set ($allCurated = true)
-  #set ($handle = $parent.getProperty("handle"))
-  #if ($handle != $nullValue)
-    <div class="handle">This object has a Persistent ID:  <a href="$handle">$handle</a></div>
+  #set ($pidProperty = $systemConfig.getString("error", "curation", "pidProperty"))
+    <div>$pidProperty</div>
+  #set ($pId = $parent.getProperty("pidProperty"))
+  #if ($pId != $nullValue)
+    <div class="pId">This object has a Persistent ID:  <a href="$pId">$pId</a></div>
   #end
 
   #### CURATION DATA
   #if($page.authentication.is_admin())
     #set($curationData = $self.getCurationData($oid))
     #if ($curationData.get("error"))
-        <div class="handle">
+        <div class="pId">
             <dl>
                 <dt><b>Curation Data</b></dt>
                 <dd class="stop-error">Error accessing curation data. Please see system logs.</dd>
@@ -24,7 +26,7 @@
     #else
         #set ($relations = $curationData.get("relationships"))
         #if (!$relations.isEmpty())
-            <div class="handle">
+            <div class="pId">
                 <dl>
                     <dt><b>Curation Data</b> - Related Objects</dt>
                     #foreach ($relation in $relations)
@@ -34,7 +36,7 @@
                         <dd>
                             #if ($isCurated)
                                 #set($curatedPid = $relation.get("curatedPid"))
-                                <span class="ticked">$relationship =&gt; $curatedPid</span> (curated)
+                                <span class="ticked">$relationship =&gt; <a href="$curatedPid">$curatedPid</a></span> (curated)
                             #else
                                 #set ($allCurated = false)
                                 #set($identifier = $relation.get("identifier"))

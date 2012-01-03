@@ -3,16 +3,6 @@
 #
 import time
 
-from com.googlecode.fascinator.api.storage import StorageException
-from com.googlecode.fascinator.common import JsonConfigHelper
-from com.googlecode.fascinator.common.storage import StorageUtils
-from java.io import ByteArrayInputStream
-from java.lang import Exception
-from java.lang import String
-from java.util import HashMap
-import md5
-from org.apache.commons.codec.digest import DigestUtils
-
 class IndexData:
     def __init__(self):
         pass
@@ -94,4 +84,3 @@ class IndexData:
     def __indexList(self, name, values):
         for value in values:
             self.utils.add(self.index, name, value)
-

@@ -10,6 +10,15 @@ from java.util import ArrayList, HashMap, HashSet, LinkedHashMap
 
 from org.apache.commons.lang import StringEscapeUtils
 
+####
+# 
+# NOTE: This script and associated workflow are deprecated. They were part of
+#  experimental work on the LACS system now in its own code branch. Sections of
+#  of this script, such as persistent ID logic are very out of date and won't
+#  be fixed.
+# 
+####
+
 class NameAuthorityData:
     def __activate__(self, context):
         self.log = context["log"]
