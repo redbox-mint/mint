@@ -30,6 +30,7 @@
         <non.proxy.hosts>localhost</non.proxy.hosts>
     </properties>
     <modules>
+        <module>config</module>
         <module>parent</module>
         <module>plugins/transaction/curation</module>
         <module>plugins/transformer/handle</module>
@@ -249,7 +250,7 @@
             </build>
             <properties>
                 <server.url.base>http://localhost:${server.port}/mint/</server.url.base>
-        </properties>
+            </properties>
         </profile>
     </profiles>
     <build>
