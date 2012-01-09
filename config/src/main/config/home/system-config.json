@@ -2,8 +2,8 @@
     "version": "1.0.5.3",
     "redbox.version.string": "${redbox.version}",
     "redbox.identity": {
-        "institution": "University of Newcastle",
-        "RIF-CS Group": "The University of Newcastle, Australia"
+        "institution": "University of Examples",
+        "RIF-CS Group": "The University of Examples, Australia"
     },
     "configured": true,
     "urlBase": "${server.url.base}",
@@ -132,15 +132,6 @@
     "transformerDefaults": {
         "ingest-relations": {
             "id": "ingest-relations"
-        },
-        "handle": {
-            "id": "handle",
-            "namingAuthority": "1959.18",
-            "privateKeyPath": "${fascinator.home}/handle/admpriv.bin",
-            "passPhrase": "password",
-            "useIncrements": true,
-            "incrementingFile": "${fascinator.home}/handle/index.txt",
-            "publishedDomain": "hdl.handle.net"
         },
         "jsonVelocity": {
             "id" : "jsonVelocity",
