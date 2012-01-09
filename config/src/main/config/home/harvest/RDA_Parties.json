@@ -1,0 +1,33 @@
+{
+    "harvester": {
+        "type": "oai-pmh",
+        "oai-pmh": {
+            "url": "http://services.ands.org.au/home/orca/services/oai.php",
+            "metadataPrefix": ["rif"],
+            "setSpec": "class:party",
+            "maxRequests": -1
+        }
+    },
+
+    "transformer": {
+        "curation": [],
+        "metadata": []
+    },
+    "curation": {
+        "neverPublish": true,
+        "alreadyCurated": true
+    },
+
+    "transformerOverrides": {
+    },
+
+    "indexer": {
+        "script": {
+            "type": "python",
+            "rules": "RDA_Parties.py"
+        },
+        "params": {
+            "repository.type": "RDA Parties"
+        }
+    }
+}
