@@ -6,8 +6,7 @@
   #### Persistent Identifiers
   #set ($allCurated = true)
   #set ($pidProperty = $systemConfig.getString("error", "curation", "pidProperty"))
-    <div>$pidProperty</div>
-  #set ($pId = $parent.getProperty("pidProperty"))
+  #set ($pId = $parent.getProperty($pidProperty))
   #if ($pId != $nullValue)
     <div class="pId">This object has a Persistent ID:  <a href="$pId">$pId</a></div>
   #end
