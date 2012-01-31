@@ -171,7 +171,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
             List<String> path = itemConfig.getStringList("sourcePath");
             if (path == null) {
                 // Empty is ok, null is not
-                path = new ArrayList();
+                path = new ArrayList<String>();
             }
 
             // Get our data

@@ -1416,10 +1416,9 @@ public class CurationManager extends GenericTransactionManager {
             throws TransactionException {
         // Get from storage
         DigitalObject object = null;
-        Payload payload = null;
         try {
             object = storage.getObject(oid);
-            payload = object.getPayload(DATA_PAYLOAD_ID);
+            object.getPayload(DATA_PAYLOAD_ID);
         } catch (StorageException ex) {
             log.error("Error accessing object '{}' in storage: ", oid, ex);
             throw new TransactionException(ex);

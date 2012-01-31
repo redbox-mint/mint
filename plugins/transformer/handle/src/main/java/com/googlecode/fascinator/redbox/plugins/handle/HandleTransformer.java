@@ -429,7 +429,7 @@ public class HandleTransformer implements Transformer {
             }
 
             // Work out what the base URL for finished Handles will look like
-            String handleDomain = config.getString(null,
+            String handleDomain = config.getString(HANDLE_DEFAULT_DOMAIN,
                     "transformerDefaults", "handle", "publishedDomain");
             handleBaseUrl = "http://"+handleDomain+"/";
         }
@@ -533,7 +533,7 @@ public class HandleTransformer implements Transformer {
 
             // Make sure it is a number
             try {
-                int inc = Integer.valueOf(newContents);
+                Integer.valueOf(newContents);
                 result = true;
             } catch (Exception ex) {
                 log.error("Error parsing integer '{}'; cannot use.", newContents, ex);
@@ -749,7 +749,7 @@ public class HandleTransformer implements Transformer {
         //        ]
         //    },
         String seperator = itemConfig.getString("", "description", "seperator");
-        List<String[]> elementPaths = new ArrayList();
+        List<String[]> elementPaths = new ArrayList<String[]>();
         // Find the path to each element of the description
         JSONArray array = itemConfig.getArray("description", "paths");
         for (Object element : array) {
@@ -832,7 +832,7 @@ public class HandleTransformer implements Transformer {
         // A new handle is required
         } else {
             // What are we going to IN the handle
-            List<String> descriptionParts = new ArrayList();
+            List<String> descriptionParts = new ArrayList<String>();
             for (String[] path : elementPaths) {
                 String part = json.getString(null, (Object[]) path);
                 if (part != null) {
