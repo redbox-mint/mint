@@ -50,9 +50,9 @@
   #end
 
   #### MANUAL CURATION
-  #if ($handle == $nullValue || $allCurated == false)
+  #if ($pId == $nullValue || $allCurated == false)
     #if($page.authentication.is_admin())
-    <div class="handle">
+    <div class="pId">
         <a id="curate-now" href="#">CURATE NOW</a>
         <span id="curate-sent" class="hidden"></span>
     </div>
