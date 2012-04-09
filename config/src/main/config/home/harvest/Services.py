@@ -64,6 +64,10 @@ class IndexData:
                 self.utils.add(self.index, "pidProperty", pid)
                 self.utils.add(self.index, "oai_identifier", pid)
         self.utils.add(self.index, "oai_set", "Services")
+        # Publication
+        published = self.params["published"]
+        if published is not None:
+            self.utils.add(self.index, "published", "true")
 
     def __metadata(self):
         self.utils.registerNamespace("dc", "http://purl.org/dc/terms/")
