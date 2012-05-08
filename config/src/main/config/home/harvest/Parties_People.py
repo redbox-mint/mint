@@ -69,6 +69,16 @@ class IndexData:
         published = self.params["published"]
         if published is not None:
             self.utils.add(self.index, "published", "true")
+        # NLA Integration
+        nlaReady = self.params["ready_for_nla"]
+        if nlaReady is not None:
+            self.utils.add(self.index, "ready_for_nla", "ready")
+        nlaProperty = self.config.getString(None, ["curation", "nlaIntegration", "pidProperty"])
+        if nlaProperty is not None:
+            nlaId = self.params[nlaProperty]
+            if nlaId is not None:
+                self.utils.add(self.index, "known_ids", nlaId)
+                self.utils.add(self.index, "nlaId", nlaId)
 
     def __metadata(self):
         jsonPayload = self.object.getPayload("metadata.json")

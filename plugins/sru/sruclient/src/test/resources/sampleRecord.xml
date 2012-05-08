@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+    <version>1.1</version>
+    <numberOfRecords>1</numberOfRecords>
+    <resultSetId>t5qpd7</resultSetId>
+    <resultSetIdleTime>600</resultSetIdleTime>
+    <records xmlns:ns1="http://www.loc.gov/zing/srw/">
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>915373</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-915373</otherRecordId>
+                        <otherRecordId>03c475d4-1e29-40d6-be7d-faa1d49a59ea</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2009-10-07T04:47:18Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record identifier not found. Identity automatically created. (Identity created from 35333617 and AUCNLKIN)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T10:46:43Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35333617  updated  nla.party-915373. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Masson</part>
+                                <part localType="forename">Andre&#x301;</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_052c4ac5-494d-4565-b418-2a309fd237e7" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35333617</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35333617</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv00295092</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1981-05-13"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2010-08-10T17:47:15"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                            <sources>
+                                                <source>
+                                                    <sourceEntry>Author&#x2019;s Mythology of being ... 1942.</sourceEntry>
+                                                </source>
+                                                <source>
+                                                    <sourceEntry>New York Times, 10/29/87 (Andre&#x301; Masson, 91, painter, d. in Paris, 10/28/87)</sourceEntry>
+                                                </source>
+                                                <source>
+                                                    <sourceEntry>NUCMC files (Masson, Andre&#x301;, 1896-1987; French artist)</sourceEntry>
+                                                </source>
+                                            </sources>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35333617</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Masson</part>
+                                                    <part localType="forename">Andre&#x301;</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <existDates>
+                                                    <dateRange>
+                                                        <fromDate standardDate="1896"/>
+                                                        <toDate standardDate="1987"/>
+                                                    </dateRange>
+                                                </existDates>
+                                            </description>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>1</recordPosition>
+        </record>
+    </records>
+    <echoedSearchRetrieveRequest xmlns:ns2="http://www.loc.gov/zing/srw/">
+        <version>1.1</version>
+        <query>rec.identifier=&quot;nla.party-915373&quot;</query>
+        <xQuery>
+            <ns3:searchClause xmlns:ns3="http://www.loc.gov/zing/cql/xcql/">
+                <ns3:index>rec.identifier</ns3:index>
+                <ns3:relation>
+                    <ns3:value>=</ns3:value>
+                </ns3:relation>
+                <ns3:term>nla.party-915373</ns3:term>
+            </ns3:searchClause>
+        </xQuery>
+        <recordPacking>xml</recordPacking>
+        <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+    </echoedSearchRetrieveRequest>
+</searchRetrieveResponse>

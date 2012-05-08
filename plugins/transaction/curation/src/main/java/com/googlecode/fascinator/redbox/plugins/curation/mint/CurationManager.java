@@ -1,6 +1,6 @@
 /* 
  * The Fascinator - Mint Curation Transaction Manager
- * Copyright (C) 2011 Queensland Cyber Infrastructure Foundation (http://www.qcif.edu.au/)
+ * Copyright (C) 2011-2012 Queensland Cyber Infrastructure Foundation (http://www.qcif.edu.au/)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.json.simple.JSONArray;
@@ -63,6 +65,12 @@ public class CurationManager extends GenericTransactionManager {
 
     /** Property to set flag for publication allowed */
     private static String PUBLISH_PROPERTY = "published";
+
+    /** NLA ID Property default */
+    private static String NLA_ID_PROPERTY_DEFAULT = "nlaPid";
+
+    /** Property to set flag for ready to send to the NLA */
+    private static String NLA_READY_PROPERTY = "ready_for_nla";
 
     /** Logging **/
     private static Logger log = LoggerFactory.getLogger(CurationManager.class);
@@ -87,6 +95,15 @@ public class CurationManager extends GenericTransactionManager {
 
     /** URL for our AMQ broker */
     private String brokerUrl;
+
+    /** NLA Integration */
+    private boolean nlaIntegrationEnabled;
+
+    /** NLA Integration - Property Name */
+    private String nlaIdProperty;
+
+    /** NLA Integration - Test for execution */
+    private Map<String, String> nlaIncludeTest;
 
     /**
      * Base constructor
@@ -166,6 +183,21 @@ public class CurationManager extends GenericTransactionManager {
         brokerUrl = config.getString(null, "messaging", "url");
         if (brokerUrl == null) {
             throw new TransactionException("Cannot find the message broker.");
+        }
+
+        // National Library Integration
+        nlaIntegrationEnabled = config.getBoolean(false,
+                "curation", "nlaIntegration", "enabled");
+        nlaIdProperty = config.getString(NLA_ID_PROPERTY_DEFAULT,
+                "curation", "nlaIntegration", "pidProperty");
+        JsonObject nlaIncludeTestNode = config.getObject(
+                "curation", "nlaIntegration", "includeTest");
+        nlaIncludeTest = new HashMap<String, String>();
+        if (nlaIncludeTestNode != null) {
+            for (Object key : nlaIncludeTestNode.keySet()) {
+                nlaIncludeTest.put((String) key,
+                        (String) nlaIncludeTestNode.get(key));
+            }
         }
     }
 
@@ -312,7 +344,12 @@ public class CurationManager extends GenericTransactionManager {
                         responseObj.put("originId", id);
                     }
                     responseObj.put("originOid", oid);
-                    responseObj.put("curatedPid", thisPid);
+                    // If NLA Integration is enabled, use the NLA ID instead
+                    if (nlaIntegrationEnabled && metadata.containsKey(nlaIdProperty)) {
+                        responseObj.put("curatedPid", metadata.getProperty(nlaIdProperty));
+                    } else {
+                        responseObj.put("curatedPid", thisPid);
+                    }
                 }
 
                 // Set a flag to let publish events that may come in later
@@ -379,8 +416,59 @@ public class CurationManager extends GenericTransactionManager {
                 return response;
             }
 
-            // The object has finished, work on downstream 'children'
+            // The object has finished in-house curation
             if (task.equals("curation-confirm")) {
+                // If NLA Integration is required and not completed yet
+                if (nlaIntegrationEnabled && !metadata.containsKey(nlaIdProperty)) {
+                    // Make sure we only run for required datasources (Parties People at this stage)
+                    boolean sendToNla = false;
+                    for (String key : nlaIncludeTest.keySet()) {
+                        String value = metadata.getProperty(key);
+                        String testValue = nlaIncludeTest.get(key);
+                        if (value != null && value.equals(testValue)) {
+                            sendToNla = true;
+                        }
+                    }
+
+                    if (sendToNla) {
+                        // Check if we've released the party into the NLA feed yet
+                        if (!metadata.containsKey(NLA_READY_PROPERTY)) {
+                            try {
+                                DigitalObject object = storage.getObject(oid);
+                                metadata = object.getMetadata();
+                                metadata.setProperty(NLA_READY_PROPERTY, "ready");
+                                object.close();
+                                metadata = getObjectMetadata(oid);
+                                audit(response, oid,
+                                        "This object is ready to go to the NLA");
+
+                            } catch (StorageException ex) {
+                                log.error("Error accessing object '{}' in storage: ",
+                                        oid, ex);
+                                emailObjectLink(response, oid,
+                                        "This object is ready for the NLA, but an"
+                                        + " error occured writing to storage. Please"
+                                        + " see the system log");
+                                return response;
+                            }
+
+                            // Since the flag hasn't been set we also know this is the
+                            //   first time through, so generate some notifications
+                            emailObjectLink(response, oid,
+                                    "This email is confirming that the object linked" +
+                                    " below has completed curation and is ready to" +
+                                    " be harvested by the National Library. NOTE:" +
+                                    " This object is not ready for publication until" +
+                                    " after the NLA has harvested it.");
+                        }  else {
+                            audit(response, oid,
+                                    "Curation attempt: This object is still waiting on the NLA");
+                        }
+                        return response;
+                    }
+                } // Finish NLA
+
+                // The object has finished, work on downstream 'children'
                 boolean isReady = false;
                 try {
                     isReady = checkChildren(response, data, oid, thisPid, true);
@@ -395,7 +483,7 @@ public class CurationManager extends GenericTransactionManager {
                     return response;
                 }
 
-                // If it is ready ont he first pass...
+                // If it is ready on the first pass...
                 if (isReady) {
                     createTask(response, oid, "curation-response");
                 } else {

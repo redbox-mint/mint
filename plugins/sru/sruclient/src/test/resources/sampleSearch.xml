@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+    <version>1.1</version>
+    <numberOfRecords>3605</numberOfRecords>
+    <resultSetId>ea72ft</resultSetId>
+    <resultSetIdleTime>600</resultSetIdleTime>
+    <records xmlns:ns1="http://www.loc.gov/zing/srw/">
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>460525</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-460525</otherRecordId>
+                        <otherRecordId>438ca4d6-ce67-4f41-83bc-51a724b19033</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:19:57Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35040395 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:33Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040395  updated  nla.party-460525. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">A</part>
+                                <part localType="forename">Viola</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_03bc3593-0049-41f8-ae7f-f38b4219fa76" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040395</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040395</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024143</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1983-05-07"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:49"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040395</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">A</part>
+                                                    <part localType="forename">Viola</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>1</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>460521</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-460521</otherRecordId>
+                        <otherRecordId>b5c33497-33d7-427a-9ab0-3cb80f8a8e0b</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:19:56Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35040386 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:33Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040386  updated  nla.party-460521. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">A</part>
+                                <part localType="forename">L</part>
+                                <part localType="forename">H</part>
+                            </nameEntry>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Alan</part>
+                                <part localType="forename">Leslie</part>
+                                <part localType="forename">Hawthorn</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_b4d0b8a0-e471-4f52-8e03-e6a2555f443f" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040386</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040386</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024141</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1980-07-18"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:47"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040386</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">A</part>
+                                                    <part localType="forename">L</part>
+                                                    <part localType="forename">H</part>
+                                                    <part localType="extension">Alan Leslie Hawthorn</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Alan</part>
+                                                    <part localType="forename">Leslie</part>
+                                                    <part localType="forename">Hawthorn</part>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>2</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>809180</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-809180</otherRecordId>
+                        <otherRecordId>e7622f56-2f83-41be-afc8-a50fe1ba97be</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2009-10-06T21:49:59Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record identifier not found. Identity automatically created. (Identity created from 35040405 and AUCNLKIN)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:34Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040405  updated  nla.party-809180. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Brian</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_a393e958-b936-409b-bd65-e0f1676d7dbb" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040405</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040405</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024144</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1983-06-17"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:50"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040405</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Brian</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <biogHist>
+                                                    <p>Conflict unresolved Feb. 2000.</p>
+                                                </biogHist>
+                                            </description>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>3</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>460536</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-460536</otherRecordId>
+                        <otherRecordId>200ed474-0b04-428c-b1fd-15b78a8a4d7d</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:20:00Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35040426 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:34Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040426  updated  nla.party-460536. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Fay</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_21049866-dc39-4070-bbaf-7012a0518415" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040426</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040426</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024148</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1988-03-01"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:53"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040426</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Fay</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>4</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>809181</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-809181</otherRecordId>
+                        <otherRecordId>56cb3eb5-89c3-4e2d-b529-cda333239b9f</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2009-10-06T21:49:59Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record identifier not found. Identity automatically created. (Identity created from 35040410 and AUCNLKIN)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:34Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040410  updated  nla.party-809181. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">C</part>
+                                <part localType="forename">J</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_10e2e1e2-774c-4fa7-bc8b-bad9d6f9df83" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040410</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040410</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024145</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1980-07-02"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:51"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040410</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">C</part>
+                                                    <part localType="forename">J</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>5</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>460531</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-460531</otherRecordId>
+                        <otherRecordId>74ad8b07-d53f-4680-9789-7bd42aeb4bda</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:19:59Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35040418 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:34Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040418  updated  nla.party-460531. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">E</part>
+                                <part localType="forename">T</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_e5598751-cfbd-4ce6-be10-4f0c3b15e95c" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040418</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040418</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024147</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1984-04-17"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:52"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040418</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">E</part>
+                                                    <part localType="forename">T</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>6</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>460537</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-460537</otherRecordId>
+                        <otherRecordId>a85b6fc2-88fe-4026-a73c-e338a1289257</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:20:02Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35040440 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:35Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040440  updated  nla.party-460537. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Keith</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_4c0bf2d7-6a44-4c02-99d1-ec78b3238eeb" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040440</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040440</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024155</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1980-10-03"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:54"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040440</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Keith</part>
+                                                    <part localType="extension">Keith H</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>7</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>809189</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-809189</otherRecordId>
+                        <otherRecordId>e15fe7c4-28f4-4c45-8466-a8fadb5d70de</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2009-10-06T21:50:00Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record identifier not found. Identity automatically created. (Identity created from 35040447 and AUCNLKIN)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:36:35Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35040447  updated  nla.party-809189. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Pat</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_5bd4a295-0a83-4df0-8b2d-3b9fd2fd078c" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35040447</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35040447</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv02024158</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1983-06-24"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:00:55"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35040447</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Pat</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>8</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>809531</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-809531</otherRecordId>
+                        <otherRecordId>5403c311-43b1-4144-ab15-299752a2ce03</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2009-10-06T21:50:58Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record identifier not found. Identity automatically created. (Identity created from 35041573 and AUCNLKIN)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:37:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35041573  updated  nla.party-809531. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Henry</part>
+                                <part localType="forename">J</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_4fac7bf7-b672-48ae-8499-f4f5a0faffec" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35041573</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35041573</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv03860298</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1986-01-22"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:02:45"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35041573</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Henry</part>
+                                                    <part localType="forename">J</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>9</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>461580</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-461580</otherRecordId>
+                        <otherRecordId>da989951-013c-40ff-bdd6-901d459d5dda</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2008-12-04T02:33:35Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>Record with identifier AuCNLKIN-35047074 added.</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T06:42:28Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-AUCNLKIN-35047074  updated  nla.party-461580. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Smith</part>
+                                <part localType="forename">Helen</part>
+                                <part localType="forename">Joan</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_a8ab6384-5382-44f7-b1aa-6f0b4c9d7952" xmlns:eac="http://jefferson.village.virginia.edu/eac">
+                                        <control>
+                                            <recordId>35047074</recordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">http://nla.gov.au/anbd.aut-an35047074</otherRecordId>
+                                            <otherRecordId localType="AU-AuCNLKIN">abv11089729</otherRecordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-AuCNLKIN</agencyCode>
+                                                <agencyName>Libraries Australia</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>AACR2</abbreviation>
+                                                <citation>Anglo-American Cataloging Rules, Second Edition.</citation>
+                                            </conventionDeclaration>
+                                            <conventionDeclaration>
+                                                <abbreviation>ISO3166-1alpha-2</abbreviation>
+                                                <citation>ISO 3166-1, Codes for the representation of names of countries and their subdivisions - Part 1: Country codes</citation>
+                                            </conventionDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1992-10-23"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2009-12-16T21:10:43"/>
+                                                    <agentType>machine</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://nla.gov.au/anbd.aut-an35047074</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="surname">Smith</part>
+                                                    <part localType="forename">Helen</part>
+                                                    <part localType="forename">Joan</part>
+                                                    <authorizedForm>AACR2</authorizedForm>
+                                                </nameEntry>
+                                            </identity>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>10</recordPosition>
+        </record>
+    </records>
+    <nextRecordPosition>11</nextRecordPosition>
+    <echoedSearchRetrieveRequest xmlns:ns2="http://www.loc.gov/zing/srw/">
+        <version>1.1</version>
+        <query>pa.surname=&quot;Smith&quot;</query>
+        <xQuery>
+            <ns3:searchClause xmlns:ns3="http://www.loc.gov/zing/cql/xcql/">
+                <ns3:index>pa.surname</ns3:index>
+                <ns3:relation>
+                    <ns3:value>=</ns3:value>
+                </ns3:relation>
+                <ns3:term>Smith</ns3:term>
+            </ns3:searchClause>
+        </xQuery>
+        <recordPacking>xml</recordPacking>
+        <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+    </echoedSearchRetrieveRequest>
+</searchRetrieveResponse>

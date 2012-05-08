@@ -1,0 +1,1830 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<searchRetrieveResponse xmlns="http://www.loc.gov/zing/srw/">
+    <version>1.1</version>
+    <numberOfRecords>4870</numberOfRecords>
+    <resultSetId>kb0knh</resultSetId>
+    <resultSetIdleTime>600</resultSetIdleTime>
+    <records xmlns:ns1="http://www.loc.gov/zing/srw/">
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1475230</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1475230</otherRecordId>
+                        <otherRecordId>3ee4579c-ea0d-4710-885e-dd8a6134046a</otherRecordId>
+                        <maintenanceStatus>deleted</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-04-06T01:54:08Z"/>
+                                <agentType>human</agentType>
+                                <agent>bdewhurs</agent>
+                                <eventDescription>(Identity created from splitting of identity nla.party-1470866)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-04-06T01:54:37Z"/>
+                                <agentType>human</agentType>
+                                <agent>bdewhurs</agent>
+                                <eventDescription>(P001087 and AU-VU:EOAS transferred to nla.party-571417)</eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Jones</part>
+                                <part localType="forename">Inigo Owen</part>
+                            </nameEntry>
+                        </identity>
+                        <relations>
+                            <cpfRelation cpfRelationType="associative" xml:id="nla.party-1470866">
+                                <relationEntry localType="may refer to" xml:id="_201fc639-944f-4ade-b8d6-a47d37556600">Jones, Inigo Owen.</relationEntry>
+                            </cpfRelation>
+                        </relations>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>1</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1475631</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1475631</otherRecordId>
+                        <otherRecordId>656ef7c9-3eeb-49ad-b1bc-f909ec52ba22</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-05-09T06:46:56Z"/>
+                                <agentType>human</agentType>
+                                <agent>bharris</agent>
+                                <eventDescription>(Identity created from P002551 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:07:00Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:19Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:06Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:06Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:06Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002551  updated  nla.party-1475631. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Booth</part>
+                                <part localType="forename">John</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_56e21ab9-3d81-4fa9-9f04-bb9897504aa0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P002551</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1997-06-30"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Rosanne Walker</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P002551b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Booth</part>
+                                                    <part localType="givenname">John</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <existDates>
+                                                    <dateRange>
+                                                        <toDate standardDate="1920-07-25">25 July 1920</toDate>
+                                                    </dateRange>
+                                                </existDates>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Chemical engineer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>John Booth was on the engineering staff of the Melbourne and Metropolitan Board of Works for many years. He was also President of the Society of Chemical Industry of Victoria (1916-17), President of the Victorian Microscopical Society and a member of the Victorian Provisional Committee at the inception of the Australian Chemical Institute.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1475631" xlink:type="simple">
+                                                    <relationEntry>Booth, John</relationEntry>
+                                                </cpfRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>2</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1473690</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1473690</otherRecordId>
+                        <otherRecordId>a1252580-1ad3-425b-a989-b39efefa6e21</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-01-12T06:30:13Z"/>
+                                <agentType>human</agentType>
+                                <agent>kmcintyr</agent>
+                                <eventDescription>(Identity created from P001713 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:04:54Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:19Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:07Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P001713  updated  nla.party-1473690. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Josephs</part>
+                                <part localType="forename">E.</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_1b68a59d-d637-4303-b25b-127a05af6b3f" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P001713</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1993-10-20"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>McCarthy, G.J.</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P001713b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Josephs</part>
+                                                    <part localType="givenname">E.</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Electrical engineer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>E. Josephs was an electrical engineer during the early 1900s and wrote at least one scientific article.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1473690" xlink:type="simple">
+                                                    <relationEntry>Josephs, E.</relationEntry>
+                                                </cpfRelation>
+                                                <resourceRelation resourceRelationType="other">
+
+                                                    <objectXMLWrap>
+                                                        <dc:dc>
+                                                            <dc:creator/>
+                                                            <dc:title>Josephs, E.</dc:title>
+                                                            <dc:publisher>Australian Science Archives Project</dc:publisher>
+                                                            <dc:date>1995</dc:date>
+                                                            <dc:title>
+Physics in Australia to 1945
+R.W. Home, with the assistance of Paula J. Needham
+: Josephs, E.
+                                                            </dc:title>
+                                                            <dc:relation>http://www.asap.unimelb.edu.au/bsparcs/physics/P001713p.htm</dc:relation>
+                                                            <dc:identifier>http://www.eoas.info/bib/BSOL00307.htm</dc:identifier>
+                                                        </dc:dc>
+                                                    </objectXMLWrap>
+                                                </resourceRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>3</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1475396</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1475396</otherRecordId>
+                        <otherRecordId>16fcd31d-4f50-4cda-88cd-92f61bbdebdb</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-05-05T00:51:39Z"/>
+                                <agentType>human</agentType>
+                                <agent>bharris</agent>
+                                <eventDescription>(Identity created from P000600 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:01:26Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:11Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:14Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:25Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:14Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:14Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:17Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:15Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P000600  updated  nla.party-1475396. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">MacKenzie</part>
+                                <part localType="forename">A.E.</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_a5089cfc-5154-4800-98e9-e46ed72e0456" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P000600</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1993-10-20"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>McCarthy, G.J.</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P000600b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">MacKenzie</part>
+                                                    <part localType="givenname">A.E.</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Aviator</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>A. E. MacKenzie was involved in the early days of aviation in Australia particularly the 1920s-50s.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1475396" xlink:type="simple">
+                                                    <relationEntry>MacKenzie, A.E.</relationEntry>
+                                                </cpfRelation>
+                                                <resourceRelation resourceRelationType="other">
+
+                                                    <objectXMLWrap>
+                                                        <dc:dc>
+
+                                                            <dc:title>State Library of Victoria, Australian Manuscripts Collection: A.E. MacKenzie - Records (1920 - 1960)</dc:title>
+
+                                                            <dc:description>Extracts from a recorded interview, in which Ted MacKenzie and H.L. Mortlock speak of Mascot Airport and aviation in Australia 1920s-50s, with comments on well-known aviators, recorded 1980 [MS 10980 MSB 359].</dc:description>
+
+                                                            <dc:identifier>http://www.eoas.info/archives/BSAR00895.htm</dc:identifier>
+                                                        </dc:dc>
+                                                    </objectXMLWrap>
+                                                </resourceRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>4</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1473130</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1473130</otherRecordId>
+                        <otherRecordId>1f923067-02be-48d9-8677-0d2a2d893690</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-01-10T05:05:07Z"/>
+                                <agentType>human</agentType>
+                                <agent>kmcintyr</agent>
+                                <eventDescription>(Identity created from P002172 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:06:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:11Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:22Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002172  updated  nla.party-1473130. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Prideaux</part>
+                                <part localType="forename">Brian Angus</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_a9672b90-03a6-4721-8011-374ea958902b" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P002172</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1993-10-20"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>McCarthy, G.J.</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P002172b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Prideaux</part>
+                                                    <part localType="givenname">Brian Angus</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Conservationist and Librarian</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>Brian Angus Prideaux took an active role in conservation issues and served on the Bush Fire Council of New South Wales c1953-75.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1473130" xlink:type="simple">
+                                                    <relationEntry>Prideaux, Brian Angus</relationEntry>
+                                                </cpfRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>5</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1474261</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1474261</otherRecordId>
+                        <otherRecordId>319db087-6fce-4eb6-af2b-4f8addff19ef</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-02-02T00:38:21Z"/>
+                                <agentType>human</agentType>
+                                <agent>kmcintyr</agent>
+                                <eventDescription>(Identity created from P003420 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:09:05Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:14Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:11Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:16Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:18Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:28Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:17Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:16Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:18Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:18Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:21Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:19Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003420  updated  nla.party-1474261. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Cawthron</part>
+                                <part localType="forename">Edward Robert</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_97421661-a5f7-4db1-9931-1f6d893da7bc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P003420</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="2001-05-25"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Rosanne Walker</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P003420b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Cawthron</part>
+                                                    <part localType="givenname">Edward Robert</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Electronic engineer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>Edward Robert Cawthron worked for the Department of Industry, Technology and Commerce in the mid 1980s. He was involved in looking at the numbers of people working in the area of communications technology such as microwaves and fibre optics.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1474261" xlink:type="simple">
+                                                    <relationEntry>Cawthron, Edward Robert</relationEntry>
+                                                </cpfRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>6</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1473568</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1473568</otherRecordId>
+                        <otherRecordId>431420a9-f4e8-4b2b-b861-6c1ff8369f01</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-01-11T07:03:13Z"/>
+                                <agentType>human</agentType>
+                                <agent>kmcintyr</agent>
+                                <eventDescription>(Identity created from P003781 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:09:51Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:16Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:18Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:21Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:31Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:21Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:19Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:22Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:22Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:25Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:23Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P003781  updated  nla.party-1473568. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Meulman</part>
+                                <part localType="forename">P.</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_2f1e3c4b-63a6-4db1-aaa5-846472485cab" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P003781</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="2001-05-25"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Rosanne Walker</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P003781b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Meulman</part>
+                                                    <part localType="givenname">P.</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Electronic engineer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>P. Meulman was the OTC System Manager responsible for a Pacific coaxial telephone cable, the SEACOM cable, installed during the 1980s.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1473568" xlink:type="simple">
+                                                    <relationEntry>Meulman, P.</relationEntry>
+                                                </cpfRelation>
+                                                <resourceRelation resourceRelationType="other">
+
+                                                    <objectXMLWrap>
+                                                        <dc:dc>
+                                                            <dc:creator>Academy of Technological Sciences and Engineering</dc:creator>
+                                                            <dc:title>Technology in Australia 1788-1988</dc:title>
+
+                                                            <dc:publisher>Australian Science and Technology Heritage Centre</dc:publisher>
+                                                            <dc:date>2000</dc:date>
+                                                            <dc:relation>http://www.austehc.unimelb.edu.au/tia/</dc:relation>
+                                                            <dc:identifier>http://www.eoas.info/bib/ASBS00016.htm</dc:identifier>
+                                                        </dc:dc>
+                                                    </objectXMLWrap>
+                                                </resourceRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>7</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1476464</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1476464</otherRecordId>
+                        <otherRecordId>5802030b-3703-4e9b-92a1-2b339173f0ad</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-05-25T00:00:51Z"/>
+                                <agentType>human</agentType>
+                                <agent>bharris</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  created  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:22Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:11Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004691  updated  nla.party-1476464. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="familyname">Bradley</part>
+                                <part localType="givenname">William Albert</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_52e33bb0-a834-4d1b-badd-c37e6b5804e6" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P004691</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="2006-05-18"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Annette Alafaci</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-02-07"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P004691b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Bradley</part>
+                                                    <part localType="givenname">William Albert</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <existDates>
+                                                    <dateRange>
+                                                        <fromDate standardDate="1880-08-29">29 August 1880</fromDate>
+                                                        <toDate standardDate="1956-01-09">c. 9 January 1956</toDate>
+                                                    </dateRange>
+                                                </existDates>
+                                                <places>
+                                                    <place>
+                                                        <placeEntry>Stafford, United Kingdom</placeEntry>
+                                                    </place>
+                                                </places>
+                                                <places>
+                                                    <place>
+                                                        <placeEntry>Australia</placeEntry>
+                                                    </place>
+                                                </places>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Manufacturer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>William Albert (Bert) Bradley has been described as a wizard with rubber. He spent his entire working life (1895-1945) with Perdriau Rubber which was the predecessor of Dunlop Rubber Australia Limited. Bradley joined the company at the age of fourteen and advanced through to foreman then manager of the Surgical Department. During his time there he produced Australia's first hot water bottle approved for hospital use and a portable rubber bath to treat burns victims during World War I. Bradley also developed ways of bonding rubber and canvas to produce tennis shoes -the forerunner of the highly successful Dunlop Volley tennis shoes.</abstract>
+                                                    <chronList>
+                                                        <chronItem>
+                                                            <date>1887</date>
+                                                            <event>Life event - Migrated to Australia (Sydney?) with family</event>
+                                                        </chronItem>
+                                                        <chronItem>
+                                                            <date>January 1895 - August 1945</date>
+                                                            <event>Career position - Worker, then Foreman and Manager of the Surgical Department at Perdriau Rubber, Sydney</event>
+                                                        </chronItem>
+                                                    </chronList>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>8</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1475721</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1475721</otherRecordId>
+                        <otherRecordId>591a6e16-cabd-4216-b887-366a5423c753</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-05-11T01:14:37Z"/>
+                                <agentType>human</agentType>
+                                <agent>bharris</agent>
+                                <eventDescription>(Identity created from P004026 and AU-VU:EOAS)</eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-05-19T02:10:27Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:23Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:11Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:15Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:13Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P004026  updated  nla.party-1475721. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="surname">Vantrick</part>
+                                <part localType="forename">C.</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_1f70efa1-7bae-4aae-b0a2-618d97e97338" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P004026</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="2001-05-25"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Rosanne Walker</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P004026b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Vantrick</part>
+                                                    <part localType="givenname">C.</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Engineer</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>C. Vantrick (or Vahtrick) chaired the Preparatory Committee's Organisational Panel of INMARSAT (International Maritime Satellite Organisation), which was formed in 1979 to provide world-wide satellite based comprehensive service for maritime use.</abstract>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1475721" xlink:type="simple">
+                                                    <relationEntry>Vantrick, C.</relationEntry>
+                                                </cpfRelation>
+                                                <resourceRelation resourceRelationType="other">
+
+                                                    <objectXMLWrap>
+                                                        <dc:dc>
+                                                            <dc:creator>Academy of Technological Sciences and Engineering</dc:creator>
+                                                            <dc:title>Technology in Australia 1788-1988</dc:title>
+
+                                                            <dc:publisher>Australian Science and Technology Heritage Centre</dc:publisher>
+                                                            <dc:date>2000</dc:date>
+                                                            <dc:relation>http://www.austehc.unimelb.edu.au/tia/</dc:relation>
+                                                            <dc:identifier>http://www.eoas.info/bib/ASBS00016.htm</dc:identifier>
+                                                        </dc:dc>
+                                                    </objectXMLWrap>
+                                                </resourceRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>9</recordPosition>
+        </record>
+        <record>
+            <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+            <recordPacking>xml</recordPacking>
+            <recordData>
+                <eac-cpf xmlns="urn:isbn:1-931666-33-4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <control>
+                        <recordId>1476864</recordId>
+                        <otherRecordId>http://nla.gov.au/nla.party-1476864</otherRecordId>
+                        <otherRecordId>611fb580-48bc-4635-8de0-bc617e1a2f7e</otherRecordId>
+                        <maintenanceStatus>revised</maintenanceStatus>
+                        <maintenanceAgency>
+                            <agencyCode>AU-ANL:PEAU</agencyCode>
+                            <agencyName>National Library of Australia Party Infrastructure</agencyName>
+                        </maintenanceAgency>
+                        <languageDeclaration>
+                            <language languageCode="eng">English</language>
+                            <script scriptCode="Latn">Latin</script>
+                        </languageDeclaration>
+                        <maintenanceHistory>
+                            <maintenanceEvent>
+                                <eventType>created</eventType>
+                                <eventDateTime standardDateTime="2011-05-30T07:15:24Z"/>
+                                <agentType>human</agentType>
+                                <agent>bharris</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  created  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-18T19:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-09-19T19:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-18T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2011-11-19T18:00:10Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-14T18:00:21Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-15T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-16T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-17T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-01-18T18:00:08Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-11T18:00:12Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                            <maintenanceEvent>
+                                <eventType>updated</eventType>
+                                <eventDateTime standardDateTime="2012-02-12T18:00:09Z"/>
+                                <agentType>machine</agentType>
+                                <agent>harvester</agent>
+                                <eventDescription>AU-VU:EOAS-P002997  updated  nla.party-1476864. </eventDescription>
+                            </maintenanceEvent>
+                        </maintenanceHistory>
+                    </control>
+                    <cpfDescription>
+                        <identity>
+                            <entityType>person</entityType>
+                            <nameEntry>
+                                <part localType="familyname">Marshall</part>
+                                <part localType="givenname">Joshua</part>
+                            </nameEntry>
+                        </identity>
+                        <alternativeSet>
+                            <setComponent>
+                                <objectXMLWrap>
+                                    <eac-cpf xml:id="_50134b33-ba89-4699-b318-a215c9f6fbd2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <control>
+                                            <recordId>P002997</recordId>
+                                            <maintenanceStatus>revised</maintenanceStatus>
+                                            <maintenanceAgency>
+                                                <agencyCode>AU-VU:EOAS</agencyCode>
+                                                <agencyName>Encyclopedia of Australian Science</agencyName>
+                                            </maintenanceAgency>
+                                            <languageDeclaration>
+                                                <language languageCode="eng"/>
+                                                <script scriptCode="Latn"/>
+                                            </languageDeclaration>
+                                            <maintenanceHistory>
+                                                <maintenanceEvent>
+                                                    <eventType>created</eventType>
+                                                    <eventDateTime standardDateTime="1997-10-24"/>
+                                                    <agentType>human</agentType>
+                                                    <agent>Rosanne Walker</agent>
+                                                </maintenanceEvent>
+                                                <maintenanceEvent>
+                                                    <eventType>updated</eventType>
+                                                    <eventDateTime standardDateTime="2011-11-10"/>
+                                                    <agentType>human</agentType>
+                                                    <agent/>
+                                                </maintenanceEvent>
+                                            </maintenanceHistory>
+                                        </control>
+                                        <cpfDescription>
+                                            <identity>
+                                                <entityId>http://www.eoas.info/biogs/P002997b.htm</entityId>
+                                                <entityType>person</entityType>
+                                                <nameEntry>
+                                                    <part localType="familyname">Marshall</part>
+                                                    <part localType="givenname">Joshua</part>
+                                                </nameEntry>
+                                            </identity>
+                                            <description>
+                                                <existDates>
+                                                    <dateRange>
+                                                        <fromDate standardDate="1907-02-10">10 February 1907</fromDate>
+                                                        <toDate standardDate="1964-09-23">23 September 1964</toDate>
+                                                    </dateRange>
+                                                </existDates>
+                                                <places>
+                                                    <place>
+                                                        <placeEntry>Wilna, Lithuania</placeEntry>
+                                                    </place>
+                                                </places>
+                                                <occupations>
+                                                    <occupation>
+                                                        <term>Applied chemist</term>
+                                                    </occupation>
+                                                </occupations>
+                                                <biogHist>
+                                                    <abstract>Joshua Marshall came to Australia in 1936 and operated his own business, manufacturing aromatic chemicals and perfumery products until 1953. In 1954 he was appointed patent examiner at the Patent Office, Canberra, and held this position at the time of his death.</abstract>
+                                                    <p>Born Wilna, Lithuania, 10 February 1907. Died Canberra, 23 September 1964. Educated University of Toulouse (B.Chem. Eng. 1928). Perfumery chemist, Paris 1928-29, analyst of non-ferrous metals, Berlin 1929-30, Chief Chemist, Picardy Yeast Company 1930-36, own business manufacturing aromatic chemicals and perfumery products 1936-53, Herculoid company Pty Ltd, manufacturers of casein plastics 1953-54, patent examiner, Patent Office, Canberra 1954-64.</p>
+
+                                                </biogHist>
+                                            </description>
+                                            <relations>
+                                                <cpfRelation cpfRelationType="identity" xlink:href="http://nla.gov.au/nla.party-1476864" xlink:type="simple">
+                                                    <relationEntry>Marshall Joshua</relationEntry>
+                                                </cpfRelation>
+                                            </relations>
+                                        </cpfDescription>
+                                    </eac-cpf>
+                                </objectXMLWrap>
+                            </setComponent>
+                        </alternativeSet>
+                    </cpfDescription>
+                </eac-cpf>
+            </recordData>
+            <recordPosition>10</recordPosition>
+        </record>
+    </records>
+    <nextRecordPosition>11</nextRecordPosition>
+    <echoedSearchRetrieveRequest xmlns:ns2="http://www.loc.gov/zing/srw/">
+        <version>1.1</version>
+        <query>bath.possessingInstitution=&quot;AU-VU:EOAS&quot; AND pa.type=&quot;person&quot;</query>
+        <xQuery>
+            <ns3:triple xmlns:ns3="http://www.loc.gov/zing/cql/xcql/">
+                <ns3:boolean>
+                    <ns3:value>AND</ns3:value>
+                </ns3:boolean>
+                <ns3:leftOperand>
+                    <ns3:searchClause>
+                        <ns3:index>bath.possessingInstitution</ns3:index>
+                        <ns3:relation>
+                            <ns3:value>=</ns3:value>
+                        </ns3:relation>
+                        <ns3:term>AU-VU:EOAS</ns3:term>
+                    </ns3:searchClause>
+                </ns3:leftOperand>
+                <ns3:rightOperand>
+                    <ns3:searchClause>
+                        <ns3:index>pa.type</ns3:index>
+                        <ns3:relation>
+                            <ns3:value>=</ns3:value>
+                        </ns3:relation>
+                        <ns3:term>person</ns3:term>
+                    </ns3:searchClause>
+                </ns3:rightOperand>
+            </ns3:triple>
+        </xQuery>
+        <recordPacking>xml</recordPacking>
+        <recordSchema>urn:isbn:1-931666-33-4</recordSchema>
+    </echoedSearchRetrieveRequest>
+</searchRetrieveResponse>

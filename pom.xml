@@ -15,6 +15,7 @@
     <modules>
         <module>config</module>
         <module>parent</module>
+        <module>plugins/sru/sruclient</module>
         <module>plugins/transaction/curation</module>
         <module>plugins/transformer/handle</module>
         <module>plugins/transformer/local</module>
@@ -112,6 +113,11 @@
         <dependency>
             <groupId>com.googlecode.redbox-mint</groupId>
             <artifactId>plugin-transaction-curation-mint</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.redbox-mint</groupId>
+            <artifactId>sruclient-mint</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Contrib plugins -->
