@@ -3,12 +3,10 @@ from com.googlecode.fascinator.common import JsonObject
 from com.googlecode.fascinator.common.messaging import MessagingServices
 from com.googlecode.fascinator.common.solr import SolrResult
 from com.googlecode.fascinator.messaging import TransactionManagerQueueConsumer
-from com.googlecode.fascinator.redbox.sru import NLAIdentity
 from com.googlecode.fascinator.redbox.sru import SRUClient
 
 from java.io import ByteArrayInputStream
 from java.io import ByteArrayOutputStream
-from java.io import InputStreamReader
 from java.lang import Exception
 
 class NlaData:
@@ -58,8 +56,8 @@ class NlaData:
             pid = record.getFirst("pidProperty")
 
             # TODO
-            #nlaPid = sru.nlaGetNationalId(pid);
-            nlaPid = sru.nlaGetNationalId("nla.party-915373");
+            nlaPid = sru.nlaGetNationalId(pid);
+            #nlaPid = sru.nlaGetNationalId("nla.party-915373"); # Debugging. A known NLA ID
             self.log.debug("{} => {} ({})", [id, pid, nlaPid])
 
             if nlaPid is None:
