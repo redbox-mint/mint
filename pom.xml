@@ -124,19 +124,19 @@
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-skos</artifactId>
-            <version>${fascinator.version}</version>
+            <version>1.0.8</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-harvester-csv</artifactId>
-            <version>${fascinator.version}</version>
+            <version>1.0.8</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.googlecode.the-fascinator.plugins</groupId>
             <artifactId>plugin-transformer-jsonVelocity</artifactId>
-            <version>${fascinator.version}</version>
+            <version>1.0.8</version>
         </dependency>
         <!-- Fascinator Plugins -->
         <dependency>
