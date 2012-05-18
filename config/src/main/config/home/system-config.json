@@ -110,6 +110,8 @@
         "nlaIntegration": {
             "enabled": true,
             "pidProperty": "nlaPid",
+            "agencyCode": "TO-DO",
+            "agencyName": "The University of Examples, Australia",
             "includeTest": {
                 "repository.name": "People"
             }
@@ -259,7 +261,7 @@
                 },
                 "eac_cpf": {
                     "enabledInAllViews": false,
-                    "enabledViews": ["published"],
+                    "enabledViews": ["NLA_Harvest", "published"],
                     "schema": "urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd",
                     "metadataNamespace": "urn:isbn:1-931666-33-4"
                 },

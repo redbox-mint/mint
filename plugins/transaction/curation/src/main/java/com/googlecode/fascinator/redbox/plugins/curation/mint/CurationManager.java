@@ -40,10 +40,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
@@ -65,6 +68,12 @@ public class CurationManager extends GenericTransactionManager {
 
     /** Property to set flag for publication allowed */
     private static String PUBLISH_PROPERTY = "published";
+
+    /** Format for dates used by the NLA */
+    private static String NLA_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+    /** Property for storing creation date sent to the NLA */
+    private static String NLA_DATE_PROPERTY = "eac_creation_date";
 
     /** NLA ID Property default */
     private static String NLA_ID_PROPERTY_DEFAULT = "nlaPid";
@@ -104,6 +113,9 @@ public class CurationManager extends GenericTransactionManager {
 
     /** NLA Integration - Test for execution */
     private Map<String, String> nlaIncludeTest;
+    
+    /** NLA Integration - Date Formatting */
+    private SimpleDateFormat nlaDate;
 
     /**
      * Base constructor
@@ -199,6 +211,9 @@ public class CurationManager extends GenericTransactionManager {
                         (String) nlaIncludeTestNode.get(key));
             }
         }
+        // NLA Dates should always be UTC
+        nlaDate = new SimpleDateFormat(NLA_DATE_FORMAT);
+        nlaDate.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     /**
@@ -432,15 +447,23 @@ public class CurationManager extends GenericTransactionManager {
 
                     if (sendToNla) {
                         // Check if we've released the party into the NLA feed yet
-                        if (!metadata.containsKey(NLA_READY_PROPERTY)) {
+                        if (!metadata.containsKey(NLA_READY_PROPERTY)
+                                || !metadata.containsKey(NLA_DATE_PROPERTY)) {
                             try {
                                 DigitalObject object = storage.getObject(oid);
                                 metadata = object.getMetadata();
+                                // Set Date
+                                metadata.setProperty(NLA_DATE_PROPERTY,
+                                        nlaDate.format(new Date()));
+                                // Set Flag
                                 metadata.setProperty(NLA_READY_PROPERTY, "ready");
+                                // Cleanup
                                 object.close();
                                 metadata = getObjectMetadata(oid);
                                 audit(response, oid,
                                         "This object is ready to go to the NLA");
+                                // The EAC-CPF Template needs to be updated
+                                createTask(response, oid, "reharvest");
 
                             } catch (StorageException ex) {
                                 log.error("Error accessing object '{}' in storage: ",

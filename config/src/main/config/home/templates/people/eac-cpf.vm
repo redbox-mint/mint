@@ -21,13 +21,25 @@
         <recordId>$oid</recordId>
         <maintenanceStatus>new</maintenanceStatus>
         <maintenanceAgency>
-            <agencyCode>TO-DO</agencyCode>
-            <agencyName>$group</agencyName>
+            #set($agencyCode = $systemConfig.getString($defaultOnError, "curation", "nlaIntegration", "agencyCode"))
+            <agencyCode>$util.encodeXml($agencyCode)</agencyCode>
+            #set($agencyName = $systemConfig.getString($defaultOnError, "curation", "nlaIntegration", "agencyName"))
+            <agencyName>$util.encodeXml($agencyName)</agencyName>
         </maintenanceAgency>
         <languageDeclaration>
             <language languageCode="eng">English</language>
             <script scriptCode="Latn">Latin</script>
         </languageDeclaration>
+
+        #set($creationDate = $util.getMetadata($object, "eac_creation_date"))
+        <maintenanceHistory>
+            <maintenanceEvent>
+                <eventType>created</eventType>
+                <eventDateTime standardDateTime="$util.encodeXml($creationDate)" />
+                <agentType>machine</agentType>
+                <agent>Mint Name Authority - $util.encodeXml($group)</agent>
+            </maintenanceEvent>
+        </maintenanceHistory>
     </control>
 
     <cpfDescription>
