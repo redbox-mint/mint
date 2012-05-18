@@ -118,11 +118,18 @@ class IndexData:
                     identifier = relationship.get("identifier")
                     if identifier is not None and identifier.endswith("/group/%s" % basicGroupId):
                         # We've found it, just check if it is curated yet
-                        curatedPid = relationship.get("curatedPid")
-                        if curatedPid is not None and curatedPid != "":
-                            self.utils.add(self.index, "primary_group_id", curatedPid)
-                        else:
-                            self.utils.add(self.index, "primary_group_id", identifier)
+                        #################################
+                        ## Fixes issue #58 - I haven't removed this code entirely since
+                        ## this is a quick fix for now, but nowhere else in the system
+                        ## currently looks for this value except the ReDBox lookups, so
+                        ## it may warrant complete removal of much of this code.
+                        #curatedPid = relationship.get("curatedPid")
+                        #if curatedPid is not None and curatedPid != "":
+                        #    self.utils.add(self.index, "primary_group_id", curatedPid)
+                        #else:
+                        #    self.utils.add(self.index, "primary_group_id", identifier)
+                        #################################
+                        self.utils.add(self.index, "primary_group_id", identifier)
 
     def __security(self, oid, index):
         roles = self.utils.getRolesWithAccess(oid)
