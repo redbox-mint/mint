@@ -62,6 +62,7 @@ class NlaData:
 
             if nlaPid is None:
                 self.log.debug("Object '{}' does not yet have a national Identity in NLA", id)
+                return False
             else:
                 self.log.debug("Object '{}' has a new national Identity in NLA ({})", id, nlaPid)
 
