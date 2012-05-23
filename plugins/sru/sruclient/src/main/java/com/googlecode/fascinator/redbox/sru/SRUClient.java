@@ -466,6 +466,7 @@ public class SRUClient {
             if (status != 200) {
                 String text = get.getStatusText();
                 log.error("Error access SRU interface, status code '{}' returned with message: {}", status, text);
+                return null;
             }
 
         } catch (IOException ex) {
@@ -479,6 +480,7 @@ public class SRUClient {
             response = get.getResponseBodyAsString();
         } catch (IOException ex) {
             log.error("Error accessing response body: ", ex);
+            return null;
         }
         return response;
     }

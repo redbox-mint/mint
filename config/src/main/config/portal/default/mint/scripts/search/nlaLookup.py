@@ -86,6 +86,9 @@ class NlaLookupData:
         self.log.debug("Submitting query to NLA: '{}', Start: '{}', Rows: '{}'", [query, start, rows])
         sru = SRUClient()
         response =  sru.nlaGetResponseBySearch(query, start, rows)
+        if response is None:
+            raise Exception("Error searching NLA. Please check system logs for details.")
+
         self.metadata.put("rowsReturned", response.getRows())
         self.metadata.put("totalHits", response.getTotalResults())
 
