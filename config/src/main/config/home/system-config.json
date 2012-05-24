@@ -259,7 +259,7 @@
                     "schema": "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
                     "metadataNamespace": "http://www.openarchives.org/OAI/2.0/oai_dc/"
                 },
-                "eac_cpf": {
+                "eac-cpf": {
                     "enabledInAllViews": false,
                     "enabledViews": ["NLA_Harvest", "published"],
                     "schema": "urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd",
