@@ -85,6 +85,9 @@ class NlaLookupData:
         # Search NLA
         self.log.debug("Submitting query to NLA: '{}', Start: '{}', Rows: '{}'", [query, start, rows])
         sru = SRUClient()
+        # If using the NLA's test server, comment out the line above and uncomment the line below
+        # sru = SRUClient("http://www-test.nla.gov.au/apps/srw/search/peopleaustralia")
+        
         response =  sru.nlaGetResponseBySearch(query, start, rows)
         if response is None:
             raise Exception("Error searching NLA. Please check system logs for details.")

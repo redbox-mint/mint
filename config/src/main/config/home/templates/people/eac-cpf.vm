@@ -47,12 +47,23 @@
             <entityId>$pid</entityId>
             <entityType>person</entityType>
             <nameEntry>
-                <part localType="forename">$util.encodeXml($util.get($item, 'data', 'Given_Name'))</part>
                 #set ($value = $util.get($item, "data", "Family_Name"))
                 #if ("$!value" != "")
                 <part localType="surname">$util.encodeXml($value)</part>
+                <part localType="forename">$util.encodeXml($util.get($item, 'data', 'Given_Name'))</part>
                 #end
             </nameEntry>
         </identity>
+        <description>
+            <biogHist>
+                #set ($value = $util.get($item, "data", "Description"))
+                #if ("$!value" != "")
+                    <abstract>$util.encodeXml($value)</abstract>
+                #else
+                    #set ($pretend = "$util.encodeXml($util.get($item, 'data', 'Honorific')) $util.encodeXml($util.get($item, 'data', 'Given_Name')) $util.encodeXml($util.get($item, 'data', 'Family_Name')), $util.encodeXml($util.get($item, 'data', 'Division')), $util.encodeXml($util.get($item, 'data', 'School'))")
+                    <abstract>$pretend</abstract>
+                #end
+            </biogHist>
+        </description>
     </cpfDescription>
 </eac-cpf>

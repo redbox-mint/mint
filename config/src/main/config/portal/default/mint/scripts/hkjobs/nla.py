@@ -38,13 +38,21 @@ class NlaData:
             self.writer.println("No records to process")
             self.writer.close()
             return
+        else: 
+            self.log.debug("Processing '{}' records", num)
 
         # Now loop through each object and process
         sru = SRUClient()
+        # If using the NLA's test server, comment out the line above and uncomment the line below
+        # sru = SRUClient("http://www-test.nla.gov.au/apps/srw/search/peopleaustralia")
+
         for record in result.getResults():
             success = self.process_record(record, sru)
             if not success:
-                return
+                self.log.debug("Failed to process record")
+                continue
+            else:
+               self.log.debug("Record processed")
 
         self.writer.println("%s record(s) processed" % num)
         self.writer.close()
@@ -56,7 +64,7 @@ class NlaData:
             pid = record.getFirst("pidProperty")
 
             # TODO
-            nlaPid = sru.nlaGetNationalId(pid);
+            nlaPid = sru.nlaGetNationalId(id);
             #nlaPid = sru.nlaGetNationalId("nla.party-915373"); # Debugging. A known NLA ID
             self.log.debug("{} => {} ({})", [id, pid, nlaPid])
 
