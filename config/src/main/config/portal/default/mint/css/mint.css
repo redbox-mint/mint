@@ -116,3 +116,7 @@ ul.main li ul li.selected-view a, ul.main li:hover ul li a:hover {
     background-position: right top;
     padding-right: 20px;
 }
+
+a#fascinator-blog-link {
+  display:none;
+}
