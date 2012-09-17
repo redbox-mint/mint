@@ -490,7 +490,7 @@
     </repository>
   </repositories>
   <scm>
-    <scmUrl>https://github.com/redbox-mint/mint</scmUrl>
+    <url>https://github.com/redbox-mint/mint</url>
     <developerConnection>scm:git:https://github.com/redbox-mint/mint.git</developerConnection>
   </scm>
 </project>
