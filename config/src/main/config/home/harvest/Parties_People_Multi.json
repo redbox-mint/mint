@@ -2,7 +2,7 @@
     "harvester": {
         "type": "csv",
         "csv": {
-            "fileLocation": "${fascinator.home}/data/People_Sample.csv",
+            "fileLocation": "${fascinator.home}/data/People_Sample_Multi.csv",
             "idColumn": "ID",
             "recordIDPrefix": "redbox-mint.googlecode.com/parties/people/",
             "headerRow": true,
@@ -59,7 +59,7 @@
     "indexer": {
         "script": {
             "type": "python",
-            "rules": "Parties_People.py"
+            "rules": "Parties_People_Multi.py"
         },
         "params": {
             "repository.name": "People",

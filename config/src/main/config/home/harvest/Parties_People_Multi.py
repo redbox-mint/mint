@@ -93,8 +93,15 @@ class IndexData:
 
         self.utils.add(self.index, "dc_description", data.get("Description"))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
+        
         for key in data.keySet():
-            self.utils.add(self.index, key, data.get(key))
+            data_value = data.get(key)
+            try:
+                self.utils.add(self.index, key, data_value)
+            except TypeError:
+                # Some of the fields may be arrays
+                for element in data_value:
+                    self.utils.add(self.index, key, element)
 
         # Known IDs
         idFields = ["ID", "URI", "NLA_Party_Identifier", "ResearcherID", "openID", "Personal_URI"]
@@ -108,7 +115,7 @@ class IndexData:
             self.utils.add(self.index, "known_ids", identifier)
 
         # Primary group membership
-        basicGroupId = data.getArray("Groups")[0]
+        basicGroupId = data.get("Groups")[0]
         if basicGroupId is not None and basicGroupId != "":
             # Look through each relationship
             relationships = json.getArray("relationships")
