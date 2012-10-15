@@ -1,6 +1,17 @@
 *.class
-
+.DS_Store
 # Package Files #
 *.jar
 *.war
 *.ear
+
+.project
+
+.pydevproject
+
+.settings/
+target/
+
+deploy.server
+
+.classpath

@@ -130,7 +130,7 @@
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-harvester-csv</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -293,6 +293,10 @@
             <version>2.1</version>
             <executions>
               <!-- Unpack SKOS harvest config -->
+              <!-- 
+              This is no-longer needed as the skos files are held in the Mint src
+              This helps reduce the need to release the SKOS harvester just because 
+              of the data files
               <execution>
                 <id>unpack-harvest-config</id>
                 <phase>generate-resources</phase>
@@ -306,6 +310,7 @@
                   <outputDirectory>${dir.home}</outputDirectory>
                 </configuration>
               </execution>
+               -->
               <!-- Unpack common workflow configuration -->
               <execution>
                 <id>unpack-workflows</id>
