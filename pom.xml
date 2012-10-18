@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.5.2-SNAPSHOT</version>
+  <version>1.5.2</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
@@ -130,7 +130,7 @@
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-harvester-csv</artifactId>
-      <version>1.1.2-SNAPSHOT</version>
+      <version>1.1.2</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -497,5 +497,6 @@
   <scm>
     <url>https://github.com/redbox-mint/mint</url>
     <developerConnection>scm:git:https://github.com/redbox-mint/mint.git</developerConnection>
+    <tag>mint-1.5.2</tag>
   </scm>
 </project>
