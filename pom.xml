@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.5.2.1-SNAPSHOT</version>
+  <version>1.5.2.1</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.5.2.1-SNAPSHOT</version>
+    <version>1.5.2.1</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
@@ -497,6 +497,6 @@
   <scm>
     <url>https://github.com/redbox-mint/mint</url>
     <developerConnection>scm:git:https://github.com/redbox-mint/mint.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>mint-1.5.2.1</tag>
   </scm>
 </project>
