@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>plugin-transformer-local</artifactId>
-    <version>1.5.2.1</version>
+    <version>1.5.2.2-SNAPSHOT</version>
     <name>The Mint - Plugin - Transformer - Local Curation</name>
     <parent>
         <groupId>com.googlecode.redbox-mint</groupId>
         <artifactId>mint-project</artifactId>
-        <version>1.5.2.1</version>
+        <version>1.5.2.2-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
     <dependencies>
