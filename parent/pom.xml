@@ -43,10 +43,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<distributionManagement>
-		<site>
-			<id>website</id>
-			<url>${sites.location}</url>
-		</site>
-	</distributionManagement>
 </project>
