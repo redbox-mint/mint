@@ -84,6 +84,9 @@ public class CurationManager extends GenericTransactionManager {
     /** Logging **/
     private static Logger log = LoggerFactory.getLogger(CurationManager.class);
 
+    /** System configuration */
+    private JsonSimpleConfig systemConfig;
+
     /** Storage */
     private Storage storage;
 
@@ -132,10 +135,10 @@ public class CurationManager extends GenericTransactionManager {
      */
     @Override
     public void init() throws TransactionException {
-        JsonSimpleConfig config = getJsonConfig();
+        systemConfig = getJsonConfig();
 
         // Load the storage plugin
-        String storageId = config.getString("file-system", "storage", "type");
+        String storageId = systemConfig.getString("file-system", "storage", "type");
         if (storageId == null) {
             throw new TransactionException("No Storage ID provided");
         }
@@ -145,14 +148,14 @@ public class CurationManager extends GenericTransactionManager {
                     + storageId + "'");
         }
         try {
-            storage.init(config.toString());
+            storage.init(systemConfig.toString());
         } catch (PluginException ex) {
             log.error("Unable to initialise storage layer!", ex);
             throw new TransactionException(ex);
         }
 
         // Load the indexer plugin
-        String indexerId = config.getString("solr", "indexer", "type");
+        String indexerId = systemConfig.getString("solr", "indexer", "type");
         if (indexerId == null) {
             throw new TransactionException("No Indexer ID provided");
         }
@@ -162,47 +165,47 @@ public class CurationManager extends GenericTransactionManager {
                     + indexerId + "'");
         }
         try {
-            indexer.init(config.toString());
+            indexer.init(systemConfig.toString());
         } catch (PluginException ex) {
             log.error("Unable to initialise indexer!", ex);
             throw new TransactionException(ex);
         }
 
         // External facing URL
-        urlBase = config.getString(null, "urlBase");
+        urlBase = systemConfig.getString(null, "urlBase");
         if (urlBase == null) {
             throw new TransactionException("URL Base in config cannot be null");
         }
 
         // Where should emails be sent?
-        emailAddress = config.getString(null,
+        emailAddress = systemConfig.getString(null,
                 "curation", "curationEmailAddress");
         if (emailAddress == null) {
             throw new TransactionException("An admin email is required!");
         }
 
         // Where are PIDs stored?
-        pidProperty = config.getString(null, "curation", "pidProperty");
+        pidProperty = systemConfig.getString(null, "curation", "pidProperty");
         if (pidProperty == null) {
             throw new TransactionException("An admin email is required!");
         }
 
         // Do admin staff want to confirm each curation?
-        manualConfirmation = config.getBoolean(false,
+        manualConfirmation = systemConfig.getBoolean(false,
                 "curation", "curationRequiresConfirmation");
 
         // Find the address of our broker
-        brokerUrl = config.getString(null, "messaging", "url");
+        brokerUrl = systemConfig.getString(null, "messaging", "url");
         if (brokerUrl == null) {
             throw new TransactionException("Cannot find the message broker.");
         }
 
         // National Library Integration
-        nlaIntegrationEnabled = config.getBoolean(false,
+        nlaIntegrationEnabled = systemConfig.getBoolean(false,
                 "curation", "nlaIntegration", "enabled");
-        nlaIdProperty = config.getString(NLA_ID_PROPERTY_DEFAULT,
+        nlaIdProperty = systemConfig.getString(NLA_ID_PROPERTY_DEFAULT,
                 "curation", "nlaIntegration", "pidProperty");
-        JsonObject nlaIncludeTestNode = config.getObject(
+        JsonObject nlaIncludeTestNode = systemConfig.getObject(
                 "curation", "nlaIntegration", "includeTest");
         nlaIncludeTest = new HashMap<String, String>();
         if (nlaIncludeTestNode != null) {
@@ -248,7 +251,7 @@ public class CurationManager extends GenericTransactionManager {
      * @returns JsonSimple The response object to send back to the
      * queue consumer
      */
-    private JsonSimple curation(JsonSimple message, String task, String oid) {
+    private JsonSimple curation(JsonSimple message, String task, String oid) throws TransactionException {
         JsonSimple response = new JsonSimple();
 
         //*******************
@@ -366,7 +369,10 @@ public class CurationManager extends GenericTransactionManager {
                         responseObj.put("curatedPid", thisPid);
                     }
                 }
-
+                //JCU: now that the responses have been sent, remove them, so they are not sent again. Otherwise, they just keep getting resent and performance suffers greatly.
+                responses.clear();
+                saveObjectData(data, oid);
+                
                 // Set a flag to let publish events that may come in later
                 //  that this is ready to publish (if not already set)
                 if (!metadata.containsKey(READY_PROPERTY)) {
@@ -538,8 +544,6 @@ public class CurationManager extends GenericTransactionManager {
                 if (task.equals("curation-request")) {
                     JsonObject taskObj = createTask(response, oid, "curation");
                     taskObj.put("alreadyCurated", true);
-                    return response;
-
                 // Queries
                 } else {
                     // Rather then push to 'curation-response' we are just
@@ -555,12 +559,12 @@ public class CurationManager extends GenericTransactionManager {
                     responseObj.put("originOid", oid);
                     responseObj.put("curatedPid", thisPid);
                 }
+                return response;
             }
 
             // Same as above, but this is a second stage request, let's be a
             //   little sterner in case log filtering is occurring
             if (task.equals("curation")) {
-                alreadyCurated = message.getBoolean(false, "alreadyCurated");
                 log.info("Request to curate ignored. This object '{}' has"
                         + " already been curated.", oid);
                 JsonObject taskObj = createTask(response, oid,
@@ -637,11 +641,10 @@ public class CurationManager extends GenericTransactionManager {
                     for (String id : list) {
                         JsonObject order = newTransform(response, id, oid);
                         JsonObject config = (JsonObject) order.get("config");
-                        // Make sure it even has an override...
-                        JsonObject override = itemConfig.getObject(
+                        JsonObject overrides = itemConfig.getObject(
                                 "transformerOverrides", id);
-                        if (override != null) {
-                            config.putAll(override);
+                        if (overrides != null) {
+                            config.putAll(overrides);
                         }
                     }
 
@@ -716,13 +719,13 @@ public class CurationManager extends GenericTransactionManager {
             boolean localRecord = broker.equals(brokerUrl);
             String relatedId = json.getString(null, "identifier");
 
-            // We need to find OIDs to match IDs... for local records
+            // We need to find OIDs to match IDs (only for local records)
             String relatedOid = json.getString(null, "oid");
             if (relatedOid == null && localRecord) {
                 String identifier = json.getString(null, "identifier");
                 if (identifier == null) {
                     throw new TransactionException(
-                            "Cannot resolve identifer: " + identifier);
+                            "NULL identifer provided!");
                 }
                 relatedOid = idToOid(identifier);
                 if (relatedOid == null) {
@@ -753,14 +756,13 @@ public class CurationManager extends GenericTransactionManager {
                 // Only send out curation requests if asked to
                 if (sendRequests) {
                     JsonObject task;
-                    broker = json.getString(null, "broker");
                     // It is a local object
-                    if (broker == null) {
+                    if (localRecord) {
                         task = createTask(response, relatedOid,
                                 "curation-query");
                     // Or remote
                     } else {
-                        task = createTask(response, broker,relatedOid,
+                        task = createTask(response, broker, relatedOid,
                                 "curation-query");
                     }
 
@@ -911,21 +913,12 @@ public class CurationManager extends GenericTransactionManager {
             JSONArray relations = metadata.writeArray("relationships");
             for (JsonSimple newRelation : JsonSimple.toJavaList(newRelations)) {
                 boolean duplicate = false;
-                // Relationships have multiple keys. String comparison of
-                // the JSON will catch this sometimes, but a housekeeping
-                // job periodically cleans up dupes that make it through.
-
-                // When building the string for comparison is needs to be
-                // done before any alterations, so basically as it it was
-                // recieved.
-                String uniqueString = newRelation.toString();
-
+                String identifier = newRelation.getString(null, "identifier");
                 // Compare to each existing relationship
                 for (JsonSimple relation : JsonSimple.toJavaList(relations)) {
-                    String storedUnique = relation.getString(null,
-                            "uniqueString");
-                    if (uniqueString.equals(storedUnique)) {
-                        log.debug("Ignoring duplicate relationship '{}'", oid);
+                    String storedId = relation.getString(null, "identifier");
+                    if (identifier.equals(storedId)) {
+                        log.debug("Ignoring duplicate relationship '{}'", identifier);
                         duplicate = true;
                     }
                 }
@@ -933,8 +926,6 @@ public class CurationManager extends GenericTransactionManager {
                 // Store new entries
                 if (!duplicate) {
                     log.debug("New relationship added to '{}'", oid);
-                    newRelation.getJsonObject().put(
-                            "uniqueString", uniqueString);
                     relations.add(newRelation.getJsonObject());
                 }
             }
@@ -983,7 +974,7 @@ public class CurationManager extends GenericTransactionManager {
             throw new TransactionException(
                     "Error setting publish property: ", ex);
         }
-        
+
         // Make a final pass through the curation tool(s),
         //   allows for external publication. eg. VITAL
         JsonSimple itemConfig = getConfigFromStorage(oid);
@@ -1015,8 +1006,9 @@ public class CurationManager extends GenericTransactionManager {
      * Send out requests to all relations to publish
      * 
      * @param oid The object identifier to publish
+     * @throws TransactionException 
      */
-    private void publishRelations(JsonSimple response, String oid) {
+    private void publishRelations(JsonSimple response, String oid) throws TransactionException {
         log.debug("Publishing Children of '{}'", oid);
 
         JsonSimple data = getDataFromStorage(oid);
@@ -1027,6 +1019,8 @@ public class CurationManager extends GenericTransactionManager {
                     + " record. Please check the system logs.");
             return;
         }
+
+        boolean saveData = false;
 
         JSONArray relations = data.writeArray("relationships");
         for (Object relation : relations) {
@@ -1040,7 +1034,7 @@ public class CurationManager extends GenericTransactionManager {
             if (relatedOid == null && localRecord) {
                 String identifier = json.getString(null, "identifier");
                 if (identifier == null) {
-                    log.error("Cannot resolve identifer: '{}'", identifier);
+                    log.error("NULL identifer provided!");
                 }
                 relatedOid = idToOid(identifier);
                 if (relatedOid == null) {
@@ -1052,26 +1046,43 @@ public class CurationManager extends GenericTransactionManager {
             if (authority) {
                 // Is this relationship using a curated ID?
                 boolean isCurated = json.getBoolean(false, "isCurated");
-                if (isCurated) {
+                //JCU: adding check for publishMsgSent
+                boolean publishMsgSent = json.getBoolean(false, "publishMsgSent");
+                if (isCurated && !publishMsgSent) {
                     log.debug(" * Publishing '{}'", relatedId);
-                    JsonObject task;
                     // It is a local object
                     if (localRecord) {
-                        task = createTask(response, relatedOid, "publish");
+                        createTask(response, relatedOid, "publish");
+
                     // Or remote
                     } else {
-                        task = createTask(response, broker, relatedOid,
+                        JsonObject task = createTask(response, broker, relatedOid,
                                 "publish");
                         // We won't know OIDs for remote systems
                         task.remove("oid") ;
                         task.put("identifier", relatedId);
                     }
-                } else {
+                    
+                    //JCU: Adding tag to indicate the publish message has been sent.
+                    ((JsonObject) relation).put("publishMsgSent", "true");
+                    saveData = true;
+                    
+                } else if (publishMsgSent){
+                    log.debug(" * Ignoring already published relationship '{}'",
+                            relatedId);
+                }
+                else {
                     log.debug(" * Ignoring non-curated relationship '{}'",
                             relatedId);
                 }
             }
         }
+
+        if  (saveData){
+        	//updating the relations with publishMsgSent
+            saveObjectData(data, oid);
+        }
+        
     }
 
     /**
