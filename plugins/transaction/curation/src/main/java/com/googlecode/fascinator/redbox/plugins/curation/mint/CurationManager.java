@@ -802,7 +802,7 @@ public class CurationManager extends GenericTransactionManager {
                     task.put("respond", msgResponse);
                 }
             } else {
-                log.debug(" * Already curated '{}'", relatedOid);
+                log.debug(" * Already curated '{}'", relatedId);
             }
         }
 
