@@ -21,6 +21,7 @@ package com.googlecode.fascinator.redbox.plugins.curation.mint;
 import com.googlecode.fascinator.api.PluginException;
 import com.googlecode.fascinator.api.PluginManager;
 import com.googlecode.fascinator.api.indexer.Indexer;
+import com.googlecode.fascinator.api.indexer.IndexerException;
 import com.googlecode.fascinator.api.indexer.SearchRequest;
 import com.googlecode.fascinator.api.storage.DigitalObject;
 import com.googlecode.fascinator.api.storage.Payload;
@@ -40,6 +41,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -1112,7 +1114,50 @@ public class CurationManager extends GenericTransactionManager {
         String task = message.getString(null, "task");
         if (task != null) {
             String oid = message.getString(null, "oid");
+            
+            
+          //######################
+            if (task.equals("workflow")) {
+                JsonSimple response = new JsonSimple();
 
+                String eventType = message.getString(null, "eventType");
+                String newStep = message.getString(null, "newStep");
+                // The workflow has altered data, run the tool chain
+                if (newStep != null || eventType.equals("ReIndex")) {
+                    // For housekeeping, we need to alter the
+                    //   Solr index fairly speedily
+                    boolean quickIndex = message.getBoolean(false, "quickIndex");
+                    if (quickIndex) {
+                        JsonObject order = newIndex(response, oid);
+                        order.put("forceCommit", true);
+                        try {
+							indexer.index(oid);
+						} catch (IndexerException e) {
+							throw new TransactionException(e);
+						}
+                    }
+                    
+                    // send a copy to the audit log
+                    JsonObject order = newSubscription(response, oid);
+                    JsonObject audit = (JsonObject) order.get("message");
+                    audit.putAll(message.getJsonObject());
+
+                    // Then business as usual
+                    reharvest(response, message);
+
+                    // Once the dust settles come back here
+                    createTask(response, oid, "curation-request");
+
+                // A traditional Subscriber message for audit logs
+                } else {
+                    JsonObject order = newSubscription(response, oid);
+                    JsonObject audit = (JsonObject) order.get("message");
+                    audit.putAll(message.getJsonObject());
+                }
+                return response;
+            }
+            
+            
             //######################
             // Start a reharvest for this object
             if (task.equals("reharvest")) {
@@ -1546,4 +1591,6 @@ public class CurationManager extends GenericTransactionManager {
             throw new TransactionException(ex);
         }
     }
+    
+   
 }
