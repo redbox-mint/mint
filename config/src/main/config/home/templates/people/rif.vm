@@ -19,12 +19,6 @@
         <party type="person">
             <identifier type="uri">$util.encodeXml($pid)</identifier>
 
-			#set ($nla_id = $util.getMetadata($object, "nlaPid"))
-            #if ("$!nla_id" != "") 
-            	<identifier type="AU-ANL:PEAU">$util.encodeXml($nla_id)</identifier> 
-            #end
-            
-            
             ### Name
             <name type="primary">
                 <namePart type="given">$util.encodeXml($util.get($item, 'data', 'Given_Name'))</namePart>
