@@ -1,5 +1,6 @@
 from com.googlecode.fascinator.common import JsonSimple
 from com.googlecode.fascinator.portal.services import ScriptingServices
+from com.googlecode.fascinator.portal.api.impl import MintStatsAPICallHandlerImpl
 from java.lang import Class
 
 class QueryData:
@@ -11,20 +12,23 @@ class QueryData:
         self.request = context["request"]
         self.systemConfig = context["systemConfig"]
         out = self.response.getPrintWriter("text/plain; charset=UTF-8")
-        apiClass=self.systemConfig.getObject("api").get(self.request.getParameter("callType"))
+        callType = self.request.getParameter("callType")
+        apiClass=self.systemConfig.getObject("api").get(callType)
         className = apiClass.get("className")
         apiCallClass = Class.forName(className)
-        apiCallObject = apiCallClass.newInstance()
-        
-        
+        apiCallObject = apiCallClass.newInstance()        
+    
         setScriptingServiceMethod = apiCallClass.getMethod("setScriptingServices", self.get_class("com.googlecode.fascinator.portal.services.ScriptingServices"))
         setScriptingServiceMethod.invoke(apiCallObject, context['Services'])
-        
+        if callType == "mint-stats":
+             setScriptingServiceMethod = apiCallClass.getMethod("setConfig", self.get_class("com.googlecode.fascinator.common.JsonSimple"))
+             setScriptingServiceMethod.invoke(apiCallObject, JsonSimple(self.systemConfig.getObject("api", "mint-stats")))
+             
         handleRequestMethod = apiCallClass.getMethod("handleRequest", 
-                                                           self.get_class("org.apache.tapestry5.services.Request"))
-        
+                                                       self.get_class("org.apache.tapestry5.services.Request"))
         responseString = handleRequestMethod.invoke(apiCallObject, context["request"]);
         out.println(responseString)
+        
         out.close()
     
     # Standard Java Class forName seems to have issues at least with Interfaces. 
