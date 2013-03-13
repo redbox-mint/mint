@@ -25,4 +25,30 @@
             <artifactId>fascinator-plugin-api</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+    	<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <goals>deploy</goals>
+                    <pushChanges>false</pushChanges>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+    	</plugins>
+    </build>
+
+    <scm>
+        <url>scm:git://github.com/innodev-au/mint.git</url>
+        <connection>scm:git://github.com/innodev-au/mint.git</connection>
+        <developerConnection>scm:git:https://github.com/innodev-au/mint.git</developerConnection>
+    </scm>
 </project>
