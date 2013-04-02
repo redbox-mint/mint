@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.6</version>
+  <version>1.6.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.6</version>
+    <version>1.6.1-SNAPSHOT</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
