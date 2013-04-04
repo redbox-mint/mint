@@ -8,5 +8,4 @@
 ./tf_harvest.sh MARC_Countries
 ./tf_harvest.sh Parties_Groups
 ./tf_harvest.sh Parties_People
-./tf_harvest.sh Parties_People_Multi
 ./tf_harvest.sh Services
