@@ -1,5 +1,5 @@
 #set($noLayout = true)
-#set($results = $self.getResults())
+#set($results = $self.getResultsByCode())
 {
     "OpenSearchResponse": {
         "title": "ANZSRC SEO Search",

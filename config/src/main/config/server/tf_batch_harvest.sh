@@ -1,0 +1,11 @@
+./tf_harvest.sh ANZSRC_FOR
+./tf_harvest.sh ANZSRC_SEO
+./tf_harvest.sh Activities_NGCP_Completed
+./tf_harvest.sh Activities_NGCP_New_Ongoing
+./tf_harvest.sh Activities_NHMRC_2010
+./tf_harvest.sh Funding_Bodies
+./tf_harvest.sh Languages
+./tf_harvest.sh MARC_Countries
+./tf_harvest.sh Parties_Groups
+./tf_harvest.sh Parties_People
+./tf_harvest.sh Services

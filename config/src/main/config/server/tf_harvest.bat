@@ -9,12 +9,12 @@ if "%1" == "" goto usage
 set JSON_FILE=%1
 
 REM Find the window 'The Fascinator'
-set Cmd=tasklist /fi "windowtitle eq The Fascinator" /fo csv /nh
+set Cmd=tasklist /fi "windowtitle eq Mint" /fo csv /nh
 for /f "tokens=1*" %%i in ('%Cmd% ^| find "cmd.exe"') do goto harvest
 REM Or perhaps it is running as admin 'Administrator:  The Fascinator' (note the two spaces)
 set Cmd=tasklist /fi "windowtitle eq Administrator:  The Fascinator" /fo csv /nh
 for /f "tokens=1*" %%i in ('%Cmd% ^| find "cmd.exe"') do goto harvest
-echo Please start The Fascinator before harvesting.
+echo Please start Mint before harvesting.
 goto end
 
 :harvest

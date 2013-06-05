@@ -2,7 +2,8 @@ from com.googlecode.fascinator.api.indexer import SearchRequest
 from com.googlecode.fascinator.common.solr import SolrResult
 
 from java.io import ByteArrayInputStream, ByteArrayOutputStream
-from java.lang import Exception
+from java.util import TreeMap, HashMap
+from java.lang import Exception, String
 
 class LookupData:
     def __activate__(self, context):
@@ -16,12 +17,22 @@ class LookupData:
 
         self.__solrData = self.__getSolrData()
         self.__results = self.__solrData.getResults()
-
+        self.sortResultsByCode()
+        
         baseUrl = context["systemConfig"].getString("", ["urlBase"])
         if baseUrl.endswith("/"):
             baseUrl = baseUrl[:-1]
         self.__baseUrl = baseUrl
-
+    
+    def sortResultsByCode(self):
+        tempMap = HashMap()
+        for result in self.__results:
+            uri = String(self.getValue(result, "dc_identifier"))
+            lastIndex = uri.lastIndexOf('/') + 1 
+            code = uri.substring(lastIndex)
+            tempMap.put(code, result)
+        self.resultsByCode = TreeMap(tempMap)
+        
     def getBaseUrl(self):
         return self.__baseUrl + "/" + self.portalId
 
@@ -50,6 +61,9 @@ class LookupData:
 
     def getResults(self):
         return self.__solrData.getResults()
+    
+    def getResultsByCode(self):
+        return self.resultsByCode.values()
 
     def getValue(self, doc, field):
         value = doc.getFirst(field)
