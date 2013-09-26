@@ -478,6 +478,7 @@
       </build>
     </profile>
   </profiles>
+  <!--
   <repositories>
     <repository>
       <id>fascinator-snapshots</id>
@@ -493,7 +494,7 @@
       <id>redbox-nexus</id>
       <url>http://dev.redboxresearchdata.com.au/nexus/content/groups/public/</url>
     </repository>
-  </repositories>
+  </repositories> -->
   <scm>
     <url>https://github.com/redbox-mint/mint</url>
     <developerConnection>scm:git:https://github.com/redbox-mint/mint.git</developerConnection>
