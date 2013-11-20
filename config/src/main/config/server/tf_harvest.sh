@@ -17,6 +17,8 @@ echo "The Fascinator - Harvest Client - Mint - $REDBOX_VERSION"
 # harvest config directory
 HARVEST_DIR=$TF_HOME/harvest
 
+export JAVA_OPTS="-Dlogback.configurationFile=$TF_HOME/harvest/logback.xml"
+
 usage() {
 	echo "Usage: `basename $0` JSON_FILE"
 	echo "Where JSON_FILE is a JSON configuration file."
