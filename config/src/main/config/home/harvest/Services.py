@@ -88,6 +88,8 @@ class IndexData:
         self.utils.add(self.index, "dc_subject", data.get("ANZSRC_FOR_2"))
         self.utils.add(self.index, "dc_subject", data.get("ANZSRC_FOR_3"))
         self.utils.add(self.index, "dc_format", "application/x-mint-service")
+        for key in data.keySet():
+            self.utils.add(self.index, key, data.get(key))
 
         # Known IDs
         identifier = json.getString(None, ["metadata", "dc.identifier"])
