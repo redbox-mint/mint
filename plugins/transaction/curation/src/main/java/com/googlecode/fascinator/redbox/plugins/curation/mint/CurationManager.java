@@ -210,7 +210,7 @@ public class CurationManager extends GenericTransactionManager {
                 "curation", "nlaIntegration", "enabled");
         nlaIdProperty = systemConfig.getString(NLA_ID_PROPERTY_DEFAULT,
                 "curation", "nlaIntegration", "pidProperty");
-        useNlaIdForRelationships = config.getBoolean(true,
+        useNlaIdForRelationships = systemConfig.getBoolean(true,
                 "curation", "nlaIntegration", "useNlaIdForRelationships");
         JsonObject nlaIncludeTestNode = systemConfig.getObject(
                 "curation", "nlaIntegration", "includeTest");
