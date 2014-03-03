@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.6.1</version>
+  <version>1.7-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.6.1</version>
+    <version>1.7-SNAPSHOT</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
@@ -46,7 +46,7 @@
       <artifactId>fascinator-portal</artifactId>
       <type>war</type>
       <classifier>skinny</classifier>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator</groupId>
@@ -67,6 +67,11 @@
       <classifier>skinny</classifier>
       <version>1.0</version>
     </dependency>
+<dependency>
+ <groupId>com.googlecode.the-fascinator</groupId>
+ <artifactId>fascinator-config-db</artifactId>
+ <version>0.1-SNAPSHOT</version>
+ </dependency>
     <dependency>
       <groupId>com.googlecode.solr-geonames</groupId>
       <artifactId>solr-geonames-harvester</artifactId>
@@ -96,6 +101,10 @@
         <exclusion>
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -130,61 +139,61 @@
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-harvester-csv</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-transformer-jsonVelocity</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
     </dependency>
     <!-- Fascinator Plugins -->
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-access-derby</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-authentication-internal</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-harvester-oai-pmh</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-harvester-workflow</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-indexer-solr</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-roles-internal</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-storage-filesystem</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-subscriber-solrEventLog</artifactId>
-      <version>1.1.4</version>
+      <version>1.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
@@ -237,7 +246,7 @@
           <groupId>com.googlecode.the-fascinator</groupId>
           <artifactId>fascinator-portal</artifactId>
           <type>warpath</type>
-          <version>1.1.4-SNAPSHOT</version>
+          <version>1.2-SNAPSHOT</version>
         </dependency>
       </dependencies>
       <!-- The standard build/deploy process for making a server -->
@@ -403,7 +412,7 @@
                   <goal>unpack</goal>
                 </goals>
                 <configuration>
-                  <includes>portal/**</includes>
+                  <includes>portal/**,home/**</includes>
                   <outputDirectory>${project.home}</outputDirectory>
                   <artifactItems>
                     <artifactItem>
@@ -478,6 +487,7 @@
       </build>
     </profile>
   </profiles>
+  <!--
   <repositories>
     <repository>
       <id>fascinator-snapshots</id>
@@ -493,7 +503,7 @@
       <id>redbox-nexus</id>
       <url>http://dev.redboxresearchdata.com.au/nexus/content/groups/public/</url>
     </repository>
-  </repositories>
+  </repositories> -->
   <scm>
     <url>https://github.com/redbox-mint/mint</url>
     <developerConnection>scm:git:https://github.com/redbox-mint/mint.git</developerConnection>

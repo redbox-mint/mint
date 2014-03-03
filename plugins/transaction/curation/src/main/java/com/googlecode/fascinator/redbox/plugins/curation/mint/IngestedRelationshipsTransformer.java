@@ -163,11 +163,15 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			log.error("Failed to retrieve data from storage: '{}'", in.getId());
 			return in;
 		}
-
 		// Look in config for what relationships to map
 		boolean saveChanges = false;
 		Map<String, JsonSimple> relations = itemConfig
 				.getJsonSimpleMap("relations");
+		
+		// Fix for REDBOXHELP-22: Drop all existing relationships.
+		if (relations != null && relations.size() > 0) {
+			data.getJsonObject().remove("relationships");	
+		}
 
 		// And loop through them all
 		for (String field : relations.keySet()) {
@@ -220,7 +224,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 		if (saveChanges) {
 			saveObjectData(in, data, pid);
 			// Value is not important, just having it set
-			properties.setProperty(PROPERTY_FLAG, "hasRun");
+			// Fix for REDBOXHELP-22: Commented out next line to allow so this transformer can update the relationships and primary_group_id
+			// properties.setProperty(PROPERTY_FLAG, "hasRun");
 			try {
 				in.close();
 			} catch (StorageException ex) {

@@ -115,6 +115,9 @@ public class CurationManager extends GenericTransactionManager {
 
     /** NLA Integration - Property Name */
     private String nlaIdProperty;
+    
+    /** NLA Integration - whether to use the NlaId for relationships*/
+    private boolean useNlaIdForRelationships;
 
     /** NLA Integration - Test for execution */
     private Map<String, String> nlaIncludeTest;
@@ -207,6 +210,8 @@ public class CurationManager extends GenericTransactionManager {
                 "curation", "nlaIntegration", "enabled");
         nlaIdProperty = systemConfig.getString(NLA_ID_PROPERTY_DEFAULT,
                 "curation", "nlaIntegration", "pidProperty");
+        useNlaIdForRelationships = config.getBoolean(true,
+                "curation", "nlaIntegration", "useNlaIdForRelationships");
         JsonObject nlaIncludeTestNode = systemConfig.getObject(
                 "curation", "nlaIntegration", "includeTest");
         nlaIncludeTest = new HashMap<String, String>();
@@ -365,7 +370,7 @@ public class CurationManager extends GenericTransactionManager {
                     }
                     responseObj.put("originOid", oid);
                     // If NLA Integration is enabled, use the NLA ID instead
-                    if (nlaIntegrationEnabled && metadata.containsKey(nlaIdProperty)) {
+                    if (nlaIntegrationEnabled && metadata.containsKey(nlaIdProperty) && useNlaIdForRelationships) {
                         responseObj.put("curatedPid", metadata.getProperty(nlaIdProperty));
                     } else {
                         responseObj.put("curatedPid", thisPid);
