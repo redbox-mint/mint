@@ -169,9 +169,10 @@ public class IngestedRelationshipsTransformer implements Transformer {
 				.getJsonSimpleMap("relations");
 		
 		// Fix for REDBOXHELP-22: Drop all existing relationships.
-		if (relations != null && relations.size() > 0) {
-			data.getJsonObject().remove("relationships");	
-		}
+		//JCU - commented out - causing problems with curation.....it deletes the curated relationship.
+		//if (relations != null && relations.size() > 0) {
+		//	data.getJsonObject().remove("relationships");	
+		//}
 
 		// And loop through them all
 		for (String field : relations.keySet()) {
@@ -225,7 +226,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			saveObjectData(in, data, pid);
 			// Value is not important, just having it set
 			// Fix for REDBOXHELP-22: Commented out next line to allow so this transformer can update the relationships and primary_group_id
-			// properties.setProperty(PROPERTY_FLAG, "hasRun");
+			//JCU - uncommented the comment, this fix is causing curation issues, maybe not this line though. fix above.
+			properties.setProperty(PROPERTY_FLAG, "hasRun");
 			try {
 				in.close();
 			} catch (StorageException ex) {
