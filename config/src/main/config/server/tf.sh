@@ -108,6 +108,7 @@ status)
 		echo "   - Log files in $TF_HOME/logs"
 	else
 		echo "not running"
+		exitval=2
 	fi
 	;;
 *)
