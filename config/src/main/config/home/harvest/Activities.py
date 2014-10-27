@@ -93,7 +93,8 @@ class IndexData:
         self.utils.add(self.index, "foaf_name", data.get("Institution"))
         self.utils.add(self.index, "dc_subject", data.get("Discipline"))
         self.utils.add(self.index, "dc_format", "application/x-mint-research-activity")
-        self.__indexList("dc_contributor", data.get("Investigators").split(";"))
+        if data.get("Investigators") is not None: # Added not null check before splitting
+            self.__indexList("dc_contributor", data.get("Investigators").split(";"))
 
         # Known IDs
         identifier = json.getString(None, ["metadata", "dc.identifier"])

@@ -94,7 +94,8 @@ class IndexData:
         self.utils.add(self.index, "dc_description", data.get("Description"))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
         for key in data.keySet():
-            self.utils.add(self.index, key, data.get(key))
+            if (key != "Description"): # Retaining dc_description because it might be used somewhere else, but at the same time not repeating the "Description" field.
+                self.utils.add(self.index, key, data.get(key))
 
         # Known IDs
         idFields = ["ID", "URI", "NLA_Party_Identifier", "ResearcherID", "openID", "Personal_URI"]
