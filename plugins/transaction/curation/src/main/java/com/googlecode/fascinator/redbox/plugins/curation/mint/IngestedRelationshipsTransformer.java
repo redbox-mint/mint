@@ -30,16 +30,12 @@ import com.googlecode.fascinator.api.transformer.TransformerException;
 import com.googlecode.fascinator.common.JsonObject;
 import com.googlecode.fascinator.common.JsonSimple;
 import com.googlecode.fascinator.common.JsonSimpleConfig;
-import com.googlecode.fascinator.common.messaging.MessagingException;
-import com.googlecode.fascinator.common.messaging.MessagingServices;
-import com.googlecode.fascinator.messaging.TransactionManagerQueueConsumer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +64,6 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/** Storage layer */
 	private Storage storage;
-
-	private MessagingServices messaging;
 
 	/**
 	 * Constructor
@@ -106,12 +100,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 		try {
 			config = new JsonSimpleConfig(jsonString);
 			reset();
-			messaging = MessagingServices.getInstance();
 		} catch (IOException e) {
 			throw new PluginException("Error reading config: ", e);
-		} catch (MessagingException e) {
-			throw new PluginException(
-					"Error initialising messaging services: ", e);
 		}
 	}
 
@@ -173,19 +163,11 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			log.error("Failed to retrieve data from storage: '{}'", in.getId());
 			return in;
 		}
+
 		// Look in config for what relationships to map
 		boolean saveChanges = false;
 		Map<String, JsonSimple> relations = itemConfig
 				.getJsonSimpleMap("relations");
-
-		JSONArray oldrelationships = data.getArray("relationships");
-		// Fix for REDBOXHELP-22: Drop all existing relationships.
-		if (relations != null && relations.size() > 0) {
-			if (oldrelationships != null) {
-				oldrelationships = (JSONArray) oldrelationships.clone();
-			}
-			data.getJsonObject().remove("relationships");
-		}
 
 		// And loop through them all
 		for (String field : relations.keySet()) {
@@ -236,63 +218,18 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 		// If changed, store
 		if (saveChanges) {
-
-			if (oldrelationships != null) {
-				mergeCuratedRelationshipInfo(oldrelationships, data);
-			}
-
 			saveObjectData(in, data, pid);
-
-			// if it's published we need to re-curate the item in case there
-			// are new relationships
-			if ("true".equals(properties.get("published"))||"ready".equals(properties.get("ready_to_publish"))) {
-				JsonSimple message = new JsonSimple();
-				message.getJsonObject().put("task", "curation");
-				message.getJsonObject().put("oid", in.getId());
-
-				try {
-					messaging.queueMessage(
-							TransactionManagerQueueConsumer.LISTENER_ID,
-							message.toString());
-				} catch (MessagingException ex) {
-					log.error("Error sending message: ", ex);
-				}
+			// Value is not important, just having it set
+			properties.setProperty(PROPERTY_FLAG, "hasRun");
+			try {
+				in.close();
+			} catch (StorageException ex) {
+				throw new TransformerException("Error updating properties: ",
+						ex);
 			}
-		}
-		// Value is not important, just having it set
-		// Fix for REDBOXHELP-22: Commented out next line to allow so this
-		// transformer can update the relationships and primary_group_id
-		// properties.setProperty(PROPERTY_FLAG, "hasRun");
-		try {
-			in.close();
-		} catch (StorageException ex) {
-			throw new TransformerException("Error updating properties: ", ex);
 		}
 
 		return in;
-	}
-
-	private boolean mergeCuratedRelationshipInfo(JSONArray oldRelationships,
-			JsonSimple data) {
-		boolean itemsMerged = false;
-		JSONArray newRelationships = data.getArray("relationships");
-		for (int i = 0; i < newRelationships.size(); i++) {
-			JsonObject relationship = (JsonObject) newRelationships.get(i);
-			for (Object oldRelationshipObject : oldRelationships) {
-				JsonObject oldRelationship = (JsonObject) oldRelationshipObject;
-				if (oldRelationship.get("oid") != null
-						&& (oldRelationship.get("oid").equals(
-								relationship.get("oid")) || relationship.get(
-								"identifier").equals(
-								oldRelationship.get("identifier")))) {
-					newRelationships.remove(i);
-					newRelationships.add(i, oldRelationship);
-					itemsMerged = true;
-					break;
-				}
-			}
-		}
-		return itemsMerged;
 	}
 
 	/**

@@ -60,7 +60,7 @@
                 #if ("$!value" != "")
                     <abstract>$util.encodeXml($value)</abstract>
                 #else
-                    #set ($pretend = "$util.encodeXml($util.get($item, 'data', 'Honorific')) $util.encodeXml($util.get($item, 'data', 'Given_Name')) $util.encodeXml($util.get($item, 'data', 'Family_Name')), $util.encodeXml($util.get($item, 'data', 'Division')), $util.encodeXml($util.get($item, 'data', 'School'))")
+                    #set ($pretend = "$util.encodeXml($util.get($item, 'data', 'Honorific')) $util.encodeXml($util.get($item, 'data', 'Given_Name')) $util.encodeXml($util.get($item, 'data', 'Family_Name'))")
                     <abstract>$pretend</abstract>
                 #end
             </biogHist>
