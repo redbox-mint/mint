@@ -93,9 +93,9 @@ appender("SPRING", RollingFileAppender) {
   }
 }
 root(OFF)
-logger("com.googlecode.fascinator", INFO, ["SIFT"])
+logger("com.googlecode.fascinator", DEBUG, ["SIFT"])
 logger("org.apache.activemq", WARN, ["AMQ"])
 logger("au.edu.usq.adfi", DEBUG, ["GEO"])
 logger("org.apache.solr", INFO, ["SOLR"])
-logger("org.springframework", INFO, ["SPRING"])
-logger("au.com.redboxresearchdata", INFO, ["SIFT"])
+logger("org.springframework", DEBUG, ["SPRING"])
+logger("au.com.redboxresearchdata", DEBUG, ["SIFT"])
