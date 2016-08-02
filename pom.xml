@@ -197,6 +197,11 @@
       <version>1.3</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+       <groupId>com.googlecode.redbox-mint</groupId>
+       <artifactId>redbox-web-service</artifactId>
+       <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -314,9 +319,9 @@
             <version>2.1</version>
             <executions>
               <!-- Unpack SKOS harvest config -->
-              <!-- 
+              <!--
               This is no-longer needed as the skos files are held in the Mint src
-              This helps reduce the need to release the SKOS harvester just because 
+              This helps reduce the need to release the SKOS harvester just because
               of the data files
               <execution>
                 <id>unpack-harvest-config</id>
