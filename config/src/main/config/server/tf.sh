@@ -33,7 +33,7 @@ running() {
 ACTION="$1"
 shift
 ARGS="$*"
-
+exitval=0
 start() {
 	echo " * Starting The Fascinator..."
 	if [ -f $PID_FILE ]; then
@@ -55,10 +55,12 @@ start() {
 	echo "   - Started on `date`"
 	echo "   - PID: `cat $PID_FILE`"
 	echo "   - Log files in $TF_HOME/logs"
+	exitval=0
 }
 
 stop() {
 	echo " * Stopping The Fascinator..."
+	exitval=2
 	if [ -f $PID_FILE ]; then
 		echo "   - Found PID file: $PID_FILE"
 		PID=`cat $PID_FILE`
@@ -106,6 +108,7 @@ status)
 		echo "   - Log files in $TF_HOME/logs"
 	else
 		echo "not running"
+		exitval=2
 	fi
 	;;
 *)
@@ -113,3 +116,4 @@ status)
 	usage
 	;;
 esac
+exit $exitval

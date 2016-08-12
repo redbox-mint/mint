@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>plugin-transformer-local</artifactId>
-    <version>1.7</version>
+    <version>1.8.1-SNAPSHOT</version>
     <name>The Mint - Plugin - Transformer - Local Curation</name>
     <parent>
         <groupId>com.googlecode.redbox-mint</groupId>
         <artifactId>mint-project</artifactId>
-        <version>1.7</version>
+        <version>1.8.1-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
     <dependencies>
         <dependency>
             <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-common</artifactId>
-        </dependency>	
+        </dependency>
         <dependency>
             <groupId>com.googlecode.the-fascinator</groupId>
             <artifactId>fascinator-plugin-api</artifactId>

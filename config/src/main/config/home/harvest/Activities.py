@@ -78,6 +78,14 @@ class IndexData:
 
         data = json.getObject("data")
         self.utils.add(self.index, "grant_number", data.get("ID"))
+        self.utils.add(self.index, "Type", data.get("Type"))
+        self.utils.add(self.index, "Existence_Start", data.get("Existence_Start"))
+        self.utils.add(self.index, "Existence_End", data.get("Existence_End"))
+        self.utils.add(self.index, "Primary_Investigator_ID", data.get("Primary_Investigator_ID"))
+        self.utils.add(self.index, "Website", data.get("Website"))
+        self.utils.add(self.index, "ANZSRC_FOR_1", data.get("ANZSRC_FOR_1"))
+        self.utils.add(self.index, "ANZSRC_FOR_2", data.get("ANZSRC_FOR_2"))
+        self.utils.add(self.index, "ANZSRC_FOR_3", data.get("ANZSRC_FOR_3"))
         self.utils.add(self.index, "dc_date_submitted", data.get("Submit Year"))
         self.utils.add(self.index, "dc_date", data.get("Start Year"))
         self.utils.add(self.index, "dc_title", data.get("Title"))
@@ -85,7 +93,8 @@ class IndexData:
         self.utils.add(self.index, "foaf_name", data.get("Institution"))
         self.utils.add(self.index, "dc_subject", data.get("Discipline"))
         self.utils.add(self.index, "dc_format", "application/x-mint-research-activity")
-        self.__indexList("dc_contributor", data.get("Investigators").split(";"))
+        if data.get("Investigators") is not None: # Added not null check before splitting
+            self.__indexList("dc_contributor", data.get("Investigators").split(";"))
 
         # Known IDs
         identifier = json.getString(None, ["metadata", "dc.identifier"])

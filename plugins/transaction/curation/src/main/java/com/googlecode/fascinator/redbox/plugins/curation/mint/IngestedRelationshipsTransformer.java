@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This transformer is designed to fire only once after each item is ingested.
  * It is primarily concerned with resolving relationships between parties.
- * 
+ *
  * @author Greg Pendlebury
  */
 public class IngestedRelationshipsTransformer implements Transformer {
@@ -79,7 +79,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Init method from file
-	 * 
+	 *
 	 * @param jsonFile
 	 * @throws IOException
 	 * @throws PluginException
@@ -96,7 +96,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Init method from String
-	 * 
+	 *
 	 * @param jsonString
 	 * @throws IOException
 	 * @throws PluginException
@@ -133,7 +133,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Transform method
-	 * 
+	 *
 	 * @param object
 	 *            : DigitalObject to be transformed
 	 * @param jsonConfig
@@ -173,19 +173,11 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			log.error("Failed to retrieve data from storage: '{}'", in.getId());
 			return in;
 		}
+
 		// Look in config for what relationships to map
 		boolean saveChanges = false;
 		Map<String, JsonSimple> relations = itemConfig
 				.getJsonSimpleMap("relations");
-
-		JSONArray oldrelationships = data.getArray("relationships");
-		// Fix for REDBOXHELP-22: Drop all existing relationships.
-		if (relations != null && relations.size() > 0) {
-			if (oldrelationships != null) {
-				oldrelationships = (JSONArray) oldrelationships.clone();
-			}
-			data.getJsonObject().remove("relationships");
-		}
 
 		// And loop through them all
 		for (String field : relations.keySet()) {
@@ -242,21 +234,13 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			}
 
 			saveObjectData(in, data, pid);
-
-			// if it's published we need to re-curate the item in case there
-			// are new relationships
-			if ("true".equals(properties.get("published"))||"ready".equals(properties.get("ready_to_publish"))) {
-				JsonSimple message = new JsonSimple();
-				message.getJsonObject().put("task", "curation");
-				message.getJsonObject().put("oid", in.getId());
-
-				try {
-					messaging.queueMessage(
-							TransactionManagerQueueConsumer.LISTENER_ID,
-							message.toString());
-				} catch (MessagingException ex) {
-					log.error("Error sending message: ", ex);
-				}
+			// Value is not important, just having it set
+			properties.setProperty(PROPERTY_FLAG, "hasRun");
+			try {
+				in.close();
+			} catch (StorageException ex) {
+				throw new TransformerException("Error updating properties: ",
+						ex);
 			}
 		}
 		// Value is not important, just having it set
@@ -297,7 +281,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Retrieve and parse the indicated JSON payload from storage
-	 * 
+	 *
 	 * @param in
 	 *            The incoming object
 	 * @param pid
@@ -334,7 +318,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Retrieve and parse the indicated JSON payload from storage
-	 * 
+	 *
 	 * @param in
 	 *            The incoming object
 	 * @param pid
@@ -368,7 +352,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Save the provided object data back into storage
-	 * 
+	 *
 	 * @param data
 	 *            The data to save
 	 * @param oid
@@ -389,7 +373,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Get Transformer ID
-	 * 
+	 *
 	 * @return id
 	 */
 	@Override
@@ -399,7 +383,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Get Transformer Name
-	 * 
+	 *
 	 * @return name
 	 */
 	@Override
@@ -409,7 +393,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Gets a PluginDescription object relating to this plugin.
-	 * 
+	 *
 	 * @return a PluginDescription
 	 */
 	@Override
