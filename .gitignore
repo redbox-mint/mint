@@ -15,3 +15,5 @@ target/
 deploy.server
 
 .classpath
+
+*.iml
