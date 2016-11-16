@@ -38,7 +38,7 @@
     <!-- Control scripts try to auto-detect proxy. Use this value if you
              want Java to specifically exclude certain hosts from proxying. -->
     <non.proxy.hosts>localhost</non.proxy.hosts>
-      <groovy.version>2.3.4</groovy.version>
+      <groovy.version>2.4.5</groovy.version>
   </properties>
   <dependencies>
     <!-- Fascinator -->
