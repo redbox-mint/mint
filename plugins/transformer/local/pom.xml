@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>plugin-transformer-local</artifactId>
-    <version>1.9-SNAPSHOT</version>
+    <version>1.9</version>
     <name>The Mint - Plugin - Transformer - Local Curation</name>
     <parent>
         <groupId>com.googlecode.redbox-mint</groupId>
