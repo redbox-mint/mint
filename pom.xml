@@ -120,17 +120,17 @@
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>mint-config</artifactId>
-      <version>${project.version}</version>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>plugin-transaction-curation-mint</artifactId>
-      <version>${project.version}</version>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>sruclient-mint</artifactId>
-      <version>${project.version}</version>
+      <version>1.9</version>
     </dependency>
     <!-- Contrib plugins -->
     <dependency>
