@@ -15,6 +15,7 @@
 		<intercept-url pattern="/**/history/*" access="hasRole('admin')" />
 		<intercept-url pattern="/**/admin" access="hasRole('admin')" />                                                         
 		<intercept-url pattern="/**/settings" access="hasRole('admin')" />
+		<intercept-url pattern="/**/systemSettings" access="hasRole('admin')" />
 		<intercept-url pattern="/**/batchprocesses" access="hasRole('admin')" />
 		<intercept-url pattern="/**/queues" access="hasRole('admin')" />
 		<intercept-url pattern="/**/workflow/*" access="hasWorkflowAccess()" />
