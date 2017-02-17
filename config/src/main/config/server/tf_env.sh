@@ -58,7 +58,7 @@ JETTY_OPTS="-Djetty.port=$LOCAL_PORT -Djetty.logs=$JETTY_LOGS -Djetty.home=$PROJ
 SOLR_OPTS="-Dsolr.solr.home=$PROJECT_HOME/solr"
 
 # Geonames
-GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/home/geonames/solr"
+GEONAMES="-Dgeonames.solr.home=$PROJECT_HOME/data/geonames/solr"
 
 # directories
 CONFIG_DIRS="-Dfascinator.home=$TF_HOME -Dportal.home=$PROJECT_HOME/portal -Dstorage.home=$PROJECT_HOME/storage"

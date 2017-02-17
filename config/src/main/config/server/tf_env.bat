@@ -54,7 +54,7 @@ REM solr settings
 set SOLR_OPTS=-Dsolr.solr.home="%PROJECT_HOME%/solr"
 
 Rem Geonames
-set GEONAMES=-Dgeonames.solr.home="%PROJECT_HOME%/home/geonames/solr"
+set GEONAMES=-Dgeonames.solr.home="%PROJECT_HOME%/data/geonames/solr"
 
 REM proxy data
 set PROXY_OPTS=-Dhttp.proxyHost=%PROXY_HOST% -Dhttp.proxyPort=%PROXY_PORT% -Dhttp.nonProxyHosts=%NON_PROXY_HOSTS%

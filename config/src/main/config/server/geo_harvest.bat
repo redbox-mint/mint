@@ -10,7 +10,7 @@ set LOG_FILE=%FASCINATOR_HOME%/logs/geo-harvest.out
 echo "Geonames Solr Index building."
 echo "Logging to: '%LOG_FILE%'"
 
-set CLASSPATH=%PROJECT_HOME%/home/geonames/solr/conf;%CLASSPATH%
+set CLASSPATH=%PROJECT_HOME%/data/geonames/solr/conf;%CLASSPATH%
 call java %JAVA_OPTS% -cp %CLASSPATH% com.googlecode.solrgeonames.harvester.Harvester "%PROGRAM_DIR%%1" > "%LOG_FILE%"
 goto end
 

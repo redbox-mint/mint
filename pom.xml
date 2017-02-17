@@ -32,7 +32,7 @@
     <dir.solr>${project.home}/solr</dir.solr>
     <dir.data>${project.home}/data</dir.data>
     <dir.storage>${project.home}/storage</dir.storage>
-    <dir.geonames>${dir.home}/geonames/solr</dir.geonames>
+    <dir.geonames>${dir.data}/geonames/solr</dir.geonames>
     <server.url.base>http://${ip.address}:${server.port}/mint/</server.url.base>
     <smtp.host>localhost</smtp.host>
     <admin.email>admin@localhost</admin.email>
@@ -208,7 +208,7 @@
              <groupId>org.slf4j</groupId>
              <artifactId>slf4j-log4j12</artifactId>
            </exclusion>
-         </exclusions> 
+         </exclusions>
     </dependency>
   </dependencies>
   <build>
