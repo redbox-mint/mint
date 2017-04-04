@@ -48,12 +48,12 @@
       <artifactId>fascinator-portal</artifactId>
       <type>war</type>
       <classifier>skinny</classifier>
-      <version>1.4</version>
+      <version>1.4.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator</groupId>
       <artifactId>fascinator-common</artifactId>
-      <version>1.4</version>
+      <version>1.4.0.1-SNAPSHOT</version>
     </dependency>
     <!-- Solr Web App -->
     <dependency>
@@ -120,7 +120,7 @@
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>mint-config</artifactId>
-      <version>1.9</version>
+      <version>1.9.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
@@ -132,6 +132,7 @@
       <artifactId>sruclient-mint</artifactId>
       <version>1.9</version>
     </dependency>
+
     <!-- Contrib plugins -->
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
@@ -210,6 +211,11 @@
            </exclusion>
          </exclusions>
     </dependency>
+      <dependency>
+          <groupId>com.googlecode.the-fascinator</groupId>
+          <artifactId>fascinator-core</artifactId>
+          <version>1.4.0.1-SNAPSHOT</version>
+      </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -271,7 +277,7 @@
           <groupId>com.googlecode.the-fascinator</groupId>
           <artifactId>fascinator-portal</artifactId>
           <type>warpath</type>
-          <version>1.4</version>
+          <version>1.4.1-SNAPSHOT</version>
         </dependency>
       </dependencies>
       <!-- The standard build/deploy process for making a server -->
