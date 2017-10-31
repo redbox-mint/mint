@@ -93,6 +93,12 @@ class IndexData:
 
         self.utils.add(self.index, "dc_description", data.get("Description"))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
+        
+        fullName = json.getString("", ["metadata", "Given_Name"]) + " " + json.getString("", ["metadata", "Family_Name"])
+        fullNameHonorific = json.getString("", ["metadata", "Honorific"]) + " " + fullName
+        self.utils.add(self.index, "full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "full_name", fullName)
+        
         for key in data.keySet():
             if (key != "Description"): # Retaining dc_description because it might be used somewhere else, but at the same time not repeating the "Description" field.
                 self.utils.add(self.index, key, data.get(key))

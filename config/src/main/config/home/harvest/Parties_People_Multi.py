@@ -114,6 +114,10 @@ class IndexData:
         if identifier is not None:
             self.utils.add(self.index, "known_ids", identifier)
 
+        fullName = json.getString("", ["metadata", "Given_Name"]) + " " + json.getString("", ["metadata", "Family_Name"])
+        fullNameHonorific = json.getString("", ["metadata", "Honorific"]) + " " + fullName
+        self.utils.add(self.index, "full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "full_name", fullName)
         # Primary group membership
         basicGroupId = data.get("Groups")[0]
         if basicGroupId is not None and basicGroupId != "":
