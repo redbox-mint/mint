@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.10</version>
+  <version>1.10.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.10</version>
+    <version>1.10.1-SNAPSHOT</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
@@ -125,17 +125,17 @@
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>mint-config</artifactId>
-      <version>1.10</version>
+      <version>1.10.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>plugin-transaction-curation-mint</artifactId>
-      <version>1.9</version>
+      <version>1.10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>sruclient-mint</artifactId>
-      <version>1.9</version>
+      <version>1.10-SNAPSHOT</version>
     </dependency>
 
     <!-- Contrib plugins -->
