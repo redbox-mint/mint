@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>plugin-transformer-handle</artifactId>
-    <version>1.10-SNAPSHOT</version>
+    <version>1.10</version>
     <name>The Mint - Plugin - Transformer - Handle</name>
     <url>http://fascinator.usq.edu.au/trac/wiki/tf2/DeveloperNotes/plugins/transformer/handle</url>
     <parent>
