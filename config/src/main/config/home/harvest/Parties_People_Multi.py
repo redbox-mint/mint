@@ -84,7 +84,15 @@ class IndexData:
         jsonPayload = self.object.getPayload("metadata.json")
         json = self.utils.getJsonObject(jsonPayload.open())
         jsonPayload.close()
-        
+       
+
+
+        fullName =  "%s %s" % (json.getString("", ["data", "Given_Name"]), json.getString("", ["data", "Family_Name"]))
+        fullNameHonorific = "%s %s" % (json.getString("", ["data", "Honorific"]), fullName)
+        self.utils.add(self.index, "text_full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "text_full_name", fullName) 
+        self.utils.add(self.index, "text_given_name", json.getString("", ["data", "Given_Name"]))
+        self.utils.add(self.index, "text_family_name", json.getString("", ["data", "Family_Name"]))
         metadata = json.getObject("metadata")
         self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
         
@@ -113,11 +121,10 @@ class IndexData:
         identifier = json.getString(None, ["metadata", "dc.identifier"])
         if identifier is not None:
             self.utils.add(self.index, "known_ids", identifier)
-
+	
         fullName = json.getString("", ["metadata", "Given_Name"]) + " " + json.getString("", ["metadata", "Family_Name"])
         fullNameHonorific = json.getString("", ["metadata", "Honorific"]) + " " + fullName
-        self.utils.add(self.index, "full_name_honorific", fullNameHonorific)
-        self.utils.add(self.index, "full_name", fullName)
+        
         # Primary group membership
         basicGroupId = data.get("Groups")[0]
         if basicGroupId is not None and basicGroupId != "":
