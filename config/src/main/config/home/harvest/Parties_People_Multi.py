@@ -93,6 +93,10 @@ class IndexData:
         self.utils.add(self.index, "text_full_name", fullName) 
         self.utils.add(self.index, "text_given_name", json.getString("", ["data", "Given_Name"]))
         self.utils.add(self.index, "text_family_name", json.getString("", ["data", "Family_Name"]))
+        self.utils.add(self.index, "autocomplete_full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "autocomplete_full_name", fullName) 
+        self.utils.add(self.index, "autocomplete_given_name", json.getString("", ["data", "Given_Name"]))
+        self.utils.add(self.index, "autocomplete_family_name", json.getString("", ["data", "Family_Name"]))      
         metadata = json.getObject("metadata")
         self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
         

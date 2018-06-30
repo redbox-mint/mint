@@ -16,6 +16,7 @@ class IndexData:
         self.payload = context["payload"]
         self.params = context["params"]
         self.utils = context["pyUtils"]
+        self.log = context["log"]
 
         # Common data
         self.__newDoc()
@@ -82,6 +83,8 @@ class IndexData:
 
         rdfAbout = URIImpl(self.params.getProperty("concept-uri"))
         self.utils.add(self.index, "dc_identifier", rdfAbout.toString())
+        self.log.info("Object payload list is: ")
+        self.log.info(self.object.getPayloadList())
         rdfPayload = self.object.getPayload(self.object.getSourceId())
         rdfModel = self.utils.getRdfModel(rdfPayload.open())
         rdfPayload.close()
