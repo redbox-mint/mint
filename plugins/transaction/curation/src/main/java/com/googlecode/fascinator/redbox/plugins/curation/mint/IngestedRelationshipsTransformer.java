@@ -30,12 +30,16 @@ import com.googlecode.fascinator.api.transformer.TransformerException;
 import com.googlecode.fascinator.common.JsonObject;
 import com.googlecode.fascinator.common.JsonSimple;
 import com.googlecode.fascinator.common.JsonSimpleConfig;
+import com.googlecode.fascinator.common.messaging.MessagingException;
+import com.googlecode.fascinator.common.messaging.MessagingServices;
+import com.googlecode.fascinator.messaging.TransactionManagerQueueConsumer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This transformer is designed to fire only once after each item is ingested.
  * It is primarily concerned with resolving relationships between parties.
- * 
+ *
  * @author Greg Pendlebury
  */
 public class IngestedRelationshipsTransformer implements Transformer {
@@ -65,6 +69,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 	/** Storage layer */
 	private Storage storage;
 
+	private MessagingServices messaging;
+
 	/**
 	 * Constructor
 	 */
@@ -73,7 +79,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Init method from file
-	 * 
+	 *
 	 * @param jsonFile
 	 * @throws IOException
 	 * @throws PluginException
@@ -90,7 +96,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Init method from String
-	 * 
+	 *
 	 * @param jsonString
 	 * @throws IOException
 	 * @throws PluginException
@@ -100,8 +106,12 @@ public class IngestedRelationshipsTransformer implements Transformer {
 		try {
 			config = new JsonSimpleConfig(jsonString);
 			reset();
+			messaging = MessagingServices.getInstance();
 		} catch (IOException e) {
 			throw new PluginException("Error reading config: ", e);
+		} catch (MessagingException e) {
+			throw new PluginException(
+					"Error initialising messaging services: ", e);
 		}
 	}
 
@@ -123,7 +133,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Transform method
-	 * 
+	 *
 	 * @param object
 	 *            : DigitalObject to be transformed
 	 * @param jsonConfig
@@ -218,6 +228,11 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 		// If changed, store
 		if (saveChanges) {
+
+			if (oldrelationships != null) {
+				mergeCuratedRelationshipInfo(oldrelationships, data);
+			}
+
 			saveObjectData(in, data, pid);
 			// Value is not important, just having it set
 			properties.setProperty(PROPERTY_FLAG, "hasRun");
@@ -228,13 +243,45 @@ public class IngestedRelationshipsTransformer implements Transformer {
 						ex);
 			}
 		}
+		// Value is not important, just having it set
+		// Fix for REDBOXHELP-22: Commented out next line to allow so this
+		// transformer can update the relationships and primary_group_id
+		// properties.setProperty(PROPERTY_FLAG, "hasRun");
+		try {
+			in.close();
+		} catch (StorageException ex) {
+			throw new TransformerException("Error updating properties: ", ex);
+		}
 
 		return in;
 	}
 
+	private boolean mergeCuratedRelationshipInfo(JSONArray oldRelationships,
+			JsonSimple data) {
+		boolean itemsMerged = false;
+		JSONArray newRelationships = data.getArray("relationships");
+		for (int i = 0; i < newRelationships.size(); i++) {
+			JsonObject relationship = (JsonObject) newRelationships.get(i);
+			for (Object oldRelationshipObject : oldRelationships) {
+				JsonObject oldRelationship = (JsonObject) oldRelationshipObject;
+				if (oldRelationship.get("oid") != null
+						&& (oldRelationship.get("oid").equals(
+								relationship.get("oid")) || relationship.get(
+								"identifier").equals(
+								oldRelationship.get("identifier")))) {
+					newRelationships.remove(i);
+					newRelationships.add(i, oldRelationship);
+					itemsMerged = true;
+					break;
+				}
+			}
+		}
+		return itemsMerged;
+	}
+
 	/**
 	 * Retrieve and parse the indicated JSON payload from storage
-	 * 
+	 *
 	 * @param in
 	 *            The incoming object
 	 * @param pid
@@ -271,7 +318,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Retrieve and parse the indicated JSON payload from storage
-	 * 
+	 *
 	 * @param in
 	 *            The incoming object
 	 * @param pid
@@ -305,7 +352,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Save the provided object data back into storage
-	 * 
+	 *
 	 * @param data
 	 *            The data to save
 	 * @param oid
@@ -326,7 +373,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Get Transformer ID
-	 * 
+	 *
 	 * @return id
 	 */
 	@Override
@@ -336,7 +383,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Get Transformer Name
-	 * 
+	 *
 	 * @return name
 	 */
 	@Override
@@ -346,7 +393,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 
 	/**
 	 * Gets a PluginDescription object relating to this plugin.
-	 * 
+	 *
 	 * @return a PluginDescription
 	 */
 	@Override
