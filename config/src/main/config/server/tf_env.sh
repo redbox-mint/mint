@@ -2,7 +2,9 @@
 #
 # this script sets the environment for other fascinator scripts
 #
-
+if [ -z "$SERVER_URL" ]; then
+  export SERVER_URL="${server.url.base}"
+fi
 export SERVER_URL="${server.url.base}"
 export LOCAL_PORT="${server.port}"
 export PROJECT_HOME="${project.home}"
