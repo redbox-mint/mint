@@ -431,7 +431,9 @@ public class HandleTransformer implements Transformer {
             // Work out what the base URL for finished Handles will look like
             String handleDomain = config.getString(HANDLE_DEFAULT_DOMAIN,
                     "transformerDefaults", "handle", "publishedDomain");
-            handleBaseUrl = "http://"+handleDomain+"/";
+            String handleHttpScheme = config.getString("http",
+                    "transformerDefaults", "handle", "httpScheme");
+            handleBaseUrl = handleHttpScheme+"://"+handleDomain+"/";
         }
     }
 
