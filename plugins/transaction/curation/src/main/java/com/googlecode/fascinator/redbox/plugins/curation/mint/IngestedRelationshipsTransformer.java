@@ -21,22 +21,27 @@ package com.googlecode.fascinator.redbox.plugins.curation.mint;
 import com.googlecode.fascinator.api.PluginDescription;
 import com.googlecode.fascinator.api.PluginException;
 import com.googlecode.fascinator.api.PluginManager;
+import com.googlecode.fascinator.api.indexer.Indexer;
+import com.googlecode.fascinator.api.indexer.SearchRequest;
 import com.googlecode.fascinator.api.storage.DigitalObject;
 import com.googlecode.fascinator.api.storage.Payload;
 import com.googlecode.fascinator.api.storage.Storage;
 import com.googlecode.fascinator.api.storage.StorageException;
+import com.googlecode.fascinator.api.transaction.TransactionException;
 import com.googlecode.fascinator.api.transformer.Transformer;
 import com.googlecode.fascinator.api.transformer.TransformerException;
 import com.googlecode.fascinator.common.JsonObject;
 import com.googlecode.fascinator.common.JsonSimple;
 import com.googlecode.fascinator.common.JsonSimpleConfig;
+import com.googlecode.fascinator.common.solr.SolrDoc;
+import com.googlecode.fascinator.common.solr.SolrResult;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -65,7 +70,10 @@ public class IngestedRelationshipsTransformer implements Transformer {
 	/** Storage layer */
 	private Storage storage;
 
-	/**
+    /** Solr Index */
+    private Indexer indexer;
+
+    /**
 	 * Constructor
 	 */
 	public IngestedRelationshipsTransformer() {
@@ -119,6 +127,25 @@ public class IngestedRelationshipsTransformer implements Transformer {
 				throw new TransformerException(ex);
 			}
 		}
+
+		// Load the indexer plugin (if not already loaded)
+		if (indexer == null) {
+	        String indexerId = config.getString("solr", "indexer", "type");
+	        if (indexerId == null) {
+	            throw new TransformerException("No Indexer ID provided");
+	        }
+	        indexer = PluginManager.getIndexer(indexerId);
+	        if (indexer == null) {
+	            throw new TransformerException("Unable to load Indexer '"
+	                    + indexerId + "'");
+	        }
+	        try {
+	            indexer.init(config.toString());
+	        } catch (PluginException ex) {
+	            log.error("Unable to initialise indexer!", ex);
+	            throw new TransformerException(ex);
+	        }
+		}
 	}
 
 	/**
@@ -139,21 +166,26 @@ public class IngestedRelationshipsTransformer implements Transformer {
 		try {
 			itemConfig = new JsonSimpleConfig(jsonConfig);
 		} catch (IOException ex) {
-			throw new TransformerException("Error reading item configuration!",
-					ex);
+			throw new TransformerException("Error reading item configuration!", ex);
 		}
 		reset();
 
-		// Test, have we done this before?
 		Properties properties = null;
 		try {
 			properties = in.getMetadata();
 		} catch (StorageException ex) {
 			throw new TransformerException("Error reading properties: ", ex);
 		}
-		boolean hasRun = properties.containsKey(PROPERTY_FLAG);
-		if (hasRun) {
-			return in;
+
+		// Check forceUpdate config to determine if we should update the relationships
+		// (this overrides the PROPERTY_FLAG check)
+		boolean forceUpdate = itemConfig.getBoolean(false, "forceUpdate");
+		if (! forceUpdate) {
+			// Test, have we done this before?
+			boolean hasRun = properties.containsKey(PROPERTY_FLAG);
+			if (hasRun) {
+				return in;
+			}
 		}
 
 		// Where are we getting out data from?
@@ -190,6 +222,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 					values.add(value);
 				}
 			}
+
 			if (values != null) {
 				// And work out supporting values
 				String prefix = relations.get(field).getString(null, "prefix");
@@ -197,6 +230,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 						"hasAssociationWith", "relation");
 				String reverseRelation = relations.get(field).getString(
 						"hasAssociationWith", "reverseRelation");
+				boolean checkExistence = relations.get(field).getBoolean(
+						false, "checkExistence");
 
 				// Now finish up
 				if (prefix == null) {
@@ -206,8 +241,8 @@ public class IngestedRelationshipsTransformer implements Transformer {
 					for (String value : values) {
 						if (!value.equals("")) {
 							// Add this relationship (if needed)
-							if (addWithDuplicateTest(data, prefix + value,
-									relation, reverseRelation)) {
+							if (addWithDuplicateAndExistanceTest(data, prefix + value,
+									relation, reverseRelation, checkExistence)) {
 								saveChanges = true;
 							}
 						}
@@ -224,8 +259,7 @@ public class IngestedRelationshipsTransformer implements Transformer {
 			try {
 				in.close();
 			} catch (StorageException ex) {
-				throw new TransformerException("Error updating properties: ",
-						ex);
+				throw new TransformerException("Error updating properties: ", ex);
 			}
 		}
 
@@ -233,29 +267,48 @@ public class IngestedRelationshipsTransformer implements Transformer {
 	}
 
 	/**
-	 * Retrieve and parse the indicated JSON payload from storage
+	 * Add the specified relationship to the JSON payload, if it is not already present and if the 
+	 * Also checks if the related object exists, if required.
 	 * 
-	 * @param in
-	 *            The incoming object
-	 * @param pid
-	 *            The payload holding JSON
+	 * @param data The JSON payload
+	 * @param identifier Identifier of the related object
+	 * @param relationship Name of the relationship to create
+	 * @param reverseRelationship Name of the reverse relationship
+	 * @param checkExistence Flag indicating whether to do the related object existence check
+	 * @return True if the relationship has been added to the JSON payload, False otherwise
 	 */
-	private boolean addWithDuplicateTest(JsonSimple data, String identifier,
-			String relationship, String reverseRelationship) {
-		// Find what we have already
+	private boolean addWithDuplicateAndExistanceTest(JsonSimple data, String identifier,
+			String relationship, String reverseRelationship, boolean checkExistence) {
 		boolean found = false;
+
+		// Find the relationships that we already have
 		JSONArray relations = data.writeArray("relationships");
 		for (Object relation : relations) {
 			JsonSimple existing = new JsonSimple((JsonObject) relation);
 			String existingId = existing.getString(null, "identifier");
-			if (existingId != null && existingId.equals(identifier)) {
+			String existingRel = existing.getString(null, "relationship");
+			if (existingId != null && existingId.equals(identifier)
+					&& existingRel != null && existingRel.equals(relationship)) {
+				log.trace(relationship + " relationship already exists to object (id: " + identifier + ")");
 				found = true;
+				break;
 			}
 		}
 
 		// We're done if it already exists
 		if (found) {
 			return false;
+		}
+
+		if (checkExistence) {
+			// Check for existence of related object (only for local records)
+			// Lookup the related object by it's identifier
+	        String relatedOid = idToOid(identifier);
+	        if (relatedOid == null) {
+				log.warn("Skipping " + relationship
+						+ " relationship to non-existant object (id: " + identifier + ")");
+				return false;
+	        }
 		}
 
 		// Time to add our new relationship to the JSON
@@ -270,6 +323,42 @@ public class IngestedRelationshipsTransformer implements Transformer {
 	}
 
 	/**
+	 * Lookup (using SOLR) the OID for an object using an identifier
+	 * @param identifier The identifier for the required object 
+	 * @return The OID for the required object, or null (if not found)
+	 */
+    private String idToOid(String identifier) {
+        // Build a query
+        String query = "known_ids:\""+identifier+"\"";
+        SearchRequest request = new SearchRequest(query);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        // Now search and parse response
+        SolrResult result = null;
+        try {
+            indexer.search(request, out);
+            InputStream in = new ByteArrayInputStream(out.toByteArray());
+            result = new SolrResult(in);
+        } catch (Exception ex) {
+            log.error("Error searching Solr: ", ex);
+            return null;
+        }
+
+        // Verify our results
+        if (result.getNumFound() == 0) {
+            return null;
+        }
+        if (result.getNumFound() > 1) {
+            log.error("Found multiple OIDs for ID '{}'", identifier);
+            return null;
+        }
+
+        // Return our result
+        SolrDoc doc = result.getResults().get(0);
+        return doc.getFirst("storage_id");
+    }
+
+    /**
 	 * Retrieve and parse the indicated JSON payload from storage
 	 * 
 	 * @param in
