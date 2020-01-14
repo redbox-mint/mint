@@ -50,7 +50,7 @@ class IndexData:
         self.utils.add(self.index, "display_type", "parties_people")
 
         self.item_security = []
-        
+
     def __basicData(self):
         self.utils.add(self.index, "repository_name", self.params["repository.name"])
         self.utils.add(self.index, "repository_type", self.params["repository.type"])
@@ -84,21 +84,31 @@ class IndexData:
         jsonPayload = self.object.getPayload("metadata.json")
         json = self.utils.getJsonObject(jsonPayload.open())
         jsonPayload.close()
-        
+
         metadata = json.getObject("metadata")
         self.utils.add(self.index, "dc_identifier", metadata.get("dc.identifier"))
-        
+
         data = json.getObject("data")
         self.utils.add(self.index, "dc_title", "%s, %s" % (data.get("Family_Name"), data.get("Given_Name")))
 
         self.utils.add(self.index, "dc_description", data.get("Description"))
         self.utils.add(self.index, "dc_format", "application/x-mint-party-people")
-        
+
         fullName = json.getString("", ["metadata", "Given_Name"]) + " " + json.getString("", ["metadata", "Family_Name"])
         fullNameHonorific = json.getString("", ["metadata", "Honorific"]) + " " + fullName
         self.utils.add(self.index, "full_name_honorific", fullNameHonorific)
         self.utils.add(self.index, "full_name", fullName)
-        
+        ## Added for autocomplete support
+        self.utils.add(self.index, "text_full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "text_full_name", fullName)
+        self.utils.add(self.index, "text_given_name", json.getString("", ["data", "Given_Name"]))
+        self.utils.add(self.index, "text_family_name", json.getString("", ["data", "Family_Name"]))
+        self.utils.add(self.index, "autocomplete_full_name_honorific", fullNameHonorific)
+        self.utils.add(self.index, "autocomplete_full_name", fullName)
+        self.utils.add(self.index, "autocomplete_given_name", json.getString("", ["data", "Given_Name"]))
+        self.utils.add(self.index, "autocomplete_family_name", json.getString("", ["data", "Family_Name"]))
+        self.utils.add(self.index, "harvestId", json.getString("", ["harvestId"]))
+
         for key in data.keySet():
             if (key != "Description"): # Retaining dc_description because it might be used somewhere else, but at the same time not repeating the "Description" field.
                 self.utils.add(self.index, key, data.get(key))
