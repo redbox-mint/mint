@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.googlecode.redbox-mint</groupId>
   <artifactId>mint</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.1</version>
   <packaging>pom</packaging>
   <name>The Mint</name>
   <parent>
     <groupId>com.googlecode.redbox-mint</groupId>
     <artifactId>mint-project</artifactId>
-    <version>1.10.1-SNAPSHOT</version>
+    <version>1.10</version>
     <relativePath>parent/pom.xml</relativePath>
   </parent>
   <modules>
@@ -48,17 +48,17 @@
       <artifactId>fascinator-portal</artifactId>
       <type>war</type>
       <classifier>skinny</classifier>
-      <version>1.5</version>
+      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator</groupId>
       <artifactId>fascinator-common</artifactId>
-      <version>1.5</version>
+      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.the-fascinator</groupId>
       <artifactId>fascinator-core</artifactId>
-      <version>1.5</version>
+      <version>1.6</version>
     </dependency>
     <!-- Solr Web App -->
     <dependency>
@@ -125,12 +125,12 @@
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>mint-config</artifactId>
-      <version>1.10.1-SNAPSHOT</version>
+      <version>1.10.1</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
       <artifactId>plugin-transaction-curation-mint</artifactId>
-      <version>1.10</version>
+      <version>1.10.1</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.redbox-mint</groupId>
@@ -184,7 +184,7 @@
     <dependency>
       <groupId>com.googlecode.the-fascinator.plugins</groupId>
       <artifactId>plugin-indexer-solr</artifactId>
-      <version>1.4</version>
+      <version>1.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -219,7 +219,7 @@
       <dependency>
           <groupId>com.googlecode.the-fascinator</groupId>
           <artifactId>fascinator-core</artifactId>
-          <version>1.5</version>
+          <version>1.6</version>
       </dependency>
   </dependencies>
   <build>
@@ -282,7 +282,7 @@
           <groupId>com.googlecode.the-fascinator</groupId>
           <artifactId>fascinator-portal</artifactId>
           <type>warpath</type>
-          <version>1.5</version>
+          <version>1.7</version>
         </dependency>
       </dependencies>
       <!-- The standard build/deploy process for making a server -->
